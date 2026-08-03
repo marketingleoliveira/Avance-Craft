@@ -105,8 +105,8 @@ export function SiteHeader() {
               className="font-pixel pixel-border inline-flex items-center gap-2 border-grass-dark bg-emerald-block px-3 py-2.5 text-[9px] uppercase text-accent-foreground shadow-[0_4px_0_0_var(--grass-dark)] transition-transform hover:brightness-105 active:translate-y-[2px] active:shadow-none sm:px-4"
             >
               <Play className="h-4 w-4" aria-hidden />
-              <span className="hidden xs:inline">Jogar agora</span>
-              <span className="xs:hidden">Jogar</span>
+              <span className="hidden sm:inline">Jogar agora</span>
+              <span className="sm:hidden">Jogar</span>
             </Link>
             <button
               type="button"
