@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Hero } from "@/components/home/Hero";
 import { NewsSection } from "@/components/home/NewsSection";
+import { ModesSection } from "@/components/home/ModesSection";
 import { ShopHighlight } from "@/components/home/ShopHighlight";
-import { RankingAndSteps } from "@/components/home/RankingAndSteps";
-import { BlockDivider } from "@/components/ui-kit/BlockDivider";
+import { RankingSection } from "@/components/home/RankingSection";
+import { HowToPlay } from "@/components/home/HowToPlay";
+import { CommunitySection } from "@/components/home/CommunitySection";
+import { FinalCta } from "@/components/home/FinalCta";
 
 const title = "Habblet Mine — Servidor Brasileiro de Minecraft";
 const description =
-  "Portal do Habblet Mine: notícias, loja, ranking e guias para jogar no servidor brasileiro de blocos.";
+  "Portal do Habblet Mine: notícias, modalidades, loja, ranking e guias para jogar no servidor brasileiro de blocos.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,9 +31,12 @@ function Index() {
     <main>
       <Hero />
       <NewsSection />
+      <ModesSection />
       <ShopHighlight />
-      <RankingAndSteps />
-      <BlockDivider />
+      <RankingSection />
+      <HowToPlay />
+      <CommunitySection />
+      <FinalCta />
     </main>
   );
 }

@@ -1,24 +1,32 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { BlockDivider } from "@/components/ui-kit/BlockDivider";
-import { NAV_LINKS, MOCK_SERVER } from "@/data/mock";
+import { NAV_LINKS, MOCK_SERVER, SOCIAL_LINKS } from "@/data/mock";
 
 export function SiteFooter() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="mt-16">
       <BlockDivider />
       <div className="bg-dirt-dark text-parchment">
         <Container className="grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="font-pixel text-[11px] uppercase text-emerald-block">
-              Habblet Mine
+            <h3 className="font-pixel text-outline text-[13px] uppercase text-emerald-block">
+              Habblet
+              <br />
+              Mine
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-parchment/80">
-              Portal comunitário de um servidor brasileiro de blocos. Projeto independente,
-              sem vínculo com detentores de marcas de jogos.
+            <p className="mt-4 text-sm leading-relaxed text-parchment/80">
+              Portal comunitário de um servidor brasileiro de blocos, com economia, missões
+              e eventos.
+            </p>
+            <p className="mt-3 break-all bg-black/25 p-2 text-sm font-semibold">
+              {MOCK_SERVER.ip}
             </p>
           </div>
-          <div>
+
+          <nav aria-label="Rodapé">
             <h3 className="font-pixel text-[11px] uppercase text-emerald-block">Navegar</h3>
             <ul className="mt-3 grid gap-2 text-sm">
               {NAV_LINKS.map((link) => (
@@ -29,39 +37,51 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
+
           <div>
-            <h3 className="font-pixel text-[11px] uppercase text-emerald-block">Conta</h3>
+            <h3 className="font-pixel text-[11px] uppercase text-emerald-block">Redes</h3>
+            <ul className="mt-3 grid gap-2 text-sm">
+              {SOCIAL_LINKS.map((social) => (
+                <li key={social.label}>
+                  <a href={social.href} className="hover:text-emerald-block">
+                    {social.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-pixel text-[11px] uppercase text-emerald-block">Legal</h3>
             <ul className="mt-3 grid gap-2 text-sm">
               <li>
-                <Link to="/perfil" className="hover:text-emerald-block">
-                  Perfil
+                <Link to="/termos" className="hover:text-emerald-block">
+                  Termos de uso
                 </Link>
               </li>
               <li>
-                <Link to="/admin" className="hover:text-emerald-block">
-                  Painel administrativo
+                <Link to="/privacidade" className="hover:text-emerald-block">
+                  Política de privacidade
                 </Link>
               </li>
               <li>
                 <Link to="/suporte" className="hover:text-emerald-block">
-                  Abrir chamado
+                  Suporte
                 </Link>
               </li>
             </ul>
-          </div>
-          <div>
-            <h3 className="font-pixel text-[11px] uppercase text-emerald-block">Conectar</h3>
-            <p className="mt-3 text-sm">Endereço mockado para demonstração:</p>
-            <p className="mt-2 break-all bg-black/25 p-2 text-sm font-semibold">
-              {MOCK_SERVER.ip}
+            <p className="mt-4 text-xs leading-relaxed text-parchment/70">
+              Projeto independente, sem vínculo, patrocínio ou aprovação da Mojang Studios,
+              Microsoft ou detentores de marcas de jogos.
             </p>
           </div>
         </Container>
+
         <div className="border-t-4 border-black/25">
           <Container className="py-4">
             <p className="text-xs text-parchment/70">
-              © 2026 Habblet Mine. Conteúdo ilustrativo — dados de exemplo.
+              © {year} Habblet Mine. Conteúdo ilustrativo — dados de exemplo.
             </p>
           </Container>
         </div>
