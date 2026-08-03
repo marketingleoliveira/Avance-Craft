@@ -56,8 +56,8 @@ export function SiteHeader() {
             >
               <span className="h-4 w-4 bg-emerald-block" />
             </span>
-            <span className="font-pixel truncate text-[11px] uppercase leading-tight text-parchment text-outline sm:text-sm">
-              Habblet Mine
+            <span className="font-pixel min-w-0 text-[10px] uppercase leading-[1.5] text-parchment text-outline sm:text-sm">
+              Habblet<span className="block sm:inline sm:before:content-['\\00a0']">Mine</span>
             </span>
           </Link>
 
@@ -105,7 +105,8 @@ export function SiteHeader() {
               className="font-pixel pixel-border inline-flex items-center gap-2 border-grass-dark bg-emerald-block px-3 py-2.5 text-[9px] uppercase text-accent-foreground shadow-[0_4px_0_0_var(--grass-dark)] transition-transform hover:brightness-105 active:translate-y-[2px] active:shadow-none sm:px-4"
             >
               <Play className="h-4 w-4" aria-hidden />
-              Jogar agora
+              <span className="hidden xs:inline">Jogar agora</span>
+              <span className="xs:hidden">Jogar</span>
             </Link>
             <button
               type="button"
