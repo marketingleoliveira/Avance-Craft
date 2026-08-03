@@ -11,6 +11,7 @@ export const MOCK_SERVER = {
   playersOnline: 0,
   slots: 500,
   status: "manutencao" as "online" | "manutencao" | "offline",
+  discord: "#",
 };
 
 export type NewsItem = {
@@ -19,32 +20,71 @@ export type NewsItem = {
   excerpt: string;
   category: string;
   date: string;
+  author: string;
+  image: string;
 };
 
-export const MOCK_NEWS: NewsItem[] = [
+export const MOCK_NEWS: Omit<NewsItem, "image">[] = [
   {
     id: "1",
-    title: "Nova temporada de Survival chega em breve",
+    title: "Habblet Mine está chegando",
     excerpt:
-      "Um novo mundo, novas regiões para explorar e sistema de clãs reformulado. Prepare sua picareta.",
-    category: "Atualização",
-    date: "12/07/2026",
+      "Estamos nos preparativos finais do servidor: mundo novo, plugins revisados e uma equipe pronta para receber a comunidade.",
+    category: "Anúncio",
+    date: "28/07/2026",
+    author: "Equipe Habblet",
   },
   {
     id: "2",
-    title: "Evento de construção comunitária",
+    title: "Conheça o nosso Survival",
     excerpt:
-      "Monte sua equipe e construa a vila mais criativa do servidor. Prévia das regras já disponível.",
-    category: "Evento",
-    date: "05/07/2026",
+      "Economia equilibrada, proteção de terrenos, missões diárias e clãs. Veja como será o modo principal do servidor.",
+    category: "Modalidade",
+    date: "22/07/2026",
+    author: "Bloquinho",
   },
   {
     id: "3",
-    title: "Ajustes de economia e mercado de jogadores",
+    title: "Evento de inauguração",
     excerpt:
-      "Rebalanceamento de preços das lojas de aldeões e novas regras para leilões entre jogadores.",
-    category: "Notas",
-    date: "28/06/2026",
+      "Fogos, arena de desafios e recompensas de boas-vindas para quem entrar no primeiro fim de semana.",
+    category: "Evento",
+    date: "15/07/2026",
+    author: "Equipe Habblet",
+  },
+];
+
+export type GameMode = {
+  id: string;
+  name: string;
+  description: string;
+  status: "disponivel" | "em-breve";
+};
+
+export const MOCK_MODES: GameMode[] = [
+  {
+    id: "survival",
+    name: "Survival",
+    description: "Economia, missões, clãs e proteção de terreno no mundo principal.",
+    status: "disponivel",
+  },
+  {
+    id: "skyblock",
+    name: "SkyBlock",
+    description: "Comece numa ilha flutuante e expanda seu império bloco a bloco.",
+    status: "em-breve",
+  },
+  {
+    id: "rankup",
+    name: "RankUP",
+    description: "Minere, evolua de rank e desbloqueie novas áreas e vantagens.",
+    status: "em-breve",
+  },
+  {
+    id: "minigames",
+    name: "Minigames",
+    description: "Partidas rápidas, arenas competitivas e eventos com premiação.",
+    status: "em-breve",
   },
 ];
 
@@ -52,31 +92,35 @@ export type ShopItem = {
   id: string;
   name: string;
   tag: string;
+  period: string;
   price: string;
   perks: string[];
 };
 
 export const MOCK_SHOP: ShopItem[] = [
   {
-    id: "vip-terra",
-    name: "VIP Terra",
+    id: "vip-bronze",
+    name: "VIP Bronze",
     tag: "Inicial",
+    period: "30 dias",
     price: "R$ --",
-    perks: ["Kit inicial", "1 home extra", "Cor no chat"],
+    perks: ["Kit inicial", "2 homes extras", "Cor no chat"],
   },
   {
-    id: "vip-ferro",
-    name: "VIP Ferro",
+    id: "vip-ouro",
+    name: "VIP Ouro",
     tag: "Popular",
+    period: "30 dias",
     price: "R$ --",
-    perks: ["Kit reforçado", "3 homes extras", "Acesso a eventos"],
+    perks: ["Kit reforçado", "5 homes extras", "Acesso antecipado a eventos"],
   },
   {
     id: "vip-esmeralda",
     name: "VIP Esmeralda",
     tag: "Completo",
+    period: "30 dias",
     price: "R$ --",
-    perks: ["Kit completo", "Homes ilimitadas", "Prefixo exclusivo"],
+    perks: ["Kit completo", "Homes ilimitadas", "Prefixo exclusivo no chat"],
   },
 ];
 
@@ -87,31 +131,70 @@ export type RankingRow = {
   score: string;
 };
 
-export const MOCK_RANKING: RankingRow[] = [
-  { position: 1, player: "Jogador_Exemplo1", clan: "Vale Verde", score: "—" },
-  { position: 2, player: "Jogador_Exemplo2", clan: "Pedra Rúnica", score: "—" },
-  { position: 3, player: "Jogador_Exemplo3", clan: "Vale Verde", score: "—" },
-  { position: 4, player: "Jogador_Exemplo4", clan: "Sem clã", score: "—" },
-  { position: 5, player: "Jogador_Exemplo5", clan: "Minérios BR", score: "—" },
+export type RankingTab = {
+  id: string;
+  label: string;
+  metric: string;
+  rows: RankingRow[];
+};
+
+const placeholderRows = (metric: string): RankingRow[] =>
+  [1, 2, 3, 4, 5].map((position) => ({
+    position,
+    player: `Jogador_Exemplo${position}`,
+    clan: ["Vale Verde", "Pedra Rúnica", "Vale Verde", "Sem clã", "Minérios BR"][position - 1]!,
+    score: `— ${metric}`,
+  }));
+
+export const MOCK_RANKING_TABS: RankingTab[] = [
+  { id: "ricos", label: "Mais ricos", metric: "moedas", rows: placeholderRows("moedas") },
+  { id: "tempo", label: "Tempo online", metric: "horas", rows: placeholderRows("horas") },
+  { id: "abates", label: "Abates", metric: "abates", rows: placeholderRows("abates") },
+  { id: "missoes", label: "Missões", metric: "missões", rows: placeholderRows("missões") },
+  { id: "votos", label: "Votos", metric: "votos", rows: placeholderRows("votos") },
 ];
+
+/** Compatibilidade com telas antigas. */
+export const MOCK_RANKING: RankingRow[] = MOCK_RANKING_TABS[0]!.rows;
 
 export const MOCK_STEPS = [
   {
     step: "01",
-    title: "Abra o jogo",
+    title: "Abra o Minecraft",
     text: "Use a versão Java ou Bedrock compatível listada na barra de status.",
   },
   {
     step: "02",
-    title: "Adicione o servidor",
+    title: "Adicione jogar.habbletmine.com.br",
     text: "No menu multijogador, adicione o endereço oficial do Habblet Mine.",
   },
   {
     step: "03",
-    title: "Entre e explore",
-    text: "Escolha um modo de jogo no saguão e comece sua primeira construção.",
+    title: "Entre e comece sua aventura",
+    text: "Escolha um modo de jogo no saguão e faça sua primeira construção.",
   },
 ];
+
+/** placeholders — nenhum jogador real está conectado */
+export const MOCK_LAST_PLAYERS = [
+  "Jogador_Exemplo1",
+  "Jogador_Exemplo2",
+  "Jogador_Exemplo3",
+  "Jogador_Exemplo4",
+];
+
+export const MOCK_EVENTS = [
+  { id: "e1", title: "Abertura oficial", date: "A definir" },
+  { id: "e2", title: "Corrida de construção", date: "A definir" },
+  { id: "e3", title: "Caça ao tesouro", date: "A definir" },
+];
+
+export const SOCIAL_LINKS = [
+  { label: "Discord", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "TikTok", href: "#" },
+  { label: "YouTube", href: "#" },
+] as const;
 
 export const NAV_LINKS = [
   { label: "Início", to: "/" },
