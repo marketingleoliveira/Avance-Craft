@@ -93,9 +93,9 @@ export function Hero() {
 
             <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <PixelButton variant="emerald">Jogar agora</PixelButton>
-              <PixelButton variant="wood" asChild>
-                <Link to="/loja">Conhecer a loja</Link>
-              </PixelButton>
+              <Link to="/loja" className="contents">
+                <PixelButton variant="wood">Conhecer a loja</PixelButton>
+              </Link>
               <PixelButton variant="stone">Entrar no Discord</PixelButton>
             </div>
 
