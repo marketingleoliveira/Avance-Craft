@@ -176,3 +176,34 @@
     color: var(--color-foreground);
   }
 }
+
+@utility font-pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+/* Chunky pixel border used across panels, buttons and signs */
+@utility pixel-border {
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 4px;
+  image-rendering: pixelated;
+}
+
+@utility pixel-shadow {
+  box-shadow: var(--shadow-pixel);
+}
+
+@utility pixel-shadow-lg {
+  box-shadow: var(--shadow-pixel-lg);
+}
+
+@utility text-outline {
+  text-shadow:
+    -3px 0 0 var(--dirt-dark),
+    3px 0 0 var(--dirt-dark),
+    0 -3px 0 var(--dirt-dark),
+    0 3px 0 var(--dirt-dark),
+    0 6px 0 oklch(0 0 0 / 0.35);
+}
