@@ -13,7 +13,6 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { StatusBar } from "@/components/layout/StatusBar";
 
 function NotFoundComponent() {
   return (
@@ -125,7 +124,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col bg-background font-sans">
-        <StatusBar />
         <SiteHeader />
         <div className="flex-1">
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
