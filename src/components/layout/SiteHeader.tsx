@@ -61,8 +61,7 @@ export function SiteHeader() {
             aria-expanded={open}
             className="pixel-border border-dirt-dark bg-wood p-2 text-dirt-dark lg:hidden"
           >
-            {open ? <Menu className="h-5 w-5" /> : <X className="hidden" />}
-            {open ? null : <span className="sr-only">menu</span>}
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </Container>
