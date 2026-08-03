@@ -19,6 +19,19 @@
  */
 
 @theme inline {
+  --font-pixel: "Press Start 2P", "Courier New", monospace;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --color-emerald-block: var(--emerald-block);
+  --color-grass: var(--grass);
+  --color-grass-dark: var(--grass-dark);
+  --color-dirt: var(--dirt);
+  --color-dirt-dark: var(--dirt-dark);
+  --color-wood: var(--wood);
+  --color-wood-dark: var(--wood-dark);
+  --color-stone: var(--stone);
+  --color-stone-dark: var(--stone-dark);
+  --color-sky-block: var(--sky-block);
+  --color-parchment: var(--parchment);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -26,6 +39,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -62,26 +76,46 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --radius: 0.25rem;
+
+  /* Habblet Mine palette */
+  --emerald-block: oklch(0.62 0.15 165);
+  --grass: oklch(0.72 0.18 140);
+  --grass-dark: oklch(0.52 0.14 145);
+  --dirt: oklch(0.52 0.08 62);
+  --dirt-dark: oklch(0.38 0.07 60);
+  --wood: oklch(0.79 0.09 72);
+  --wood-dark: oklch(0.55 0.09 60);
+  --stone: oklch(0.72 0.008 250);
+  --stone-dark: oklch(0.48 0.01 250);
+  --sky-block: oklch(0.75 0.13 236);
+  --parchment: oklch(0.97 0.015 90);
+
+  /* pixel elevation tokens */
+  --shadow-pixel: 0 4px 0 0 var(--dirt-dark);
+  --shadow-pixel-lg: 0 6px 0 0 var(--dirt-dark), 0 10px 24px oklch(0 0 0 / 0.35);
+  --shadow-panel: inset 0 0 0 4px oklch(1 0 0 / 0.35), 0 6px 0 0 var(--stone-dark);
+
+  --background: oklch(0.96 0.02 120);
+  --foreground: oklch(0.26 0.03 60);
+  --card: var(--parchment);
+  --card-foreground: oklch(0.26 0.03 60);
+  --popover: var(--parchment);
+  --popover-foreground: oklch(0.26 0.03 60);
+  --primary: var(--grass-dark);
+  --primary-foreground: oklch(0.99 0.01 100);
+  --secondary: var(--wood);
+  --secondary-foreground: oklch(0.28 0.05 60);
+  --muted: oklch(0.92 0.02 90);
+  --muted-foreground: oklch(0.48 0.03 70);
+  --accent: var(--emerald-block);
+  --accent-foreground: oklch(0.99 0.01 100);
+  --destructive: oklch(0.55 0.21 27);
+  --destructive-foreground: oklch(0.98 0.01 100);
+  --border: var(--dirt-dark);
+  --input: oklch(0.88 0.02 80);
+  --ring: var(--grass);
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -141,4 +175,35 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@utility font-pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+/* Chunky pixel border used across panels, buttons and signs */
+@utility pixel-border {
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 4px;
+  image-rendering: pixelated;
+}
+
+@utility pixel-shadow {
+  box-shadow: var(--shadow-pixel);
+}
+
+@utility pixel-shadow-lg {
+  box-shadow: var(--shadow-pixel-lg);
+}
+
+@utility text-outline {
+  text-shadow:
+    -3px 0 0 var(--dirt-dark),
+    3px 0 0 var(--dirt-dark),
+    0 -3px 0 var(--dirt-dark),
+    0 3px 0 var(--dirt-dark),
+    0 6px 0 oklch(0 0 0 / 0.35);
 }

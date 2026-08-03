@@ -10,33 +10,154 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ComoJogarRouteImport } from './routes/como-jogar'
+import { Route as EquipeRouteImport } from './routes/equipe'
+import { Route as LojaRouteImport } from './routes/loja'
+import { Route as NoticiasRouteImport } from './routes/noticias'
+import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as RankingRouteImport } from './routes/ranking'
+import { Route as RegrasRouteImport } from './routes/regras'
+import { Route as SuporteRouteImport } from './routes/suporte'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComoJogarRoute = ComoJogarRouteImport.update({
+  id: '/como-jogar',
+  path: '/como-jogar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipeRoute = EquipeRouteImport.update({
+  id: '/equipe',
+  path: '/equipe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LojaRoute = LojaRouteImport.update({
+  id: '/loja',
+  path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasRoute = NoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RankingRoute = RankingRouteImport.update({
+  id: '/ranking',
+  path: '/ranking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegrasRoute = RegrasRouteImport.update({
+  id: '/regras',
+  path: '/regras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuporteRoute = SuporteRouteImport.update({
+  id: '/suporte',
+  path: '/suporte',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/como-jogar': typeof ComoJogarRoute
+  '/equipe': typeof EquipeRoute
+  '/loja': typeof LojaRoute
+  '/noticias': typeof NoticiasRoute
+  '/perfil': typeof PerfilRoute
+  '/ranking': typeof RankingRoute
+  '/regras': typeof RegrasRoute
+  '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/como-jogar': typeof ComoJogarRoute
+  '/equipe': typeof EquipeRoute
+  '/loja': typeof LojaRoute
+  '/noticias': typeof NoticiasRoute
+  '/perfil': typeof PerfilRoute
+  '/ranking': typeof RankingRoute
+  '/regras': typeof RegrasRoute
+  '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/como-jogar': typeof ComoJogarRoute
+  '/equipe': typeof EquipeRoute
+  '/loja': typeof LojaRoute
+  '/noticias': typeof NoticiasRoute
+  '/perfil': typeof PerfilRoute
+  '/ranking': typeof RankingRoute
+  '/regras': typeof RegrasRoute
+  '/suporte': typeof SuporteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/como-jogar'
+    | '/equipe'
+    | '/loja'
+    | '/noticias'
+    | '/perfil'
+    | '/ranking'
+    | '/regras'
+    | '/suporte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/como-jogar'
+    | '/equipe'
+    | '/loja'
+    | '/noticias'
+    | '/perfil'
+    | '/ranking'
+    | '/regras'
+    | '/suporte'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/como-jogar'
+    | '/equipe'
+    | '/loja'
+    | '/noticias'
+    | '/perfil'
+    | '/ranking'
+    | '/regras'
+    | '/suporte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  ComoJogarRoute: typeof ComoJogarRoute
+  EquipeRoute: typeof EquipeRoute
+  LojaRoute: typeof LojaRoute
+  NoticiasRoute: typeof NoticiasRoute
+  PerfilRoute: typeof PerfilRoute
+  RankingRoute: typeof RankingRoute
+  RegrasRoute: typeof RegrasRoute
+  SuporteRoute: typeof SuporteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +169,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/como-jogar': {
+      id: '/como-jogar'
+      path: '/como-jogar'
+      fullPath: '/como-jogar'
+      preLoaderRoute: typeof ComoJogarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipe': {
+      id: '/equipe'
+      path: '/equipe'
+      fullPath: '/equipe'
+      preLoaderRoute: typeof EquipeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loja': {
+      id: '/loja'
+      path: '/loja'
+      fullPath: '/loja'
+      preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias': {
+      id: '/noticias'
+      path: '/noticias'
+      fullPath: '/noticias'
+      preLoaderRoute: typeof NoticiasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ranking': {
+      id: '/ranking'
+      path: '/ranking'
+      fullPath: '/ranking'
+      preLoaderRoute: typeof RankingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/regras': {
+      id: '/regras'
+      path: '/regras'
+      fullPath: '/regras'
+      preLoaderRoute: typeof RegrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/suporte': {
+      id: '/suporte'
+      path: '/suporte'
+      fullPath: '/suporte'
+      preLoaderRoute: typeof SuporteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  ComoJogarRoute: ComoJogarRoute,
+  EquipeRoute: EquipeRoute,
+  LojaRoute: LojaRoute,
+  NoticiasRoute: NoticiasRoute,
+  PerfilRoute: PerfilRoute,
+  RankingRoute: RankingRoute,
+  RegrasRoute: RegrasRoute,
+  SuporteRoute: SuporteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

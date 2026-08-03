@@ -1,14 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Hero } from "@/components/home/Hero";
+import { NewsSection } from "@/components/home/NewsSection";
+import { ShopHighlight } from "@/components/home/ShopHighlight";
+import { RankingAndSteps } from "@/components/home/RankingAndSteps";
+import { BlockDivider } from "@/components/ui-kit/BlockDivider";
+
+const title = "Habblet Mine — Servidor Brasileiro de Minecraft";
+const description =
+  "Portal do Habblet Mine: notícias, loja, ranking e guias para jogar no servidor brasileiro de blocos.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Blank Project" },
-      { name: "description", content: "A clean blank canvas ready for your ideas." },
-      { property: "og:title", content: "Blank Project" },
-      { property: "og:description", content: "A clean blank canvas ready for your ideas." },
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -16,8 +25,12 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4">
-      <p className="text-sm text-muted-foreground">Blank canvas</p>
+    <main>
+      <Hero />
+      <NewsSection />
+      <ShopHighlight />
+      <RankingAndSteps />
+      <BlockDivider />
     </main>
   );
 }
