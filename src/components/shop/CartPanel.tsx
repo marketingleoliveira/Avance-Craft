@@ -11,11 +11,21 @@ export function CartPanel() {
   const cart = useCart();
   const [pending, setPending] = useState(false);
 
-  async function handleCheckout() {
+  async function handleCheckout(): Promise<void> {
     const nickError = validateNickname(cart.nickname, cart.platform);
-    if (nickError) return toast.error(nickError);
-    if (!cart.confirmed) return toast.error("Confirme que o nick informado está correto.");
-    if (cart.detailed.length === 0) return toast.error("Seu carrinho está vazio.");
+    if (nickError) {
+      toast.error(nickError);
+      return;
+    }
+    if (!cart.confirmed) {
+      toast.error("Confirme que o nick informado está correto.");
+      return;
+    }
+    if (cart.detailed.length === 0) {
+      toast.error("Seu carrinho está vazio.");
+      return;
+    }
+
 
     setPending(true);
     const result = await createCheckout({
