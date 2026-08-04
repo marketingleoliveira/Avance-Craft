@@ -64,7 +64,7 @@ export function PlayerIdentity() {
           type="checkbox"
           checked={confirmed}
           onChange={(event) => setConfirmed(event.target.checked)}
-          className="mt-0.5 h-4 w-4 accent-[hsl(var(--grass))]"
+          className="accent-grass mt-0.5 h-4 w-4"
         />
         Confirmo que <span className="underline">{nickname.trim() || "meu nick"}</span> é
         o meu nick correto na edição {platform === "java" ? "Java" : "Bedrock"}.
