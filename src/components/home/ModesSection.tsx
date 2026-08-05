@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui-kit/Container";
 import { Card } from "@/components/ui/card";
 import { Gamepad2, Layout, Boxes, Trophy } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function ModesSection({ modes }: { modes: any[] }) {
   const ICONS: Record<string, any> = {
@@ -23,31 +24,39 @@ export function ModesSection({ modes }: { modes: any[] }) {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {modes.map((mode: any) => {
+          {modes.map((mode: any, index: number) => {
             const Icon = ICONS[mode.name] || Boxes;
             return (
-              <Card key={mode.id} className="p-8 flex flex-col h-full">
-                <div className="flex items-start justify-between gap-4 mb-6">
-                  <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
-                    <Icon className="w-6 h-6" />
+              <motion.div
+                key={mode.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="p-8 flex flex-col h-full hover:scale-[1.02] transition-transform duration-300">
+                  <div className="flex items-start justify-between gap-4 mb-6">
+                    <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <span
+                      className={
+                        mode.available
+                          ? "px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-widest rounded-full"
+                          : "px-3 py-1 bg-stone-800 text-stone-500 text-[10px] font-black uppercase tracking-widest rounded-full"
+                      }
+                    >
+                      {mode.available ? "Ativo" : "Breve"}
+                    </span>
                   </div>
-                  <span
-                    className={
-                      mode.available
-                        ? "px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-widest rounded-full"
-                        : "px-3 py-1 bg-stone-800 text-stone-500 text-[10px] font-black uppercase tracking-widest rounded-full"
-                    }
-                  >
-                    {mode.available ? "Ativo" : "Breve"}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-[900] uppercase italic tracking-tight text-white mb-3">
-                  {mode.name}
-                </h3>
-                <p className="text-stone-400 text-sm font-medium leading-relaxed">
-                  {mode.description}
-                </p>
-              </Card>
+                  <h3 className="text-2xl font-[900] uppercase italic tracking-tight text-white mb-3">
+                    {mode.name}
+                  </h3>
+                  <p className="text-stone-400 text-sm font-medium leading-relaxed">
+                    {mode.description}
+                  </p>
+                </Card>
+              </motion.div>
             );
           })}
         </div>

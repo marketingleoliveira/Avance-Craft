@@ -56,37 +56,51 @@ function Index() {
         
         {/* Section: Novidades */}
         <div className="py-32 md:py-64 border-t border-white/5">
-          <NewsSection news={news} status={status} />
+          <ScrollReveal>
+            <NewsSection news={news} status={status} />
+          </ScrollReveal>
         </div>
 
         {/* Section: Modalidades */}
         <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
-          <ModesSection modes={modes} />
+          <ScrollReveal>
+            <ModesSection modes={modes} />
+          </ScrollReveal>
         </div>
 
         {/* Section: Por que jogar (HowToPlay) */}
         <div className="py-32 md:py-64">
-          <HowToPlay />
+          <ScrollReveal>
+            <HowToPlay />
+          </ScrollReveal>
         </div>
 
         {/* Section: Loja */}
         <div className="py-32 md:py-64 bg-emerald-500/5 border-y border-emerald-500/10">
-          <ShopHighlight products={featuredProducts} />
+          <ScrollReveal>
+            <ShopHighlight products={featuredProducts} />
+          </ScrollReveal>
         </div>
 
         {/* Section: Ranking */}
         <div className="py-32 md:py-64">
-          <RankingSection />
+          <ScrollReveal>
+            <RankingSection />
+          </ScrollReveal>
         </div>
 
         {/* Section: Comunidade */}
         <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
-          <CommunitySection settings={settings} />
+          <ScrollReveal>
+            <CommunitySection settings={settings} />
+          </ScrollReveal>
         </div>
 
         {/* Section: CTA Final */}
         <div className="py-32 md:py-64">
-          <FinalCta />
+          <ScrollReveal>
+            <FinalCta />
+          </ScrollReveal>
         </div>
 
         <SiteFooter />
