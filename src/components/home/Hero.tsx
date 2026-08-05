@@ -129,9 +129,6 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
     </section>
   );
 }
-    </section>
-  );
-}
 
 function StatusItem({ icon: Icon, label, value, color = "text-white" }: { icon: any, label: string, value: string, color?: string }) {
   return (
