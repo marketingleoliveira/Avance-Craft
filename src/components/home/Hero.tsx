@@ -1,131 +1,93 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
-import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Play, ChevronRight, Shield, Swords, Globe } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import landscape from "@/assets/voxel-landscape.jpg";
-import stoneTex from "@/assets/tex-stone.jpg";
-import charPickaxe from "@/assets/hero-char-pickaxe.png";
-import charSword from "@/assets/hero-char-sword.png";
-
-function StonePlatform({ className }: { className?: string }) {
-  return (
-    <div className={className}>
-      <div
-        className="pixel-border border-stone-dark pixel-shadow-lg h-6 w-full sm:h-8"
-        style={{
-          backgroundImage: `url(${stoneTex})`,
-          backgroundSize: "64px",
-          imageRendering: "pixelated",
-        }}
-      />
-      <div className="mx-auto h-3 w-[85%] bg-stone-dark/70" />
-      <div className="mx-auto h-2 w-[65%] bg-dirt-dark/60" />
-    </div>
-  );
-}
-
-type CharacterProps = {
-  src: string;
-  alt: string;
-  className?: string;
-};
-
-function Character({ src, alt, className }: CharacterProps) {
-  return (
-    <div className={className}>
-      <img
-        src={src}
-        alt={alt}
-        width={768}
-        height={1024}
-        loading="lazy"
-        className="mx-auto w-full drop-shadow-[0_12px_0_rgba(0,0,0,0.28)]"
-        style={{ imageRendering: "pixelated" }}
-      />
-      <StonePlatform className="-mt-2" />
-    </div>
-  );
-}
-
-const DEFAULT_STATUS = {
-  online: true,
-  players_online: 0,
-  max_players: 100,
-  version: "1.21+",
-  ip: "jogar.avance.com.br"
-};
 
 export function Hero({ settings }: { settings?: Record<string, string> }) {
-  const HERO_FACTS = ["Java e Bedrock", `Versão ${settings?.["server_version"] || "1.21+"}`, "Servidor brasileiro"];
-
+  const HERO_STATS = [
+    { label: "Jogadores", value: "2.4k+", icon: Globe },
+    { label: "Versão", value: settings?.["server_version"] || "1.21+", icon: Shield },
+    { label: "Ping BR", value: "15ms", icon: Swords },
+  ];
 
   return (
-    <section className="relative overflow-hidden border-b-4 border-dirt-dark">
-      <img
-        src={landscape}
-        alt="Paisagem voxel"
-        width={1920}
-        height={1080}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-block/30 via-transparent to-dirt-dark/80" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.45)_100%)]" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-stone-950">
+      {/* Background Cinematográfico */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={landscape}
+          alt="Paisagem voxel"
+          className="h-full w-full object-cover opacity-40 scale-105 blur-[2px]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-950/40 via-stone-950/80 to-stone-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]" />
+      </div>
 
-      <Container className="relative py-10 sm:py-14 lg:py-20">
-        <div className="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1fr)]">
-          <div className="order-1 text-center lg:order-2">
-            <p className="font-pixel text-[9px] uppercase text-parchment text-outline sm:text-[10px]">
-              Servidor brasileiro de blocos
-            </p>
+      {/* Partículas / Efeitos Visuais */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-600/5 blur-[120px] rounded-full animate-pulse delay-1000" />
+      </div>
 
-            <div className="relative mb-6 mt-4 flex justify-center">
-              <span className="font-pixel text-outline relative z-10 text-4xl uppercase tracking-tighter text-emerald-block sm:text-6xl lg:text-7xl">
-                Avance
-              </span>
-              <div className="absolute inset-0 top-2 -z-10 translate-y-1 blur-[1px]">
-                <span className="font-pixel text-4xl uppercase tracking-tighter text-dirt-dark opacity-40 sm:text-6xl lg:text-7xl">
-                  Avance
-                </span>
-              </div>
-            </div>
-
-            <p className="font-pixel mt-5 text-[9px] uppercase leading-[1.9] text-parchment text-outline sm:text-[11px]">
-              Construa histórias. Faça amigos. Viva novas aventuras.
-            </p>
-
-            <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <PixelButton variant="emerald">Jogar agora</PixelButton>
-              <Link to="/loja" className="contents">
-                <PixelButton variant="wood">Conhecer a loja</PixelButton>
-              </Link>
-              <PixelButton variant="stone">Entrar no Discord</PixelButton>
-            </div>
-
-            <ul className="mt-7 flex flex-wrap justify-center gap-2">
-              {HERO_FACTS.map((fact) => (
-                <li
-                  key={fact}
-                  className="pixel-border border-dirt-dark bg-parchment/90 px-3 py-2 font-pixel text-[8px] uppercase text-dirt-dark sm:text-[9px]"
-                >
-                  {fact}
-                </li>
-              ))}
-            </ul>
+      <Container className="relative z-10 pt-32 pb-20">
+        <div className="max-w-4xl mx-auto text-center space-y-12">
+          {/* Badge Superior */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-1000">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">
+              Servidor Brasileiro Oficial
+            </span>
           </div>
 
-          <Character
-            src={charPickaxe}
-            alt="Personagem voxel picareta"
-            className="order-2 mx-auto w-40 max-w-full sm:w-52 lg:order-1 lg:w-full"
-          />
-          <Character
-            src={charSword}
-            alt="Personagem voxel espada"
-            className="order-3 mx-auto w-40 max-w-full sm:w-52 lg:w-full"
-          />
+          {/* Título AAA */}
+          <div className="space-y-6">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white uppercase italic leading-none animate-in fade-in zoom-in-95 duration-1000">
+              Avance
+              <span className="block text-emerald-500 text-stroke-sm">Next Gen</span>
+            </h1>
+            <p className="text-lg md:text-xl text-stone-400 max-w-2xl mx-auto font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-4 delay-300 duration-1000">
+              Explore um universo Survival reimaginado com tecnologia de ponta, 
+              economia estável e uma comunidade apaixonada. O futuro do Minecraft é aqui.
+            </p>
+          </div>
+
+          {/* Ações Minimalistas */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-in fade-in slide-in-from-bottom-8 delay-500 duration-1000">
+            <button className="group relative px-10 py-5 bg-emerald-500 text-stone-950 font-black uppercase tracking-widest text-sm transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(16,185,129,0.4)] active:scale-95 overflow-hidden">
+              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
+              <span className="relative flex items-center gap-3">
+                <Play className="w-5 h-5 fill-current" />
+                Iniciar Jornada
+              </span>
+            </button>
+
+            <Link 
+              to="/loja"
+              className="px-10 py-5 border border-white/10 text-white font-bold uppercase tracking-widest text-sm hover:bg-white/5 transition-all flex items-center gap-2"
+            >
+              Ver Coleções
+              <ChevronRight className="w-4 h-4 opacity-50" />
+            </Link>
+          </div>
+
+          {/* Stats Cinematográficos */}
+          <div className="pt-12 grid grid-cols-1 sm:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-12 delay-700 duration-1000">
+            {HERO_STATS.map((stat, i) => (
+              <div key={stat.label} className="flex flex-col items-center gap-2 p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm">
+                <stat.icon className="w-5 h-5 text-emerald-500/50 mb-1" />
+                <span className="text-2xl font-black text-white tracking-tight">{stat.value}</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500">{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
+      
+      {/* Gradiente de Transição Inferior */}
+      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-stone-950 to-transparent z-10" />
     </section>
   );
 }
