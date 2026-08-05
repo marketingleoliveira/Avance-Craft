@@ -1,4 +1,4 @@
-# Habblet Mine - Quality Gate & Hardening Report (Production Ready)
+# Avance - Quality Gate & Hardening Report (Production Ready)
 
 **Data da Auditoria:** 2026-08-05
 **Versão:** 1.0.0-final
@@ -55,7 +55,7 @@
 8. [x] Build de produção limpo e sem erros de TypeScript.
 9. [x] Suíte de testes (Vitest) passando em 100% dos cenários críticos.
 
-**O projeto Habblet Mine está oficialmente aprovado para LANÇAMENTO.**
+**O projeto Avance está oficialmente aprovado para LANÇAMENTO.**
 
 ---
-*Assinado: Habblet Mine Tech Lead (Lovable Agent)*
+*Assinado: Avance Tech Lead (Lovable Agent)*

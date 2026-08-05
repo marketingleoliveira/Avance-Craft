@@ -1,4 +1,4 @@
-# Relatório de Simulação de Lançamento - Habblet Mine (Staging)
+# Relatório de Simulação de Lançamento - Avance (Staging)
 
 Este relatório detalha a simulação de lançamento executada no ambiente de Staging para validar todos os procedimentos de deploy, rollback e sanidade do sistema.
 

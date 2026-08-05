@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PlaceholderPage } from "@/components/layout/PlaceholderPage";
 
-const title = "Equipe — Habblet Mine";
-const description = "Conheça a equipe de moderação e administração do Habblet Mine.";
+const title = "Equipe — Avance";
+const description = "Conheça a equipe de moderação e administração do Avance.";
 
 export const Route = createFileRoute("/equipe")({
   head: () => ({
     meta: [
-      { title: "Nossa Equipe | Habblet Mine" },
-      { name: "description", content: "Conheça os administradores e moderadores responsáveis por manter o Habblet Mine seguro e organizado." },
-      { property: "og:title", content: "Equipe Oficial | Habblet Mine" },
+      { title: "Nossa Equipe | Avance" },
+      { name: "description", content: "Conheça os administradores e moderadores responsáveis por manter o Avance seguro e organizado." },
+      { property: "og:title", content: "Equipe Oficial | Avance" },
       { property: "og:description", content: "Conheça quem faz o servidor acontecer." },
       { property: "og:type", content: "website" },
     ],

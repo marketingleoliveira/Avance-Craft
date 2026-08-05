@@ -1,4 +1,4 @@
-# Runbook de Rollback - Habblet Mine
+# Runbook de Rollback - Avance
 
 Este documento estabelece os procedimentos para reverter o sistema para um estado estável anterior em caso de falha crítica pós-deploy.
 

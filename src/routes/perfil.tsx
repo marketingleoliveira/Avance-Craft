@@ -26,8 +26,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/perfil")({
   head: () => ({
     meta: [
-      { title: "Meu Perfil | Habblet Mine" },
-      { name: "description", content: "Gerencie seus pedidos, vincule sua conta Minecraft e acompanhe suas conquistas no Habblet Mine." },
+      { title: "Meu Perfil | Avance" },
+      { name: "description", content: "Gerencie seus pedidos, vincule sua conta Minecraft e acompanhe suas conquistas no Avance." },
       { name: "robots", content: "noindex, nofollow" }, // Privado
     ],
   }),

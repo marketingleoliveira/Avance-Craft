@@ -1,4 +1,4 @@
-# Configuração de Ambiente - Habblet Mine
+# Configuração de Ambiente - Avance
 
 Este documento descreve as variáveis de ambiente necessárias para operar o portal em diferentes estágios.
 

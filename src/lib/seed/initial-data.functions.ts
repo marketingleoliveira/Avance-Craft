@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
- * Sistema de Seed Idempotente para o Habblet Mine.
+ * Sistema de Seed Idempotente para o Avance.
  */
 export const runDatabaseSeed = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -23,7 +23,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
 
     // --- CONFIGURAÇÕES DO SITE ---
     const settings = [
-      { key: "site_name", value: "Habblet Mine" },
+      { key: "site_name", value: "Avance" },
       { key: "server_ip_java", value: "jogar.habbletmine.com.br" },
       { key: "server_ip_bedrock", value: "bedrock.habbletmine.com.br" },
       { key: "server_port_bedrock", value: "19132" },
@@ -128,7 +128,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
       { 
         category_id: newsCatMap["novidades"]!, 
         slug: "habblet-mine-chegando", 
-        title: "Habblet Mine está chegando", 
+        title: "Avance está chegando", 
         excerpt: "O maior servidor brasileiro está em fase final de testes.",
         content: "Prepare-se para uma experiência única...",
         published: true,

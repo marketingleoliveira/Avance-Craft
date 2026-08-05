@@ -24,7 +24,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
           <StonePanel title="Discord oficial">
             <p className="text-sm leading-relaxed">
-              Nosso Discord é o ponto de encontro do Habblet Mine: avisos, suporte, eventos,
+              Nosso Discord é o ponto de encontro do Avance: avisos, suporte, eventos,
               busca por clãs e canais de voz para jogar acompanhado.
             </p>
             <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">

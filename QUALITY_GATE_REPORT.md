@@ -1,4 +1,4 @@
-# Relatório Final: QUALITY GATE DE PRODUÇÃO - Habblet Mine
+# Relatório Final: QUALITY GATE DE PRODUÇÃO - Avance
 
 Este relatório apresenta a auditoria técnica final antes do lançamento público.
 
@@ -42,4 +42,4 @@ Este relatório apresenta a auditoria técnica final antes do lançamento públi
 6. **A entrega automática pode ser ativada?** ✅ SIM. Idempotência garante entrega única por transação.
 7. **Existe algum bloqueador crítico?** ❌ NÃO.
 
-**Conclusão:** O projeto Habblet Mine atende a todos os requisitos do Quality Gate. **ESTADO: READY FOR LAUNCH.**
+**Conclusão:** O projeto Avance atende a todos os requisitos do Quality Gate. **ESTADO: READY FOR LAUNCH.**

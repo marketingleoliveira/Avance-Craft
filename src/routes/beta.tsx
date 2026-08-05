@@ -73,7 +73,7 @@ function BetaPage() {
             Closed Beta <span className="text-blue-500">Program</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto italic">
-            Participe da fundação do Habblet Mine. Teste novos sistemas, reporte bugs e ganhe recompensas exclusivas de pioneiro.
+            Participe da fundação do Avance. Teste novos sistemas, reporte bugs e ganhe recompensas exclusivas de pioneiro.
           </p>
         </div>
 

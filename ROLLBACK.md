@@ -1,4 +1,4 @@
-# Plano de Rollback - Habblet Mine
+# Plano de Rollback - Avance
 
 Procedimentos de emergência para falhas críticas em produção.
 

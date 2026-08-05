@@ -53,7 +53,7 @@ function PageLayout() {
             <p className="italic">Sua privacidade é nossa prioridade. Tratamos seus dados conforme a LGPD brasileira.</p>
             <div className="mt-4 p-4 bg-black/5 rounded pixel-border border-black/10">
               <p><strong>Encarregado de Dados:</strong> {settings['business_email'] || "contato@habbletmine.com.br"}</p>
-              <p><strong>Responsável:</strong> {settings['business_legal_name'] || "Habblet Mine"}</p>
+              <p><strong>Responsável:</strong> {settings['business_legal_name'] || "Avance"}</p>
             </div>
 
           </div>

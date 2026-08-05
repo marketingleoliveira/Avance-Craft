@@ -50,7 +50,7 @@ function PageLayout() {
           
           <div className="mt-12 pt-8 border-t border-black/10 text-xs text-muted-foreground space-y-2">
             <p>Versão: {page.version} | Última atualização: {format(new Date(page.updated_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</p>
-            <p className="italic">Este documento não substitui revisão jurídica. Os termos aqui apresentados são diretrizes operacionais do Habblet Mine.</p>
+            <p className="italic">Este documento não substitui revisão jurídica. Os termos aqui apresentados são diretrizes operacionais do Avance.</p>
             <div className="mt-4 p-4 bg-black/5 rounded pixel-border border-black/10">
               <p><strong>Identificação:</strong> {settings['business_legal_name'] || "Pendente"} | CNPJ: {settings['business_cnpj'] || "Pendente"}</p>
               <p><strong>Contato:</strong> {settings['business_email'] || "Pendente"} | {settings['business_address'] || "Pendente"}</p>

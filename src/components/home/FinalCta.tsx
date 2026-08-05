@@ -24,7 +24,7 @@ export function FinalCta() {
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-sm font-semibold text-parchment sm:text-base">
           Guarde o endereço, chame seus amigos e prepare a picareta para o lançamento do
-          Habblet Mine.
+          Avance.
         </p>
         <p className="font-pixel mt-5 text-[9px] uppercase text-parchment text-outline sm:text-[11px]">
           jogar.habbletmine.com.br

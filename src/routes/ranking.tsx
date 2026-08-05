@@ -18,8 +18,8 @@ const RANKING_TABS = [
 
 export const Route = createFileRoute("/ranking")({
   head: () => {
-    const title = "Ranking Global — Habblet Mine";
-    const description = "Confira os melhores jogadores do Habblet Mine em economia, tempo online, PvP e muito mais.";
+    const title = "Ranking Global — Avance";
+    const description = "Confira os melhores jogadores do Avance em economia, tempo online, PvP e muito mais.";
     return {
       meta: [
         { title },

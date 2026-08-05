@@ -13,9 +13,9 @@ import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube, CreditCard, Activity, Lock, ShieldAlert } from "lucide-react";
 
-const title = "Habblet Mine — Servidor Brasileiro de Minecraft (Java & Bedrock)";
+const title = "Avance — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
-  "Entre agora no Habblet Mine, o melhor servidor brasileiro de blocos. Survival com economia, eventos diários, VIPs e suporte para Java 1.21+ e Bedrock.";
+  "Entre agora no Avance, o melhor servidor brasileiro de blocos. Survival com economia, eventos diários, VIPs e suporte para Java 1.21+ e Bedrock.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

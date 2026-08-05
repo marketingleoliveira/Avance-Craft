@@ -8,8 +8,8 @@ import { Container } from "@/components/ui-kit/Container";
 export const Route = createFileRoute("/reembolso")({
   head: () => ({
     meta: [
-      { title: "Política de Reembolso — Habblet Mine" },
-      { name: "description", content: "Regras e condições para solicitação de reembolso no Habblet Mine." },
+      { title: "Política de Reembolso — Avance" },
+      { name: "description", content: "Regras e condições para solicitação de reembolso no Avance." },
     ],
   }),
   loader: async ({ context }) => {

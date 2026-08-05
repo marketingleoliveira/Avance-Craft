@@ -24,7 +24,7 @@ export async function logEvent(
   const sanitizedMessage = message.replace(/(token|password|secret|key|auth|signature)=[^& ]+/gi, '$1=[REDACTED]');
 
   // In a real environment, this would go to a logging service or a dedicated DB table
-  // For Habblet Mine, we use audit_logs table for traceability
+  // For Avance, we use audit_logs table for traceability
   try {
     const { error } = await supabaseAdmin
       .from('audit_logs')

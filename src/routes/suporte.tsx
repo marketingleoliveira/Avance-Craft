@@ -25,13 +25,13 @@ const ticketSchema = z.object({
 
 type TicketForm = z.infer<typeof ticketSchema>;
 
-const title = "Suporte — Habblet Mine";
-const description = "Central de suporte e chamados do servidor Habblet Mine.";
+const title = "Suporte — Avance";
+const description = "Central de suporte e chamados do servidor Avance.";
 
 export const Route = createFileRoute("/suporte")({
   head: () => ({
     meta: [
-      { title: "Central de Suporte | Habblet Mine" },
+      { title: "Central de Suporte | Avance" },
       { name: "description", content: "Precisa de ajuda com suas compras ou conta? Abra um chamado na nossa central de suporte oficial." },
       { name: "robots", content: "noindex, nofollow" },
     ],

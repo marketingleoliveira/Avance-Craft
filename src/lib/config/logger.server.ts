@@ -2,7 +2,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { getEnv } from "./env.server";
 
 /**
- * Logger Centralizado Enterprise para o Habblet Mine.
+ * Logger Centralizado Enterprise para o Avance.
  * Garante que erros não sejam silenciosos e mantém trilha de auditoria.
  */
 

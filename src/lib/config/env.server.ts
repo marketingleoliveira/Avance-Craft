@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Esquema de validação para variáveis de ambiente do Habblet Mine.
+ * Esquema de validação para variáveis de ambiente do Avance.
  * Garante separação clara entre development, staging e production.
  */
 const envSchema = z.object({

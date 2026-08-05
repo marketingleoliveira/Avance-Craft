@@ -1,4 +1,4 @@
-# Habblet Mine - Production Dockerfile
+# Avance - Production Dockerfile
 # Baseado em TanStack Start / Nitro
 
 FROM node:20-slim AS builder

@@ -21,8 +21,8 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/status")({
   head: () => {
-    const title = "Status do Servidor — Habblet Mine";
-    const description = "Confira em tempo real o status, jogadores online e saúde técnica do Habblet Mine.";
+    const title = "Status do Servidor — Avance";
+    const description = "Confira em tempo real o status, jogadores online e saúde técnica do Avance.";
     return {
       meta: [
         { title },

@@ -11,8 +11,8 @@ import { PixelButton } from "@/components/ui-kit/PixelButton";
 export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
-      { title: "Contato — Habblet Mine" },
-      { name: "description", content: "Entre em contato com a equipe do Habblet Mine." },
+      { title: "Contato — Avance" },
+      { name: "description", content: "Entre em contato com a equipe do Avance." },
     ],
   }),
   component: ContatoPage,

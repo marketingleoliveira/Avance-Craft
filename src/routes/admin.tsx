@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin")({
   },
   head: () => ({
     meta: [
-      { title: "Painel Administrativo | Habblet Mine" },
+      { title: "Painel Administrativo | Avance" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

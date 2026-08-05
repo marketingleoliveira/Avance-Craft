@@ -10,7 +10,7 @@ const chalk = {
   bold: (text: string) => `\x1b[1m${text}\x1b[22m`,
 };
 
-console.log(chalk.bold(chalk.blue('\n🚀 Iniciando Checklist de Pré-deploy: Habblet Mine\n')));
+console.log(chalk.bold(chalk.blue('\n🚀 Iniciando Checklist de Pré-deploy: Avance\n')));
 
 const checks: { name: string; fn: () => boolean | Promise<boolean> }[] = [
   {

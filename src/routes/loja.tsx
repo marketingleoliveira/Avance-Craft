@@ -16,9 +16,9 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 export const Route = createFileRoute("/loja")({
   head: () => ({
     meta: [
-      { title: "Loja | Habblet Mine — Vips, Cash e Itens" },
-      { name: "description", content: "Adquira VIPs, moedas e itens exclusivos para melhorar sua experiência no Habblet Mine. Entrega automática e segura." },
-      { property: "og:title", content: "Loja Oficial | Habblet Mine" },
+      { title: "Loja | Avance — Vips, Cash e Itens" },
+      { name: "description", content: "Adquira VIPs, moedas e itens exclusivos para melhorar sua experiência no Avance. Entrega automática e segura." },
+      { property: "og:title", content: "Loja Oficial | Avance" },
       { property: "og:description", content: "Turbine sua jornada com benefícios exclusivos na nossa loja oficial." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

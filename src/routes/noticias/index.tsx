@@ -4,16 +4,16 @@ import { listPublishedNews } from "@/lib/services/content.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { Newspaper, Calendar, ArrowRight } from "lucide-react";
 
-const title = "Notícias — Habblet Mine";
-const description = "Atualizações, eventos e novidades do servidor Habblet Mine.";
+const title = "Notícias — Avance";
+const description = "Atualizações, eventos e novidades do servidor Avance.";
 
 export const Route = createFileRoute("/noticias/")({
   head: () => ({
     meta: [
-      { title: "Notícias & Atualizações | Habblet Mine" },
-      { name: "description", content: "Fique por dentro das últimas atualizações, eventos e novidades do universo Habblet Mine." },
-      { property: "og:title", content: "Notícias | Habblet Mine" },
-      { property: "og:description", content: "As últimas novidades do servidor de Minecraft Habblet Mine." },
+      { title: "Notícias & Atualizações | Avance" },
+      { name: "description", content: "Fique por dentro das últimas atualizações, eventos e novidades do universo Avance." },
+      { property: "og:title", content: "Notícias | Avance" },
+      { property: "og:description", content: "As últimas novidades do servidor de Minecraft Avance." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -39,7 +39,7 @@ function NewsListPage() {
       <header className="mb-12 text-center">
         <h1 className="font-pixel text-3xl uppercase text-foreground mb-4">Notícias & Novidades</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Fique por dentro de tudo o que acontece no universo do Habblet Mine.
+          Fique por dentro de tudo o que acontece no universo do Avance.
         </p>
       </header>
 

@@ -12,7 +12,7 @@ const STEPS = [
   {
     step: "02",
     title: "Adicione jogar.habbletmine.com.br",
-    text: "No menu multijogador, adicione o endereço oficial do Habblet Mine.",
+    text: "No menu multijogador, adicione o endereço oficial do Avance.",
   },
   {
     step: "03",

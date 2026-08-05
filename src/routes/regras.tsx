@@ -8,8 +8,8 @@ import { Container } from "@/components/ui-kit/Container";
 export const Route = createFileRoute("/regras")({
   head: () => ({
     meta: [
-      { title: "Regras do Servidor — Habblet Mine" },
-      { name: "description", content: "Regras de convivência e comportamento no Habblet Mine." },
+      { title: "Regras do Servidor — Avance" },
+      { name: "description", content: "Regras de convivência e comportamento no Avance." },
     ],
   }),
   loader: async ({ context }) => {

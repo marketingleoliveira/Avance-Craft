@@ -115,7 +115,7 @@ export function SiteFooter() {
         <div className="border-t-4 border-black/25">
           <Container className="py-4">
             <p className="text-xs text-parchment/70">
-              © {year} Habblet Mine. Servidor brasileiro de blocos.
+              © {year} Avance. Servidor brasileiro de blocos.
             </p>
 
           </Container>

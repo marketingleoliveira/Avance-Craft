@@ -80,7 +80,7 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
             </p>
 
             <h1 className="font-pixel text-outline mt-4 text-3xl uppercase leading-[1.45] text-emerald-block sm:text-5xl lg:text-6xl">
-              Habblet
+              Avance
               <br />
               Mine
             </h1>

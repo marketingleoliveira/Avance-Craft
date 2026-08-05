@@ -1,6 +1,6 @@
-# Deploy Habblet Mine na Hostinger (VPS)
+# Deploy Avance na Hostinger (VPS)
 
-Este guia descreve como realizar o deploy do Habblet Mine em uma VPS Hostinger, respeitando a arquitetura atual com TanStack Start e Lovable Cloud.
+Este guia descreve como realizar o deploy do Avance em uma VPS Hostinger, respeitando a arquitetura atual com TanStack Start e Lovable Cloud.
 
 ## 🏗️ Arquitetura Final
 
