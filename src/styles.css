@@ -20,7 +20,8 @@
 
 @theme inline {
   --font-pixel: "Press Start 2P", "Courier New", monospace;
-  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Inter", "Manrope", sans-serif;
   --color-emerald-block: var(--emerald-block);
   --color-grass: var(--grass);
   --color-grass-dark: var(--grass-dark);
@@ -172,13 +173,30 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
+  h2 { font-size: clamp(2rem, 6vw, 3.5rem); }
+  h3 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
 }
 
 @utility font-pixel {
   font-family: var(--font-pixel);
-  letter-spacing: 0.02em;
-  line-height: 1.6;
+  letter-spacing: -0.02em;
+}
+
+@utility font-heading {
+  font-family: var(--font-heading);
 }
 
 /* Chunky pixel border used across panels, buttons and signs */
@@ -199,9 +217,8 @@
 
 @utility text-outline {
   text-shadow:
-    -3px 0 0 var(--dirt-dark),
-    3px 0 0 var(--dirt-dark),
-    0 -3px 0 var(--dirt-dark),
-    0 3px 0 var(--dirt-dark),
-    0 6px 0 oklch(0 0 0 / 0.35);
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
 }
