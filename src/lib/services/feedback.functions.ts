@@ -25,7 +25,7 @@ const feedbackSchema = z.object({
 });
 
 export const submitFeedback = createServerFn({ method: "POST" })
-  .input(feedbackSchema)
+  .validator((data: unknown) => feedbackSchema.parse(data))
   .handler(async ({ data }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error("Unauthorized");
@@ -58,7 +58,7 @@ export const getMyFeedbacks = createServerFn({ method: "GET" })
   });
 
 export const getFeedbackDetails = createServerFn({ method: "GET" })
-  .input(z.string())
+  .validator((id: unknown) => z.string().parse(id))
   .handler(async ({ data: id }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error("Unauthorized");
@@ -72,7 +72,7 @@ export const getFeedbackDetails = createServerFn({ method: "GET" })
     if (error) throw error;
     
     // Security check: only owner or admin can see
-    const isAdmin = session.user.app_metadata?.role === 'admin';
+    const isAdmin = session.user.app_metadata?.['role'] === 'admin';
     if (data.profile_id !== session.user.id && !isAdmin) {
       throw new Error("Forbidden");
     }
@@ -80,13 +80,12 @@ export const getFeedbackDetails = createServerFn({ method: "GET" })
     return data;
   });
 
-// Admin Functions
 export const getAdminFeedbacks = createServerFn({ method: "GET" })
-  .input(z.object({
+  .validator((filters: unknown) => z.object({
     status: z.string().optional(),
     type: z.string().optional(),
     severity: z.string().optional(),
-  }).optional())
+  }).optional().parse(filters))
   .handler(async ({ data: filters }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error("Unauthorized");
@@ -106,12 +105,12 @@ export const getAdminFeedbacks = createServerFn({ method: "GET" })
   });
 
 export const updateFeedbackStatus = createServerFn({ method: "POST" })
-  .input(z.object({
+  .validator((data: unknown) => z.object({
     id: z.string(),
     status: z.enum(['new', 'triaged', 'confirmed', 'in_progress', 'resolved', 'rejected', 'duplicate']),
     internal_notes: z.string().optional(),
     assigned_to: z.string().uuid().optional(),
-  }))
+  }).parse(data))
   .handler(async ({ data }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error("Unauthorized");
