@@ -78,7 +78,7 @@ function AdminPaymentTestHarness() {
                 className="w-full bg-stone-900 border border-stone-700 p-2 font-mono text-[10px] text-stone-100 focus:outline-none focus:border-primary"
               >
                 <option value="">-- Selecionar Recente --</option>
-                {orders?.orders.map(order => (
+                {orders?.items.map((order: any) => (
                   <option key={order.id} value={order.id}>
                     {order.minecraft_nickname} - R$ {order.total} ({order.status})
                   </option>
