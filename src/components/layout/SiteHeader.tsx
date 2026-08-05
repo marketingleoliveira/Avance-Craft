@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, LogIn, Play } from "lucide-react";
+import { Menu, X, User, Play } from "lucide-react";
 import { Container } from "@/components/ui-kit/Container";
 import { StatusBar } from "@/components/layout/StatusBar";
 import { NAV_LINKS } from "@/data/mock";
@@ -95,11 +95,15 @@ export function SiteHeader() {
           <div className="flex shrink-0 items-center gap-2">
             <Link
               to="/perfil"
-              className="font-pixel pixel-border hidden border-wood-dark bg-wood px-3 py-2.5 text-[9px] uppercase text-dirt-dark shadow-[0_4px_0_0_var(--wood-dark)] transition-transform hover:brightness-105 active:translate-y-[2px] active:shadow-none sm:inline-flex sm:items-center sm:gap-2"
+              activeProps={{
+                className: "brightness-95 translate-y-[2px] shadow-none",
+              }}
+              className="font-pixel pixel-border flex items-center gap-2 border-wood-dark bg-wood px-3 py-2.5 text-[9px] uppercase text-dirt-dark shadow-[0_4px_0_0_var(--wood-dark)] transition-transform hover:brightness-105 active:translate-y-[2px] active:shadow-none"
             >
-              <LogIn className="h-4 w-4" aria-hidden />
-              Entrar
+              <User className="h-4 w-4" aria-hidden />
+              Meu Perfil
             </Link>
+
             <Link
               to="/como-jogar"
               className="font-pixel pixel-border inline-flex items-center gap-2 border-grass-dark bg-emerald-block px-3 py-2.5 text-[9px] uppercase text-accent-foreground shadow-[0_4px_0_0_var(--grass-dark)] transition-transform hover:brightness-105 active:translate-y-[2px] active:shadow-none sm:px-4"
