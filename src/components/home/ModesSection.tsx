@@ -2,13 +2,10 @@ import { Container } from "@/components/ui-kit/Container";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { listServerModes } from "@/lib/services/content.functions";
 
-export function ModesSection() {
-  const { data: modes } = useSuspenseQuery({
-    queryKey: ["server-modes"],
-    queryFn: () => listServerModes(),
-  });
+
+export function ModesSection({ modes }: { modes: any[] }) {
+
 
   return (
     <section className="border-y-4 border-dirt-dark bg-stone/20 py-14">

@@ -4,7 +4,8 @@ import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { listPublishedNews, getServerStatus, listRankings } from "@/lib/services/content.functions";
+import { listRankings } from "@/lib/services/content.functions";
+
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
 import news3 from "@/assets/news-3.jpg";
@@ -68,24 +69,17 @@ const DEFAULT_STATUS = {
   ip: "jogar.habbletmine.com.br"
 };
 
-export function NewsSection() {
-  const { data: news } = useSuspenseQuery({
-    queryKey: ["published-news", 3],
-    queryFn: () => listPublishedNews({ data: { limit: 3 } }),
-  });
+export function NewsSection({ news, status }: { news: any[]; status: any }) {
 
-  const { data: serverStatus } = useSuspenseQuery({
-    queryKey: ["server-status"],
-    queryFn: () => getServerStatus(),
-  });
 
   const { data: rankings } = useSuspenseQuery({
     queryKey: ["rankings", "ricos", "weekly", 3],
     queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 3 } }),
   });
 
-  const status = serverStatus ?? DEFAULT_STATUS;
-  const statusKey = status.online ? "online" : "offline";
+  const currentStatus = status ?? DEFAULT_STATUS;
+  const statusKey = currentStatus.online ? "online" : "offline";
+
 
   return (
     <section className="py-14">
@@ -112,13 +106,14 @@ export function NewsSection() {
                 <SidebarRow label="Servidor" value={statusLabel[statusKey] || "Offline"} />
                 <SidebarRow
                   label="Jogadores"
-                  value={`${status.players_online}/${status.max_players}`}
+                  value={`${currentStatus.players_online}/${currentStatus.max_players}`}
                 />
                 <SidebarRow label="Modo" value="Survival" />
-                <SidebarRow label="Versão" value={status.version} />
+                <SidebarRow label="Versão" value={currentStatus.version} />
+
               </ul>
               <p className="mt-3 break-all bg-dirt-dark/10 p-2 text-sm font-bold">
-                {status.ip}
+                {currentStatus.ip}
               </p>
             </StonePanel>
 

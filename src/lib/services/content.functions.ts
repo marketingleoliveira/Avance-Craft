@@ -114,17 +114,42 @@ export const listServerModes = createServerFn({ method: "GET" }).handler(
 );
 
 export const listPublicSettings = createServerFn({ method: "GET" }).handler(
-  async (): Promise<SiteSetting[]> => {
+  async (): Promise<Record<string, string>> => {
     const { getPublicServerClient } = await import("@/lib/supabase/public-client.server");
     const { data, error } = await getPublicServerClient()
       .from("site_settings")
-      .select("*")
+      .select("key, value")
       .eq("is_public", true);
 
     if (error) {
       console.error("[content] listPublicSettings", error.message);
-      return [];
+      return {};
     }
-    return data ?? [];
+    
+    return (data ?? []).reduce((acc, curr) => ({
+      ...acc,
+      [curr.key]: curr.value
+    }), {});
   },
 );
+
+export const getHomeData = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const [news, status, modes, products, settings] = await Promise.all([
+      listPublishedNews({ data: { limit: 3 } }),
+      getServerStatus(),
+      listServerModes(),
+      import("./catalog.functions").then(m => m.listProducts({ data: { featuredOnly: true, limit: 3 } })),
+      listPublicSettings()
+    ]);
+
+    return {
+      news,
+      status,
+      modes,
+      featuredProducts: products,
+      settings
+    };
+  }
+);
+

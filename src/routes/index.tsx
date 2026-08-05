@@ -1,12 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQueries } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { 
-  listPublishedNews, 
+  getHomeData,
   listRankings, 
-  getServerStatus, 
-  listServerModes 
 } from "@/lib/services/content.functions";
-import { listProducts } from "@/lib/services/catalog.functions";
+
 import { Hero } from "@/components/home/Hero";
 import { NewsSection } from "@/components/home/NewsSection";
 import { ModesSection } from "@/components/home/ModesSection";
@@ -34,20 +32,8 @@ export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData({
-        queryKey: ["published-news", 3],
-        queryFn: () => listPublishedNews({ data: { limit: 3 } }),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["server-status"],
-        queryFn: () => getServerStatus(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["server-modes"],
-        queryFn: () => listServerModes(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["featured-products", true, 3],
-        queryFn: () => listProducts({ data: { featuredOnly: true, limit: 3 } }),
+        queryKey: ["home-data"],
+        queryFn: () => getHomeData(),
       }),
       context.queryClient.ensureQueryData({
         queryKey: ["rankings", "ricos", "weekly", 5],
@@ -55,46 +41,30 @@ export const Route = createFileRoute("/")({
       }),
     ]);
   },
+
   component: Index,
 });
 
 function Index() {
-  const [
-    newsQuery,
-    statusQuery,
-    modesQuery,
-    featuredProductsQuery,
-  ] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: ["published-news", 3],
-        queryFn: () => listPublishedNews({ data: { limit: 3 } }),
-      },
-      {
-        queryKey: ["server-status"],
-        queryFn: () => getServerStatus(),
-      },
-      {
-        queryKey: ["server-modes"],
-        queryFn: () => listServerModes(),
-      },
-      {
-        queryKey: ["featured-products", true, 3],
-        queryFn: () => listProducts({ data: { featuredOnly: true, limit: 3 } }),
-      },
-    ],
+  const { data: homeData } = useSuspenseQuery({
+    queryKey: ["home-data"],
+    queryFn: () => getHomeData(),
   });
+
+  const { news, status, modes, featuredProducts, settings } = homeData;
+
 
   return (
     <main>
-      <Hero />
-      <NewsSection />
-      <ModesSection />
-      <ShopHighlight />
+      <Hero settings={settings} />
+      <NewsSection news={news} status={status} />
+      <ModesSection modes={modes} />
+      <ShopHighlight products={featuredProducts} />
       <RankingSection />
       <HowToPlay />
-      <CommunitySection />
+      <CommunitySection settings={settings} />
       <FinalCta />
+
     </main>
   );
 }
