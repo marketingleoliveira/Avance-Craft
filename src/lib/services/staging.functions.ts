@@ -6,7 +6,7 @@ import { z } from "zod";
 
 /**
  * Seed exclusivo para ambiente de Staging.
- * Cria produtos de teste, categorias e usuários simulados.
+ * Cria produtos de teste e categorias simuladas.
  */
 export const runStagingSeed = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -20,41 +20,38 @@ export const runStagingSeed = createServerFn({ method: "POST" })
 
     const results = [];
 
-    // 1. Categorias de Teste
+    // 1. Categoria de Teste (tabela 'categories' no plural)
     const { data: cat, error: catErr } = await context.supabase
-      .from("product_categories")
-      .upsert([
-        { name: "Produtos de Teste", slug: "teste", description: "Categoria exclusiva para testes de staging", active: true }
-      ], { onConflict: 'slug' })
+      .from("categories")
+      .upsert({ 
+        name: "Produtos de Teste", 
+        slug: "teste", 
+        description: "Categoria exclusiva para testes de staging", 
+        active: true 
+      }, { onConflict: 'slug' })
       .select()
       .single();
     
     if (catErr) throw new Error(`Erro ao criar categoria: ${catErr.message}`);
-    results.push("Categoria 'Produtos de Teste' criada/atualizada.");
+    results.push("Categoria 'Produtos de Teste' pronta.");
 
     // 2. Produtos de Teste (VIP R$ 1,00 para sandbox)
     const testProducts = [
       {
         name: "VIP Teste (R$ 1,00)",
         slug: "vip-teste-staging",
-        description: "Produto para teste de checkout real em sandbox.",
+        short_description: "Produto para teste de checkout real em sandbox.",
         price: 1.00,
         category_id: cat.id,
         active: true,
-        type: 'rank',
-        commands: ["lp user {player} parent add test_vip"],
-        metadata: { staging: true }
       },
       {
         name: "Cash Teste",
         slug: "cash-teste-staging",
-        description: "Créditos virtuais para teste.",
+        short_description: "Créditos virtuais para teste.",
         price: 5.00,
         category_id: cat.id,
         active: true,
-        type: 'currency',
-        commands: ["eco give {player} 1000"],
-        metadata: { staging: true }
       }
     ];
 
@@ -62,6 +59,7 @@ export const runStagingSeed = createServerFn({ method: "POST" })
       const { error: pErr } = await context.supabase
         .from("products")
         .upsert(p, { onConflict: 'slug' });
+      
       if (pErr) results.push(`Erro no produto ${p.slug}: ${pErr.message}`);
       else results.push(`Produto ${p.name} pronto.`);
     }
@@ -71,11 +69,10 @@ export const runStagingSeed = createServerFn({ method: "POST" })
 
 /**
  * Limpa dados transacionais de Staging.
- * Útil para resetar o ambiente antes de novos ciclos de QA.
  */
 export const clearStagingData = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(z.object({ confirm: z.boolean() }))
+  .inputValidator((input: unknown) => z.object({ confirm: z.boolean() }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
 
@@ -85,10 +82,10 @@ export const clearStagingData = createServerFn({ method: "POST" })
 
     if (!data.confirm) throw new Error("Confirmação necessária.");
 
-    const tables = ["delivery_queue", "orders", "payments", "support_ticket_messages", "support_tickets"];
+    const tables = ["delivery_queue", "orders", "payments", "support_messages", "support_tickets"];
     const results: Record<string, number> = {};
 
-    for (const table of tables) {
+    for (const table of tables as any[]) {
       const { error, count } = await context.supabase
         .from(table)
         .delete()
@@ -103,7 +100,7 @@ export const clearStagingData = createServerFn({ method: "POST" })
       actor_profile_id: context.userId,
       action: "clear_staging_data",
       entity: "system",
-      metadata: { results }
+      metadata: { results } as any
     });
 
     return { success: true, results };
