@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui-kit/Container";
 import { MessageSquare, Instagram, Youtube, Share2, Users, Bell, LifeBuoy, Sword } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
   const discordUrl = settings?.["discord_url"] || "https://discord.gg/avance";
