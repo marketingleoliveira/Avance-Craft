@@ -55,21 +55,3 @@ function Index() {
     </main>
   );
 }
-
-
-  const { news, status, modes, featuredProducts, settings } = homeData;
-
-  return (
-    <main>
-      <Hero settings={settings} />
-      <NewsSection news={news} status={status} />
-      <ModesSection modes={modes} />
-      <ShopHighlight products={featuredProducts} />
-      <RankingSection />
-      <HowToPlay />
-      <CommunitySection settings={settings} />
-      <FinalCta />
-    </main>
-  );
-}
-
