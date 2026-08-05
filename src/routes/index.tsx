@@ -159,7 +159,10 @@ function Index() {
                     "Healthcheck de Produção (/api/health)",
                     "Configuração Nginx & SSL Preparada",
                     "Política de Backup & Restore Definida",
-                    "PITR & Snapshots Externos Agendados"
+                    "PITR & Snapshots Externos Agendados",
+                    "Plano de Rollback & Runbook de Emergência",
+                    "Estratégia de Reconciliação de Pedidos"
+
 
 
 
