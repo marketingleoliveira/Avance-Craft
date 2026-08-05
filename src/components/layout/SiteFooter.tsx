@@ -33,8 +33,6 @@ export function SiteFooter() {
           <div className="flex flex-col h-full">
             <h3 className="font-pixel text-outline text-[13px] uppercase text-emerald-block">
               Avance
-              <br />
-              Mine
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-parchment/80">
               Portal comunitário de um servidor brasileiro de blocos, com economia, missões
