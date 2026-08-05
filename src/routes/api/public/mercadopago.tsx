@@ -32,9 +32,10 @@ export const Route = createFileRoute("/api/public/mercadopago")({
             const { data: order } = await supabaseAdmin
               .from("orders")
               .update({ status: "paid", paid_at: new Date().toISOString() })
-              .eq("id", externalReference as string)
+              .eq("id", (externalReference as string) || "")
               .select("*, items:order_items(*)")
               .single();
+
 
 
             if (order) {

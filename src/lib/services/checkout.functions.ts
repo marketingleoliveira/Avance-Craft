@@ -23,11 +23,12 @@ export const createPaymentPreference = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     return createCheckoutRequest(
       {
-        ...data,
+        nickname: data.nickname,
+        edition: data.edition,
+        items: data.items,
         couponCode: data.couponCode ?? undefined,
       },
       context.supabase,
       context.userId
     );
-
   });
