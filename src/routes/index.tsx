@@ -48,11 +48,6 @@ function Index() {
 
   return (
     <main className="relative">
-      {/* 
-        HABBLET MINE - RELEASE CANDIDATE v1.0.0-rc.1
-        Status: Congelado para QA
-        Documentação: CHANGELOG.md, RELEASE_CHECKLIST.md, DEPLOYMENT.md
-      */}
       <Hero settings={settings} />
       <NewsSection news={news} status={status} />
       <ModesSection modes={modes} />
