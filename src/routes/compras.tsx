@@ -5,35 +5,35 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { Container } from "@/components/ui-kit/Container";
 
-export const Route = createFileRoute("/regras")({
+export const Route = createFileRoute("/compras")({
   head: () => ({
     meta: [
-      { title: "Regras do Servidor — Habblet Mine" },
-      { name: "description", content: "Regras de convivência e comportamento no Habblet Mine." },
+      { title: "Como Comprar — Habblet Mine" },
+      { name: "description", content: "Guia passo a passo de como adquirir VIPs e pacotes na nossa loja." },
     ],
   }),
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
-      queryKey: ["page", "regras"],
-      queryFn: () => getPageBySlug({ data: { slug: "regras" } }),
+      queryKey: ["page", "compras"],
+      queryFn: () => getPageBySlug({ data: { slug: "compras" } }),
     });
   },
-  component: RegrasPage,
+  component: ComprasPage,
 });
 
-function RegrasPage() {
+function ComprasPage() {
   const { data: page } = useSuspenseQuery({
-    queryKey: ["page", "regras"],
-    queryFn: () => getPageBySlug({ data: { slug: "regras" } }),
+    queryKey: ["page", "compras"],
+    queryFn: () => getPageBySlug({ data: { slug: "compras" } }),
   });
 
   if (!page) {
     return (
       <Container className="py-20 text-center">
-        <WoodSign>Regras</WoodSign>
+        <WoodSign>Guia de Compras</WoodSign>
         <StonePanel className="mt-8 p-12 max-w-2xl mx-auto">
           <p className="text-muted-foreground font-pixel text-sm">
-            As regras estão sendo revisadas.
+            O guia de compras está sendo atualizado.
           </p>
         </StonePanel>
       </Container>

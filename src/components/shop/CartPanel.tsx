@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+
 import { toast } from "sonner";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
@@ -12,7 +14,10 @@ import { useServerFn } from "@tanstack/react-start";
 export function CartPanel() {
   const cart = useCart();
   const [pending, setPending] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [acceptRefund, setAcceptRefund] = useState(false);
   const startCheckout = useServerFn(createPaymentPreference);
+
 
   async function handleCheckout(): Promise<void> {
     const nickError = validateNickname(cart.nickname, cart.platform);
@@ -24,6 +29,11 @@ export function CartPanel() {
       toast.error("Confirme que o nick informado está correto.");
       return;
     }
+    if (!acceptTerms || !acceptRefund) {
+      toast.error("Você precisa aceitar os termos e a política de reembolso para continuar.");
+      return;
+    }
+
     if (cart.detailed.length === 0) {
       toast.error("Seu carrinho está vazio.");
       return;
@@ -151,7 +161,35 @@ export function CartPanel() {
         </div>
       </dl>
 
+      <div className="mt-6 space-y-3 bg-black/5 p-3 rounded pixel-border border-black/10">
+
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <input 
+            type="checkbox" 
+            checked={acceptTerms}
+            onChange={(e) => setAcceptTerms(e.target.checked)}
+            className="mt-1 w-4 h-4 rounded border-black/20 text-emerald-block focus:ring-emerald-block/50"
+          />
+          <span className="text-[10px] leading-tight text-muted-foreground group-hover:text-foreground transition-colors">
+            Li e aceito os <Link to="/termos" className="underline font-bold text-emerald-block">Termos de Compra</Link> e <Link to="/regras" className="underline font-bold text-emerald-block">Regras do Servidor</Link>.
+          </span>
+        </label>
+        
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <input 
+            type="checkbox" 
+            checked={acceptRefund}
+            onChange={(e) => setAcceptRefund(e.target.checked)}
+            className="mt-1 w-4 h-4 rounded border-black/20 text-emerald-block focus:ring-emerald-block/50"
+          />
+          <span className="text-[10px] leading-tight text-muted-foreground group-hover:text-foreground transition-colors">
+            Compreendo que produtos digitais possuem regras específicas de <Link to="/reembolso" className="underline font-bold text-emerald-block">Reembolso</Link>.
+          </span>
+        </label>
+      </div>
+
       <PixelButton
+
         variant="emerald"
         className="mt-4 w-full"
         disabled={pending}

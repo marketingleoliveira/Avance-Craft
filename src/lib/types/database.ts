@@ -39,6 +39,7 @@ export type SupportTicket = Tables<"support_tickets">;
 export type SupportMessage = Tables<"support_messages">;
 export type AuditLog = Tables<"audit_logs">;
 export type SiteSetting = Tables<"site_settings">;
+export type Page = Tables<"pages">;
 
 /** Produto com os relacionamentos usados na vitrine da loja. */
 export type ProductWithDetails = Product & {

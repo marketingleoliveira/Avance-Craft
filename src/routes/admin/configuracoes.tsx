@@ -24,13 +24,19 @@ import {
   Trash2,
   TestTube,
   Ticket,
-  Terminal
+  Terminal,
+  Save,
+  FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FeatureFlag } from '@/lib/config/flags';
 import { useServerFn } from '@tanstack/react-start';
 import { isStaging, isDev } from '@/lib/config/env.server';
+import { getHomeData } from '@/lib/services/content.functions';
+import { adminUpdateSiteSettings } from '@/lib/services/admin-settings.functions';
+import { PixelButton } from '@/components/ui-kit/PixelButton';
+
 
 export const Route = createFileRoute('/admin/configuracoes')({
   component: AdminFlagsPage,
@@ -92,11 +98,26 @@ function AdminFlagsPage() {
   const queryClient = useQueryClient();
   const [reason, setReason] = useState("");
   const [selectedFlag, setSelectedFlag] = useState<string | null>(null);
+  const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
 
   const listFlags = useServerFn(adminListFeatureFlags);
   const updateFlag = useServerFn(adminUpdateFeatureFlag);
+  const fetchSettings = useServerFn(getHomeData);
+  const saveSettings = useServerFn(adminUpdateSiteSettings);
 
-  const { data: flags, isLoading } = useQuery({
+  const { data: homeData, isLoading: isLoadingSettings } = useQuery({
+    queryKey: ['admin-site-settings'],
+    queryFn: () => fetchSettings(),
+  });
+
+  useEffect(() => {
+    if (homeData?.settings) {
+      setSiteSettings(homeData.settings);
+    }
+  }, [homeData]);
+
+  const { data: flags, isLoading: isLoadingFlags } = useQuery({
     queryKey: ['admin-feature-flags'],
     queryFn: () => listFlags(),
   });
@@ -114,7 +135,21 @@ function AdminFlagsPage() {
     }
   });
 
-  if (isLoading) return <Container className="py-12"><div className="text-center text-foreground font-pixel">Consultando flags...</div></Container>;
+  const handleSaveSettings = async () => {
+    setIsSavingSettings(true);
+    try {
+      await saveSettings({ data: { settings: siteSettings } });
+      toast.success("Configurações institucionais salvas!");
+      queryClient.invalidateQueries({ queryKey: ['admin-site-settings'] });
+    } catch (err: any) {
+      toast.error("Erro ao salvar: " + err.message);
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
+  if (isLoadingFlags || isLoadingSettings) return <Container className="py-12"><div className="text-center text-foreground font-pixel text-sm">Carregando configurações...</div></Container>;
+
 
   const handleToggle = (flag: string, currentValue: boolean) => {
     if (selectedFlag === flag) {
@@ -152,7 +187,72 @@ function AdminFlagsPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-8">
+          {/* Configurações Institucionais */}
+          <StonePanel className="p-6">
+            <h2 className="font-pixel text-sm mb-6 flex items-center gap-2 text-primary">
+              <FileText className="w-5 h-5" /> DADOS INSTITUCIONAIS
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-pixel text-muted-foreground uppercase">Razão Social / Nome:</label>
+                <input 
+                  type="text"
+                  value={siteSettings['business_legal_name'] || ""}
+                  onChange={(e) => setSiteSettings(prev => ({ ...prev, business_legal_name: e.target.value }))}
+                  placeholder="Habblet Mine Ltda"
+                  className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-pixel text-muted-foreground uppercase">CNPJ:</label>
+                <input 
+                  type="text"
+                  value={siteSettings['business_cnpj'] || ""}
+                  onChange={(e) => setSiteSettings(prev => ({ ...prev, business_cnpj: e.target.value }))}
+                  placeholder="00.000.000/0001-00"
+                  className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-pixel text-muted-foreground uppercase">E-mail de Contato:</label>
+                <input 
+                  type="email"
+                  value={siteSettings['business_email'] || ""}
+                  onChange={(e) => setSiteSettings(prev => ({ ...prev, business_email: e.target.value }))}
+                  placeholder="contato@habbletmine.com.br"
+                  className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-pixel text-muted-foreground uppercase">Endereço Comercial:</label>
+                <input 
+                  type="text"
+                  value={siteSettings['business_address'] || ""}
+                  onChange={(e) => setSiteSettings(prev => ({ ...prev, business_address: e.target.value }))}
+                  placeholder="Av. Paulista, 1000 - São Paulo/SP"
+                  className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-stone-700 flex justify-end">
+              <PixelButton 
+                variant="emerald" 
+                onClick={handleSaveSettings}
+                disabled={isSavingSettings}
+              >
+                {isSavingSettings ? "SALVANDO..." : "SALVAR ALTERAÇÕES"}
+              </PixelButton>
+            </div>
+          </StonePanel>
+
+          <div className="space-y-4">
+            <h2 className="font-pixel text-sm mb-4 flex items-center gap-2 text-primary px-2">
+              <Settings className="w-5 h-5" /> FUNCIONALIDADES (FLAGS)
+            </h2>
+
           {Object.entries(FLAG_METADATA).map(([id, meta]) => {
             const isActive = flags?.[id as FeatureFlag];
             const isEditing = selectedFlag === id;
@@ -227,7 +327,9 @@ function AdminFlagsPage() {
               </StonePanel>
             );
           })}
+          </div>
         </div>
+
 
         <div className="space-y-6">
           {(isStaging() || isDev()) && (

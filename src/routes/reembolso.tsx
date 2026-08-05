@@ -5,35 +5,35 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { Container } from "@/components/ui-kit/Container";
 
-export const Route = createFileRoute("/regras")({
+export const Route = createFileRoute("/reembolso")({
   head: () => ({
     meta: [
-      { title: "Regras do Servidor — Habblet Mine" },
-      { name: "description", content: "Regras de convivência e comportamento no Habblet Mine." },
+      { title: "Política de Reembolso — Habblet Mine" },
+      { name: "description", content: "Regras e condições para solicitação de reembolso no Habblet Mine." },
     ],
   }),
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
-      queryKey: ["page", "regras"],
-      queryFn: () => getPageBySlug({ data: { slug: "regras" } }),
+      queryKey: ["page", "reembolso"],
+      queryFn: () => getPageBySlug({ data: { slug: "reembolso" } }),
     });
   },
-  component: RegrasPage,
+  component: ReembolsoPage,
 });
 
-function RegrasPage() {
+function ReembolsoPage() {
   const { data: page } = useSuspenseQuery({
-    queryKey: ["page", "regras"],
-    queryFn: () => getPageBySlug({ data: { slug: "regras" } }),
+    queryKey: ["page", "reembolso"],
+    queryFn: () => getPageBySlug({ data: { slug: "reembolso" } }),
   });
 
   if (!page) {
     return (
       <Container className="py-20 text-center">
-        <WoodSign>Regras</WoodSign>
+        <WoodSign>Reembolso</WoodSign>
         <StonePanel className="mt-8 p-12 max-w-2xl mx-auto">
           <p className="text-muted-foreground font-pixel text-sm">
-            As regras estão sendo revisadas.
+            Política de reembolso em processo de atualização.
           </p>
         </StonePanel>
       </Container>
@@ -45,6 +45,9 @@ function RegrasPage() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <WoodSign>{page.title}</WoodSign>
+          <p className="mt-4 text-muted-foreground font-pixel text-[10px] uppercase">
+            Vigência: {new Date(page.updated_at).toLocaleDateString("pt-BR")} | v{page.version}
+          </p>
         </div>
 
         <StonePanel className="p-8 md:p-12">
