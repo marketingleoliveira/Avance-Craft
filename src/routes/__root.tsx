@@ -18,24 +18,30 @@ import { Toaster } from "@/components/ui/sonner";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+      <div className="max-w-2xl text-center space-y-6">
+        <div className="relative inline-block">
+          <h1 className="text-[120px] font-pixel text-primary leading-none">404</h1>
+          <div className="absolute -top-4 -right-4 bg-red-500 text-white px-2 py-1 text-xs font-pixel rotate-12">
+            OOPS!
+          </div>
+        </div>
+        <h2 className="text-3xl font-pixel text-foreground">Página Perdida na Caverna</h2>
+        <p className="text-muted-foreground max-w-md mx-auto">
+          Parece que você cavou no lugar errado! O endereço que você procura não existe ou foi minerado para outro local.
         </p>
-        <div className="mt-6">
+        <div className="pt-4">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="px-8 py-4 bg-primary text-primary-foreground font-pixel text-sm rounded-none border-b-4 border-primary-dark hover:translate-y-1 hover:border-b-0 transition-all inline-block"
           >
-            Go home
+            Voltar ao Spawn
           </Link>
         </div>
       </div>
     </div>
   );
 }
+
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
