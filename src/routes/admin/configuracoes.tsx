@@ -273,6 +273,18 @@ function AdminFlagsPage() {
                 >
                   <TestTube className="w-3 h-3" /> TEST HARNESS (PAGAMENTOS)
                 </Link>
+                <Link
+                  to="/admin/plugin-teste"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-pixel text-[10px] border-b-2 border-indigo-800 transition-all"
+                >
+                  <Terminal className="w-3 h-3" /> INTEGRAÇÃO MINECRAFT
+                </Link>
+                <Link
+                  to="/admin/beta-convites"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-pixel text-[10px] border-b-2 border-orange-800 transition-all"
+                >
+                  <Ticket className="w-3 h-3" /> GERIR CONVITES BETA
+                </Link>
               </div>
             </StonePanel>
           )}
