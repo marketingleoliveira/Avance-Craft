@@ -27,7 +27,7 @@ export const createValidationProduct = createServerFn({ method: "POST" })
           slug: "interno",
           active: false, // Oculto da loja pública
           position: 999
-        })
+        } as any)
         .select("id")
         .single();
       
@@ -39,7 +39,7 @@ export const createValidationProduct = createServerFn({ method: "POST" })
     const { data: product, error: prodErr } = await supabaseAdmin
       .from("products")
       .upsert({
-        category_id: category.id,
+        category_id: (category as any).id,
         name: "Validação de Entrega (Real)",
         slug: "validacao-entrega-real",
         short_description: "Produto de teste real para validação de checkout e plugin.",
@@ -47,7 +47,7 @@ export const createValidationProduct = createServerFn({ method: "POST" })
         active: false, // Não aparece na vitrine
         featured: false,
         position: 0
-      }, { onConflict: "slug" })
+      } as any, { onConflict: "slug" })
       .select("id")
       .single();
 
@@ -57,15 +57,15 @@ export const createValidationProduct = createServerFn({ method: "POST" })
     await supabaseAdmin
       .from("product_commands")
       .delete()
-      .eq("product_id", product.id);
+      .eq("product_id", (product as any).id);
 
     await supabaseAdmin
       .from("product_commands")
       .insert({
-        product_id: product.id,
+        product_id: (product as any).id,
         command: "give {nickname} minecraft:dirt 1",
         run_on: "payment"
-      });
+      } as any);
 
-    return { productId: product.id };
+    return { productId: (product as any).id };
   });
