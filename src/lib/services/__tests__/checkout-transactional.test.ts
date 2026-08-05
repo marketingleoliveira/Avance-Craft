@@ -15,9 +15,14 @@ const mockSupabase = {
 
 // Mock de Configs
 vi.mock('../config/env.server', () => ({
-  getEnv: () => ({ APP_BASE_URL: 'http://localhost:8080', MERCADOPAGO_ACCESS_TOKEN: 'test_token' }),
-  isProd: () => false
+  getEnv: () => ({ 
+    APP_BASE_URL: 'http://localhost:8080', 
+    MERCADOPAGO_ACCESS_TOKEN: 'test_token',
+    MERCADOPAGO_WEBHOOK_SECRET: 'test_secret'
+  }),
+  isProd: () => true
 }));
+
 
 vi.mock('../config/flags', () => ({
   getServerFlags: () => Promise.resolve({ STORE_ENABLED: true, REAL_PAYMENTS_ENABLED: true })
@@ -65,10 +70,16 @@ describe('Checkout Transactional Architecture', () => {
     (mockSupabase.from as any).mockReturnValue({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          single: vi.fn().mockResolvedValue({ data: { items: [] } })
+          single: vi.fn().mockResolvedValue({ 
+            data: { 
+              id: 'order-uuid',
+              items: [{ product_name: 'VIP', unit_price: 10, quantity: 1 }] 
+            } 
+          })
         }))
       }))
     });
+
 
     const result = await createCheckoutRequest(
       { nickname: 'PlayerTest', edition: 'java', items: [{ productId: 'p1', quantity: 1 }] },
