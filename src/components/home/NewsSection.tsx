@@ -125,14 +125,14 @@ export function NewsSection() {
             <StonePanel title="Ranking semanal">
               <ol className="grid gap-2 text-sm">
                 {rankings.map((row: any) => (
-                  <li key={row.player_name} className="flex items-center gap-3">
+                  <li key={row.minecraft_nickname} className="flex items-center gap-3">
                     <span className="font-pixel text-[10px] text-grass-dark">
                       {row.position}
                     </span>
                     <span className="min-w-0 flex-1 truncate font-semibold">
-                      {row.player_name}
+                      {row.minecraft_nickname}
                     </span>
-                    <span className="text-xs text-muted-foreground">{row.score_formatted}</span>
+                    <span className="text-xs text-muted-foreground">{row.display_value}</span>
                   </li>
                 ))}
               </ol>

@@ -24,12 +24,12 @@ export function ModesSection() {
                 </h3>
                 <span
                   className={
-                    mode.status === "online"
+                    mode.available
                       ? "font-pixel pixel-border border-grass-dark bg-emerald-block px-2 py-1 text-[7px] uppercase text-accent-foreground"
                       : "font-pixel pixel-border border-wood-dark bg-wood px-2 py-1 text-[7px] uppercase text-secondary-foreground"
                   }
                 >
-                  {mode.status === "online" ? "Ativo" : "Em breve"}
+                  {mode.available ? "Ativo" : "Em breve"}
                 </span>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

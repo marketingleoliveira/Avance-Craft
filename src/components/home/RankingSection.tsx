@@ -59,17 +59,15 @@ export function RankingSection() {
                 <tr className="border-b-2 border-dirt-dark/30 text-xs uppercase text-muted-foreground">
                   <th scope="col" className="py-2">#</th>
                   <th scope="col" className="py-2">Jogador</th>
-                  <th scope="col" className="py-2">Clã</th>
                   <th scope="col" className="py-2 text-right">{activeTab.metric}</th>
                 </tr>
               </thead>
               <tbody>
                 {rankingData.map((row: any) => (
-                  <tr key={row.player_name} className="border-b border-dirt-dark/15">
+                  <tr key={row.minecraft_nickname} className="border-b border-dirt-dark/15">
                     <td className="py-2 font-black text-grass-dark">{row.position}</td>
-                    <td className="py-2 font-semibold">{row.player_name}</td>
-                    <td className="py-2 text-muted-foreground">{row.clan_tag || "-"}</td>
-                    <td className="py-2 text-right font-semibold">{row.score_formatted}</td>
+                    <td className="py-2 font-semibold">{row.minecraft_nickname}</td>
+                    <td className="py-2 text-right font-semibold">{row.display_value}</td>
                   </tr>
                 ))}
               </tbody>
