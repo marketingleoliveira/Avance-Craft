@@ -28,18 +28,33 @@ export function ModesSection({ modes }: { modes: any[] }) {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {modes.map((mode: any, index: number) => {
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15
+              }
+            }
+          }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          {modes.map((mode: any) => {
             const Icon = ICONS[mode.name] || Boxes;
             return (
               <motion.div
                 key={mode.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                variants={{
+                  hidden: { opacity: 0, y: 30, scale: 0.95 },
+                  show: { opacity: 1, y: 0, scale: 1 }
+                }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Card className="p-8 flex flex-col h-full hover:scale-[1.02] transition-transform duration-300">
+                <Card className="p-8 flex flex-col h-full">
                   <div className="flex items-start justify-between gap-4 mb-6">
                     <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
                       <Icon className="w-6 h-6" />
@@ -64,7 +79,7 @@ export function ModesSection({ modes }: { modes: any[] }) {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </Container>
     </section>
   );
