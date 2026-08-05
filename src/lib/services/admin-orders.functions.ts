@@ -8,7 +8,8 @@ type OrderStatus = Database["public"]["Enums"]["order_status"];
 type PaymentStatus = Database["public"]["Enums"]["payment_status"];
 
 /**
- * Lista pedidos com filtros avançados para o painel administrativo.
+ * Lista pedidos com filtros avançados.
+ * Proteção: Validação Zod + assertAdmin.
  */
 export const adminListOrders = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -19,7 +20,7 @@ export const adminListOrders = createServerFn({ method: "GET" })
         nickname: z.string().optional(),
         email: z.string().optional(),
         externalReference: z.string().optional(),
-        limit: z.number().int().min(1).max(100).default(50),
+        limit: z.number().int().min(1).max(50).default(50),
         offset: z.number().int().min(0).default(0),
       })
       .parse(data ?? {}),
@@ -57,12 +58,16 @@ export const adminListOrders = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .range(data.offset, data.offset + data.limit - 1);
 
-    if (error) throw error;
+    if (error) {
+      console.error("[Audit] Error listing orders", error);
+      throw new Error("Internal server error");
+    }
     return { items: rows ?? [], count: count ?? 0 };
   });
 
 /**
- * Obtém detalhes completos de um pedido para a visualização administrativa.
+ * Obtém detalhes de um pedido.
+ * Proteção: Mascara dados sensíveis e valida permissão.
  */
 export const adminGetOrderDetail = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -75,26 +80,29 @@ export const adminGetOrderDetail = createServerFn({ method: "GET" })
       .from("orders")
       .select(`
         *,
-        profile:profiles(*),
+        profile:profiles(id, username, avatar_url, created_at),
         items:order_items(
           *,
           delivery_queue(*)
         ),
-        payments:payments(*),
+        payments:payments(id, provider, status, amount, currency, created_at),
         audit_logs:audit_logs(
-          *,
-          actor:profiles(email)
+          id,
+          action,
+          entity,
+          created_at,
+          actor:profiles(username)
         )
       `)
       .eq("id", data.id)
       .single();
 
-    if (error) throw error;
+    if (error || !order) throw new Error("Pedido não encontrado.");
     return order;
   });
 
 /**
- * Lista pagamentos para reconciliação financeira.
+ * Lista pagamentos.
  */
 export const adminListPayments = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -103,7 +111,7 @@ export const adminListPayments = createServerFn({ method: "GET" })
       .object({
         status: z.string().optional(),
         provider: z.string().optional(),
-        limit: z.number().int().min(1).max(100).default(50),
+        limit: z.number().int().min(1).max(50).default(50),
         offset: z.number().int().min(0).default(0),
       })
       .parse(data ?? {}),
@@ -115,7 +123,13 @@ export const adminListPayments = createServerFn({ method: "GET" })
     let query = supabase
       .from("payments")
       .select(`
-        *,
+        id,
+        amount,
+        currency,
+        status,
+        provider,
+        provider_payment_id,
+        created_at,
         order:orders(
           id,
           minecraft_nickname,
@@ -130,6 +144,9 @@ export const adminListPayments = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .range(data.offset, data.offset + data.limit - 1);
 
-    if (error) throw error;
+    if (error) {
+      console.error("[Audit] Error listing payments", error);
+      throw new Error("Internal server error");
+    }
     return { items: rows ?? [], count: count ?? 0 };
   });
