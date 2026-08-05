@@ -6,9 +6,9 @@ import { getEnv } from "./env.server";
  * Garante que erros não sejam silenciosos e mantém trilha de auditoria.
  */
 
-type LogSeverity = 'info' | 'warn' | 'error' | 'critical' | 'audit';
+export type LogSeverity = 'info' | 'warn' | 'error' | 'critical' | 'audit';
 
-interface LogOptions {
+export interface LogOptions {
   module?: string;
   action?: string;
   context?: Record<string, any>;
@@ -59,8 +59,6 @@ async function persistLog(
   }
 
   try {
-    // Usamos null explicitamente onde o Supabase espera null em vez de undefined
-    // e tratamos os tipos para bater com o gerado pelo Supabase
     const { error } = await supabaseAdmin.from('error_logs').insert({
       severity: severity as any,
       environment: env.APP_ENV,
@@ -91,19 +89,23 @@ export const logger = {
   warn: (service: string, message: string, options?: LogOptions) => 
     persistLog('warn', service, message, options),
     
-  error: (service: string, message: string, error?: any, options?: LogOptions) => 
-    persistLog('error', service, message, {
+  error: (service: string, message: string, error?: any, options?: LogOptions) => {
+    const logOptions: LogOptions = {
       ...options,
       stack: error instanceof Error ? error.stack : (typeof error === 'string' ? error : undefined),
       context: { ...options?.context, error_detail: error?.message || error }
-    }),
+    };
+    return persistLog('error', service, message, logOptions);
+  },
     
-  critical: (service: string, message: string, error?: any, options?: LogOptions) => 
-    persistLog('critical', service, message, {
+  critical: (service: string, message: string, error?: any, options?: LogOptions) => {
+    const logOptions: LogOptions = {
       ...options,
       stack: error instanceof Error ? error.stack : (typeof error === 'string' ? error : undefined),
       context: { ...options?.context, error_detail: error?.message || error }
-    }),
+    };
+    return persistLog('critical', service, message, logOptions);
+  },
     
   audit: (service: string, action: string, message: string, options?: LogOptions) => 
     persistLog('audit', service, message, { ...options, action })
