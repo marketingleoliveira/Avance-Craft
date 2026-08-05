@@ -46,7 +46,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
                     <item.icon className="w-5 h-5" />
                   </div>
                   <span className="text-sm font-bold uppercase tracking-tight text-stone-200">{item.label}</span>
-                </div>
+                </Card>
               ))}
             </div>
 
