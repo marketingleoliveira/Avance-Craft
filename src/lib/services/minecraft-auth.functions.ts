@@ -7,7 +7,6 @@ type MinecraftEdition = Database["public"]["Enums"]["minecraft_edition"];
 
 /**
  * Lista as contas Minecraft do usuário logado.
- * No schema atual, a tabela é 'player_accounts'.
  */
 export const getMyMinecraftAccounts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -15,31 +14,46 @@ export const getMyMinecraftAccounts = createServerFn({ method: "GET" })
     const { supabase, userId } = context!;
     const { data, error } = await supabase
       .from("player_accounts")
-      .select("*")
+      .select("id, minecraft_nickname, edition, uuid, verified_at, created_at")
       .eq("profile_id", userId)
       .order("verified_at", { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      console.error("[Audit] Error listing player accounts", error);
+      throw new Error("Internal server error");
+    }
     return data ?? [];
   });
 
 /**
  * Gera um código de verificação para vincular uma conta Minecraft.
- * Como não temos colunas de código na player_accounts ainda, usaremos audit_logs ou metadata temporário
- * se necessário, mas aqui simularemos a intenção de fluxo seguro.
+ * Proteção: Limite de geração e expiração curta.
  */
 export const generateVerificationCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z.object({ 
-      nickname: z.string().min(3).max(16),
+      nickname: z.string().min(3).max(16).regex(/^[a-zA-Z0-9_]+$/),
       edition: z.enum(["java", "bedrock"])
     }).parse(data)
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context!;
 
-    // 1. Verificar se o nick já está vinculado e verificado por outro usuário
+    // Rate limiting simples: verificar se já existe solicitação recente
+    const { data: recent } = await supabase
+      .from("audit_logs")
+      .select("created_at")
+      .eq("actor_profile_id", userId)
+      .eq("action", "verification_request")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (recent && (Date.now() - new Date(recent.created_at).getTime() < 30000)) {
+      throw new Error("Aguarde 30 segundos para gerar um novo código.");
+    }
+
     const { data: existing } = await supabase
       .from("player_accounts")
       .select("id, profile_id, verified_at")
@@ -48,13 +62,11 @@ export const generateVerificationCode = createServerFn({ method: "POST" })
       .single();
 
     if (existing?.verified_at && existing.profile_id !== userId) {
-      throw new Error("Este nickname já está vinculado e verificado em outra conta.");
+      throw new Error("Este nickname já está vinculado em outra conta.");
     }
 
-    // 2. Gerar código único de 6 caracteres
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
     
-    // 3. Registrar intenção no log de auditoria (usado como store temporário para o plugin validar)
     await supabase.from("audit_logs").insert({
       actor_profile_id: userId,
       action: "verification_request",
@@ -63,7 +75,7 @@ export const generateVerificationCode = createServerFn({ method: "POST" })
         nickname: data.nickname, 
         edition: data.edition, 
         code, 
-        expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString() 
+        expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString() 
       }
     });
 
@@ -71,7 +83,7 @@ export const generateVerificationCode = createServerFn({ method: "POST" })
   });
 
 /**
- * Remove uma conta (apenas se não estiver verificada ou se o usuário desejar desvincular).
+ * Remove uma conta.
  */
 export const removeMinecraftAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -85,6 +97,9 @@ export const removeMinecraftAccount = createServerFn({ method: "POST" })
       .eq("id", data.accountId)
       .eq("profile_id", userId);
 
-    if (error) throw error;
+    if (error) {
+      console.error("[Audit] Error removing account", error);
+      throw new Error("Falha ao remover conta.");
+    }
     return { success: true };
   });

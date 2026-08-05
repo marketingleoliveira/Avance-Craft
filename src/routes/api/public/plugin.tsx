@@ -88,8 +88,7 @@ export const Route = createFileRoute("/api/public/plugin")({
             const { nickname: vNick, code: vCode, uuid: mUuid, edition: vEdition } = body;
             if (!vNick || !vCode || !mUuid) return new Response("Missing data", { status: 400 });
 
-            // Buscar o código no log de auditoria (nossa store temporária)
-            const { data: log } = await supabaseAdmin
+            const { data: log, error: logError } = await supabaseAdmin
               .from("audit_logs")
               .select("*")
               .eq("action", "verification_request")
@@ -97,16 +96,15 @@ export const Route = createFileRoute("/api/public/plugin")({
               .filter("metadata->>code", "eq", vCode.toUpperCase())
               .order("created_at", { ascending: false })
               .limit(1)
-              .single();
+              .maybeSingle();
 
-            if (!log) return new Response("Invalid code", { status: 404 });
+            if (logError || !log) return new Response("Invalid code", { status: 404 });
             
             const meta = log.metadata as any;
             if (new Date(meta.expires_at) < new Date()) {
               return new Response("Code expired", { status: 410 });
             }
 
-            // Vincular ou atualizar a conta
             const { error: linkError } = await supabaseAdmin
               .from("player_accounts")
               .upsert({
@@ -116,11 +114,14 @@ export const Route = createFileRoute("/api/public/plugin")({
                 uuid: mUuid,
                 verified_at: new Date().toISOString(),
                 updated_at: new Date().toISOString()
-              } as any, { onConflict: 'profile_id,minecraft_nickname,edition' });
+              } as any, { onConflict: 'minecraft_nickname,edition' }); // Nickname e Edition devem ser únicos
 
-            if (linkError) return new Response("Update failed", { status: 500 });
+            if (linkError) {
+              console.error("[Audit] Plugin verification failure", linkError);
+              return new Response("Verification failed", { status: 500 });
+            }
 
-            // Invalidar o log para não reuso
+            // Atômico: invalidar log após uso
             await supabaseAdmin.from("audit_logs").delete().eq("id", log.id);
 
             return Response.json({ ok: true });
