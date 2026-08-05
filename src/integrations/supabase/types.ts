@@ -485,6 +485,60 @@ export type Database = {
           },
         ]
       }
+      error_logs: {
+        Row: {
+          action: string | null
+          context: Json | null
+          created_at: string
+          environment: string
+          id: string
+          message: string
+          module: string | null
+          order_id: string | null
+          payment_id: string | null
+          plugin_id: string | null
+          request_id: string | null
+          service: string
+          severity: Database["public"]["Enums"]["log_severity"]
+          stack: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action?: string | null
+          context?: Json | null
+          created_at?: string
+          environment: string
+          id?: string
+          message: string
+          module?: string | null
+          order_id?: string | null
+          payment_id?: string | null
+          plugin_id?: string | null
+          request_id?: string | null
+          service: string
+          severity?: Database["public"]["Enums"]["log_severity"]
+          stack?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string | null
+          context?: Json | null
+          created_at?: string
+          environment?: string
+          id?: string
+          message?: string
+          module?: string | null
+          order_id?: string | null
+          payment_id?: string | null
+          plugin_id?: string | null
+          request_id?: string | null
+          service?: string
+          severity?: Database["public"]["Enums"]["log_severity"]
+          stack?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       feature_flags: {
         Row: {
           description: string | null
@@ -1315,6 +1369,7 @@ export type Database = {
         }
         Returns: Json
       }
+      prune_old_logs: { Args: { retention_days?: number }; Returns: undefined }
       use_beta_invite: {
         Args: { _code: string; _profile_id: string }
         Returns: Json
@@ -1349,6 +1404,7 @@ export type Database = {
         | "shop"
         | "delivery"
         | "other"
+      log_severity: "info" | "warn" | "error" | "critical" | "audit"
       minecraft_edition: "java" | "bedrock"
       order_status:
         | "pending"
@@ -1524,6 +1580,7 @@ export const Constants = {
         "delivery",
         "other",
       ],
+      log_severity: ["info", "warn", "error", "critical", "audit"],
       minecraft_edition: ["java", "bedrock"],
       order_status: [
         "pending",

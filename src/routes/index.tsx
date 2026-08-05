@@ -11,7 +11,7 @@ import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube, CreditCard, Activity, Lock } from "lucide-react";
+import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube, CreditCard, Activity, Lock, ShieldAlert } from "lucide-react";
 
 const title = "Habblet Mine — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
@@ -92,6 +92,12 @@ function Index() {
                     <PixelButton className="px-6 w-full bg-green-600 hover:bg-green-500 border-green-700">
                       <Lock className="w-4 h-4 mr-2" />
                       Beta Feedback
+                    </PixelButton>
+                  </Link>
+                  <Link to="/admin/logs">
+                    <PixelButton className="px-6 w-full bg-red-600 hover:bg-red-500 border-red-700">
+                      <ShieldAlert className="w-4 h-4 mr-2" />
+                      Logs (Observabilidade)
                     </PixelButton>
                   </Link>
                   <PixelButton 

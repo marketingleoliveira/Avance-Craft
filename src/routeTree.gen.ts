@@ -38,6 +38,7 @@ import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configura
 import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
 import { Route as AdminJogadoresRouteImport } from './routes/admin/jogadores'
+import { Route as AdminLogsRouteImport } from './routes/admin/logs'
 import { Route as AdminPagamentosRouteImport } from './routes/admin/pagamentos'
 import { Route as AdminPagamentosTesteRouteImport } from './routes/admin/pagamentos-teste'
 import { Route as AdminPedidosRouteImport } from './routes/admin/pedidos'
@@ -207,6 +208,11 @@ const AdminJogadoresRoute = AdminJogadoresRouteImport.update({
   path: '/jogadores',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLogsRoute = AdminLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPagamentosRoute = AdminPagamentosRouteImport.update({
   id: '/pagamentos',
   path: '/pagamentos',
@@ -353,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pagamentos-teste': typeof AdminPagamentosTesteRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -406,6 +413,7 @@ export interface FileRoutesByTo {
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pagamentos-teste': typeof AdminPagamentosTesteRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -461,6 +469,7 @@ export interface FileRoutesById {
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pagamentos-teste': typeof AdminPagamentosTesteRoute
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -517,6 +526,7 @@ export interface FileRouteTypes {
     | '/admin/cupons'
     | '/admin/entregas'
     | '/admin/jogadores'
+    | '/admin/logs'
     | '/admin/pagamentos'
     | '/admin/pagamentos-teste'
     | '/admin/pedidos'
@@ -570,6 +580,7 @@ export interface FileRouteTypes {
     | '/admin/cupons'
     | '/admin/entregas'
     | '/admin/jogadores'
+    | '/admin/logs'
     | '/admin/pagamentos'
     | '/admin/pagamentos-teste'
     | '/admin/pedidos'
@@ -624,6 +635,7 @@ export interface FileRouteTypes {
     | '/admin/cupons'
     | '/admin/entregas'
     | '/admin/jogadores'
+    | '/admin/logs'
     | '/admin/pagamentos'
     | '/admin/pagamentos-teste'
     | '/admin/pedidos'
@@ -884,6 +896,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminJogadoresRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/logs': {
+      id: '/admin/logs'
+      path: '/logs'
+      fullPath: '/admin/logs'
+      preLoaderRoute: typeof AdminLogsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pagamentos': {
       id: '/admin/pagamentos'
       path: '/pagamentos'
@@ -1056,6 +1075,7 @@ interface AdminRouteChildren {
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
   AdminJogadoresRoute: typeof AdminJogadoresRoute
+  AdminLogsRoute: typeof AdminLogsRoute
   AdminPagamentosRoute: typeof AdminPagamentosRoute
   AdminPagamentosTesteRoute: typeof AdminPagamentosTesteRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
@@ -1084,6 +1104,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
   AdminJogadoresRoute: AdminJogadoresRoute,
+  AdminLogsRoute: AdminLogsRoute,
   AdminPagamentosRoute: AdminPagamentosRoute,
   AdminPagamentosTesteRoute: AdminPagamentosTesteRoute,
   AdminPedidosRoute: AdminPedidosRoute,
@@ -1147,13 +1168,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
