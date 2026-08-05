@@ -12,7 +12,8 @@ import { useEffect, type ReactNode, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getServerFlags } from "@/lib/config/flags";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { Lock } from "lucide-react";
+import { Lock, AlertTriangle } from "lucide-react";
+import { isStaging } from "@/lib/config/env.server";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
