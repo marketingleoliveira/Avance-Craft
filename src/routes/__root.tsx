@@ -92,6 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ...(isStaging() ? [{ name: "robots", content: "noindex, nofollow" }] : []),
       { title: "Habblet Mine" },
       { name: "description", content: "Portal do servidor brasileiro Habblet Mine." },
       { property: "og:type", content: "website" },
