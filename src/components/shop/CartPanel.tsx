@@ -3,13 +3,16 @@ import { toast } from "sonner";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { formatBRL } from "@/lib/utils/format";
-import { createCheckout, validateNickname } from "@/lib/payments/checkout-service";
+import { validateNickname } from "@/lib/payments/checkout-service";
 import { useCart } from "./CartContext";
+import { createPaymentPreference } from "@/lib/services/checkout.functions";
+import { useServerFn } from "@tanstack/react-start";
 
-/** Carrinho lateral (sticky no desktop). Nenhum pagamento é processado. */
+/** Carrinho lateral (sticky no desktop). */
 export function CartPanel() {
   const cart = useCart();
   const [pending, setPending] = useState(false);
+  const startCheckout = useServerFn(createPaymentPreference);
 
   async function handleCheckout(): Promise<void> {
     const nickError = validateNickname(cart.nickname, cart.platform);
@@ -26,25 +29,34 @@ export function CartPanel() {
       return;
     }
 
-
     setPending(true);
-    const result = await createCheckout({
-      nickname: cart.nickname.trim(),
-      platform: cart.platform,
-      items: cart.detailed.map((item) => ({
-        productId: item.product.id,
-        name: item.product.name,
-        quantity: item.quantity,
-        unitPriceCents: item.product.priceCents,
-      })),
-      ...(cart.appliedCoupon ? { coupon: cart.appliedCoupon } : {}),
-      totalCents: cart.totalCents,
-    });
-    setPending(false);
+    try {
+      const result = await startCheckout({
+        data: {
+          nickname: cart.nickname.trim(),
+          edition: cart.platform,
+          items: cart.detailed.map((item) => ({
+            productId: item.product.id,
+            quantity: item.quantity,
+          })),
+          couponCode: cart.appliedCoupon,
+        }
+      });
 
-    if (result.status === "unavailable") toast.info(result.message);
-    else window.location.assign(result.url);
+      if (result.checkoutUrl) {
+        if (result.isMock) {
+          toast.info("Ambiente de teste: Redirecionando para sucesso mockado.");
+        }
+        window.location.assign(result.checkoutUrl);
+      }
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      toast.error(error.message || "Erro ao iniciar pagamento. Verifique se você está logado.");
+    } finally {
+      setPending(false);
+    }
   }
+
 
   return (
     <StonePanel title={`Carrinho (${cart.count})`} className="lg:sticky lg:top-24">
