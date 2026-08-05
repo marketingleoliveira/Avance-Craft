@@ -1,6 +1,6 @@
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { formatBRL } from "@/data/shop";
+import { formatBRL } from "@/lib/utils/format";
 import { ProductArt } from "./ProductArt";
 
 type Props = {
