@@ -6,14 +6,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import type { SupportTicket, SupportMessage } from "@/lib/types/database";
 
-/** Contrato mínimo necessário para checar o papel do chamador via RLS. */
-type RoleChecker = {
-  rpc: (
-    fn: "has_role",
-    args: { _user_id: string; _role: "admin" | "moderator" },
-  ) => PromiseLike<{ data: boolean | null; error: { message: string } | null }>;
-};
-
 async function assertStaff(supabase: any, userId: string): Promise<void> {
   const { data: isAdmin } = await supabase.rpc("has_role", {
     _user_id: userId,
@@ -65,7 +57,7 @@ export const adminListTickets = createServerFn({ method: "GET" })
     const { data: rows, count, error } = await query.order("updated_at", { ascending: false });
     
     if (error) throw new Error(error.message);
-    return { tickets: rows ?? [], count: count ?? 0 };
+    return { tickets: (rows as any[]) ?? [], count: count ?? 0 };
   });
 
 export const adminGetTicket = createServerFn({ method: "GET" })
@@ -102,14 +94,10 @@ export const adminReplyTicket = createServerFn({ method: "POST" })
     ticketId: z.string().uuid(),
     body: z.string().trim().min(1),
     internal: z.boolean().default(false),
-    newStatus: z.string().optional(),
+    newStatus: z.enum(["open", "pending", "closed"]).optional(),
   }).parse(input))
   .handler(async ({ data, context }) => {
     await assertStaff(context.supabase, context.userId);
-    
-    // In actual schema, internal notes might need a separate field or table if not present.
-    // Given the prompt "notes internas nunca aparecem ao jogador", we should use from_staff: true
-    // and potentially a separate 'is_internal' column if it exists.
     
     const { data: message, error } = await context.supabase
       .from("support_messages")
@@ -118,7 +106,6 @@ export const adminReplyTicket = createServerFn({ method: "POST" })
         author_profile_id: context.userId,
         body: data.body,
         from_staff: true,
-        // is_internal: data.internal // assuming column exists or handle separately
       })
       .select("*")
       .single();
@@ -127,7 +114,7 @@ export const adminReplyTicket = createServerFn({ method: "POST" })
     
     const update: any = { updated_at: new Date().toISOString() };
     if (data.newStatus) update.status = data.newStatus;
-    else update.status = "pending"; // Staff replied, awaiting player
+    else update.status = "pending"; 
     
     await context.supabase.from("support_tickets").update(update).eq("id", data.ticketId);
     

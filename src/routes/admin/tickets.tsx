@@ -4,7 +4,7 @@ import { adminListTickets } from "@/lib/services/admin-support.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { AdminTable } from "@/components/admin/AdminTable";
-import { Ticket, Search, Filter, Clock, MessageSquare, User } from "lucide-react";
+import { Ticket, Search, Clock, MessageSquare, User } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -14,8 +14,8 @@ import { Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/admin/tickets")({
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
-      queryKey: ["admin-tickets", {}],
-      queryFn: () => adminListTickets({}),
+      queryKey: ["admin-tickets", { status: "", category: "", search: "" }],
+      queryFn: () => adminListTickets({ status: "", category: "", search: "" }),
     });
   },
   component: AdminTicketsPage,
@@ -123,7 +123,7 @@ function AdminTicketsPage() {
           columns={[
             {
               header: "Ticket",
-              accessor: (row) => (
+              cell: (row: any) => (
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-mono text-zinc-400">#{row.id.slice(0, 8)}</span>
@@ -136,7 +136,7 @@ function AdminTicketsPage() {
             },
             {
               header: "Jogador",
-              accessor: (row) => (
+              cell: (row: any) => (
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-zinc-200 rounded-full flex items-center justify-center shrink-0">
                     <User className="w-4 h-4 text-zinc-400" />
@@ -147,7 +147,7 @@ function AdminTicketsPage() {
             },
             {
               header: "Última Atividade",
-              accessor: (row) => (
+              cell: (row: any) => (
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-500 uppercase">
                     <Clock className="w-3 h-3" />
@@ -162,9 +162,9 @@ function AdminTicketsPage() {
             },
             {
               header: "Ações",
-              accessor: (row) => (
+              cell: (row: any) => (
                 <div className="flex items-center gap-2">
-                  <Link to="/admin/tickets" search={{ id: row.id }}>
+                  <Link to="/admin/tickets" search={{ id: row.id } as any}>
                     <PixelButton variant="emerald" className="p-2 h-auto">
                       Atender
                     </PixelButton>
