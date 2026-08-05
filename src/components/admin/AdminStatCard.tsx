@@ -15,7 +15,7 @@ interface AdminStatCardProps {
 
 export function AdminStatCard({ label, value, icon: Icon, trend, className }: AdminStatCardProps) {
   return (
-    <StonePanel bodyClassName="p-6" className={className}>
+    <StonePanel bodyClassName="p-6" className={className || ""}>
       <div className="flex items-center justify-between">
         <div>
           <p className="font-pixel text-[8px] uppercase text-muted-foreground tracking-wider">{label}</p>

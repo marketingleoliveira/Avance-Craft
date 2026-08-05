@@ -7,8 +7,10 @@ import {
   AlertTriangle, 
   TrendingUp,
   CreditCard,
-  Truck
+  Truck,
+  Tags
 } from "lucide-react";
+
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { Button } from "@/components/ui/button";
 import { formatBRL } from "@/lib/utils/format";

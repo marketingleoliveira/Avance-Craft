@@ -71,7 +71,8 @@ export function AdminSidebar({ className }: { className?: string }) {
             return (
               <li key={item.to}>
                 <Link
-                  to={item.to}
+                  to={item.to!}
+
                   activeProps={{ className: "bg-emerald-block text-accent-foreground border-grass-dark" }}
                   inactiveProps={{ className: "hover:bg-black/20 border-transparent" }}
                   className="font-pixel flex items-center gap-3 px-3 py-2.5 text-[9px] uppercase transition-colors pixel-border border-2"
