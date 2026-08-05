@@ -3,6 +3,9 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertAdmin } from "./admin.functions";
 import { logAudit } from "./admin-content.functions";
+import { Database } from "@/integrations/supabase/types";
+
+type DeliveryStatus = Database["public"]["Enums"]["delivery_status"];
 
 /**
  * Lista itens da fila de entrega com filtros para administração.
@@ -34,7 +37,7 @@ export const adminListDeliveryQueue = createServerFn({ method: "GET" })
         )
       `, { count: "exact" });
 
-    if (data.status) query = query.eq("status", data.status);
+    if (data.status) query = query.eq("status", data.status as DeliveryStatus);
     if (data.orderId) query = query.eq("order_item.order_id", data.orderId);
     if (data.nickname) query = query.ilike("order_item.order.minecraft_nickname", `%${data.nickname}%`);
 
@@ -69,8 +72,8 @@ export const adminRetryDelivery = createServerFn({ method: "POST" })
     const { error: updateError } = await supabase
       .from("delivery_queue")
       .update({
-        status: "queued",
-        attempts: 0, // Resetar tentativas para nova chance
+        status: "queued" as DeliveryStatus,
+        attempts: 0,
         available_at: new Date().toISOString(),
         claimed_at: null,
         last_error: "Reprocessado manualmente pelo administrador."
@@ -97,7 +100,7 @@ export const adminCancelDelivery = createServerFn({ method: "POST" })
     const { error } = await supabase
       .from("delivery_queue")
       .update({
-        status: "cancelled",
+        status: "cancelled" as DeliveryStatus,
         last_error: `Cancelado: ${data.reason}`
       } as any)
       .eq("id", data.id);
