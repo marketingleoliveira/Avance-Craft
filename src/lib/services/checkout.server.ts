@@ -32,7 +32,7 @@ export async function createCheckoutRequest(
   }
 
   // 1. Chamar RPC Transacional
-  const { data: result, error: rpcError } = await supabase.rpc('process_checkout', {
+  const { data: result, error: rpcError } = await supabase.rpc('process_checkout' as any, {
     p_nickname: data.nickname,
     p_edition: data.edition,
     p_items: data.items,

@@ -1276,6 +1276,15 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       owns_order: { Args: { _order_id: string }; Returns: boolean }
+      process_checkout: {
+        Args: {
+          p_coupon_code?: string
+          p_edition: string
+          p_items: Json
+          p_nickname: string
+        }
+        Returns: Json
+      }
       use_beta_invite: {
         Args: { _code: string; _profile_id: string }
         Returns: Json
