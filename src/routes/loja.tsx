@@ -88,13 +88,13 @@ function ShopPage() {
           <div className="flex-1">
             <CategoryNav
               categories={categories.map((c) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
-              activeId={selectedCategory || categories[0]?.slug}
+              activeId={selectedCategory || (categories.length > 0 ? categories[0].slug : undefined)}
               onSelect={setSelectedCategory}
             />
 
             <div className="mt-8">
               <WoodSign className="mb-6">
-                {categories.find((c) => c.slug === (selectedCategory || categories[0]?.slug))?.name || "Produtos"}
+                {categories.find((c) => c.slug === (selectedCategory || (categories.length > 0 ? categories[0].slug : "")))?.name || "Produtos"}
               </WoodSign>
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -116,13 +116,13 @@ function ShopPage() {
                         fullDescription: product.full_description || "",
                         perks: product.benefits?.map((b) => b.label) || [],
                         commands: [],
-                        priceCents: Math.round(product.price * 100),
+                        priceCents: Math.round((product.price || 0) * 100),
                         previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
                           ? Math.round(product.promotional_price * 100) 
                           : undefined,
                         duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
                         platforms: ["java", "bedrock"],
-                        art: (product.position % 3)
+                        art: product.position ? (product.position % 3) : 0
                       }}
                       onBuy={(p: any) => cart.add(p.id, 1, p)}
                     />
