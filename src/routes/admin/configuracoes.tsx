@@ -180,7 +180,7 @@ function AdminFlagsPage() {
           <Link to="/admin/saude" className="flex items-center gap-2 px-4 py-2 bg-stone-700 hover:bg-stone-600 text-stone-100 font-pixel text-[10px] border-b-4 border-stone-900 transition-all">
             <Activity className="w-4 h-4" /> SAÚDE DO SISTEMA
           </Link>
-          <Link to="/admin/logs" className="flex items-center gap-2 px-4 py-2 bg-stone-700 hover:bg-stone-600 text-stone-100 font-pixel text-[10px] border-b-4 border-stone-900 transition-all">
+          <Link to="/admin/auditoria" className="flex items-center gap-2 px-4 py-2 bg-stone-700 hover:bg-stone-600 text-stone-100 font-pixel text-[10px] border-b-4 border-stone-900 transition-all">
             <History className="w-4 h-4" /> AUDITORIA
           </Link>
         </div>
