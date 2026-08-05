@@ -14,7 +14,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ComoJogarRouteImport } from './routes/como-jogar'
 import { Route as EquipeRouteImport } from './routes/equipe'
+import { Route as FalhaRouteImport } from './routes/falha'
 import { Route as LojaRouteImport } from './routes/loja'
+import { Route as PendenteRouteImport } from './routes/pendente'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as RankingRouteImport } from './routes/ranking'
@@ -73,9 +75,19 @@ const EquipeRoute = EquipeRouteImport.update({
   path: '/equipe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FalhaRoute = FalhaRouteImport.update({
+  id: '/falha',
+  path: '/falha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LojaRoute = LojaRouteImport.update({
   id: '/loja',
   path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PendenteRoute = PendenteRouteImport.update({
+  id: '/pendente',
+  path: '/pendente',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -246,7 +258,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
+  '/falha': typeof FalhaRoute
   '/loja': typeof LojaRoute
+  '/pendente': typeof PendenteRoute
   '/perfil': typeof PerfilRoute
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
@@ -285,7 +299,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
+  '/falha': typeof FalhaRoute
   '/loja': typeof LojaRoute
+  '/pendente': typeof PendenteRoute
   '/perfil': typeof PerfilRoute
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
@@ -326,7 +342,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
+  '/falha': typeof FalhaRoute
   '/loja': typeof LojaRoute
+  '/pendente': typeof PendenteRoute
   '/perfil': typeof PerfilRoute
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
@@ -368,7 +386,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/como-jogar'
     | '/equipe'
+    | '/falha'
     | '/loja'
+    | '/pendente'
     | '/perfil'
     | '/privacidade'
     | '/ranking'
@@ -407,7 +427,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/como-jogar'
     | '/equipe'
+    | '/falha'
     | '/loja'
+    | '/pendente'
     | '/perfil'
     | '/privacidade'
     | '/ranking'
@@ -447,7 +469,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/como-jogar'
     | '/equipe'
+    | '/falha'
     | '/loja'
+    | '/pendente'
     | '/perfil'
     | '/privacidade'
     | '/ranking'
@@ -488,7 +512,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ComoJogarRoute: typeof ComoJogarRoute
   EquipeRoute: typeof EquipeRoute
+  FalhaRoute: typeof FalhaRoute
   LojaRoute: typeof LojaRoute
+  PendenteRoute: typeof PendenteRoute
   PerfilRoute: typeof PerfilRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   RankingRoute: typeof RankingRoute
@@ -540,11 +566,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EquipeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/falha': {
+      id: '/falha'
+      path: '/falha'
+      fullPath: '/falha'
+      preLoaderRoute: typeof FalhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/loja': {
       id: '/loja'
       path: '/loja'
       fullPath: '/loja'
       preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pendente': {
+      id: '/pendente'
+      path: '/pendente'
+      fullPath: '/pendente'
+      preLoaderRoute: typeof PendenteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -828,7 +868,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ComoJogarRoute: ComoJogarRoute,
   EquipeRoute: EquipeRoute,
+  FalhaRoute: FalhaRoute,
   LojaRoute: LojaRoute,
+  PendenteRoute: PendenteRoute,
   PerfilRoute: PerfilRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   RankingRoute: RankingRoute,
