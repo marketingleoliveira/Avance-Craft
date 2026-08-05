@@ -26,7 +26,7 @@ const categoryInput = z.object({
     .max(120)
     .regex(/^[a-z0-9-]+$/, "Slug deve conter apenas letras minúsculas, números e hífen."),
   description: z.string().trim().max(500).nullable().optional(),
-  imageUrl: z.string().url().nullable().optional(),
+  icon: z.string().trim().nullable().optional(),
   active: z.boolean().optional(),
   position: z.number().int().optional(),
 });
