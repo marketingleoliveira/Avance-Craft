@@ -47,7 +47,13 @@ function Index() {
   const { news, status, modes, featuredProducts, settings } = homeData;
 
   return (
-    <main>
+    <main className="relative">
+      {/* 
+        DOCUMENTAÇÃO DE DEPLOY SEGURO (Server-side only reference)
+        Ambientes: development, staging, production
+        Flags: STORE_ENABLED, REAL_PAYMENTS_ENABLED, PLUGIN_DELIVERY_ENABLED
+        Checklist: Validar secrets MP e Plugin, URL base correta.
+      */}
       <Hero settings={settings} />
       <NewsSection news={news} status={status} />
       <ModesSection modes={modes} />

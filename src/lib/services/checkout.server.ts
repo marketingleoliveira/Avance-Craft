@@ -18,9 +18,15 @@ export async function createCheckoutRequest(
   supabase: SupabaseClient<Database>,
   userId: string
 ) {
-  const MP_ACCESS_TOKEN = process.env['MERCADOPAGO_ACCESS_TOKEN'];
-  const APP_URL = process.env['APP_BASE_URL'] || 'http://localhost:8080';
-  const IS_PROD = process.env['NODE_ENV'] === 'production';
+  const { getEnv, isProd } = await import("../config/env.server");
+  const { getServerFlags } = await import("../config/flags");
+  
+  const env = getEnv();
+  const flags = await getServerFlags();
+  
+  const MP_ACCESS_TOKEN = env.MERCADOPAGO_ACCESS_TOKEN;
+  const APP_URL = env.APP_BASE_URL;
+  const IS_PROD = isProd();
 
   // 1. Validar produtos e calcular valores reais do banco
   const productIds = data.items.map((i) => i.productId);
@@ -121,12 +127,12 @@ export async function createCheckoutRequest(
   }
 
   // 5. Integração com Mercado Pago ou Modo Mock
-  if (!MP_ACCESS_TOKEN) {
+  if (!MP_ACCESS_TOKEN || !flags.REAL_PAYMENTS_ENABLED) {
     if (IS_PROD) {
-      throw new Error("Configuração de pagamento incompleta para produção.");
+      throw new Error("Configuração de pagamento incompleta ou desabilitada para produção.");
     }
 
-    // Modo Mock para Desenvolvimento
+    // Modo Mock para Desenvolvimento ou Staging
     return {
       orderId: order.id,
       checkoutUrl: `${APP_URL}/sucesso?mock_order_id=${order.id}`,
