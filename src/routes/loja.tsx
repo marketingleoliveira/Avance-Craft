@@ -1,116 +1,113 @@
-import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
-import { Container } from "@/components/ui-kit/Container";
-import { WoodSign } from "@/components/ui-kit/WoodSign";
-import { CartProvider, useCart } from "@/components/shop/CartContext";
+import { useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { listCategories, listProducts } from "@/lib/services/catalog.functions";
 import { ShopBanner } from "@/components/shop/ShopBanner";
 import { PlayerIdentity } from "@/components/shop/PlayerIdentity";
 import { CategoryNav } from "@/components/shop/CategoryNav";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { ProductDialog } from "@/components/shop/ProductDialog";
 import { CartPanel } from "@/components/shop/CartPanel";
-import { ShopFaq, ShopTerms } from "@/components/shop/ShopInfo";
-import { SHOP_CATEGORIES, SHOP_PRODUCTS, type ShopCategoryId, type ShopProduct } from "@/data/shop";
-
-const title = "Loja do Habblet Mine — VIPs, Cash, Kits e Passe";
-const description =
-  "Vitrine da loja do servidor brasileiro Habblet Mine: VIPs, cash, chaves, kits, cosméticos e passe de temporada com entrega no seu nick.";
+import { FAQSection } from "@/components/shop/FAQSection";
+import { useCart } from "@/hooks/use-cart";
+import { WoodSign } from "@/components/ui-kit/WoodSign";
 
 export const Route = createFileRoute("/loja")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: () => (
-    <CartProvider>
-      <ShopPage />
-    </CartProvider>
-  ),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData({
+        queryKey: ["categories"],
+        queryFn: () => listCategories(),
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["products", { categorySlug: undefined }],
+        queryFn: () => listProducts({}),
+      }),
+    ]);
+  },
+  component: ShopPage,
 });
 
 function ShopPage() {
-  const cart = useCart();
-  const [category, setCategory] = useState<ShopCategoryId>("vips");
-  const [selected, setSelected] = useState<ShopProduct | null>(null);
-  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const { addToCart } = useCart();
 
-  const products = useMemo(
-    () => SHOP_PRODUCTS.filter((product) => product.category === category),
-    [category],
-  );
-  const activeCategory = SHOP_CATEGORIES.find((item) => item.id === category);
+  const { data: categories } = useSuspenseQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategories(),
+  });
 
-  function addToCart(product: ShopProduct, quantity = 1) {
-    if (!cart.nickname.trim()) {
-      toast.error("Informe seu nick antes de adicionar itens.");
-      return;
-    }
-    cart.add(product.id, quantity);
-    toast.success(`${product.name} adicionado ao carrinho.`);
-  }
+  const { data: products } = useSuspenseQuery({
+    queryKey: ["products", { categorySlug: selectedCategory }],
+    queryFn: () => listProducts({ categorySlug: selectedCategory }),
+  });
 
   return (
-    <main>
+    <div className="min-h-screen pb-20">
       <ShopBanner />
+      
+      <div className="container mx-auto px-4 -mt-10 relative z-10">
+        <PlayerIdentity />
 
-      <Container className="py-10">
-        <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
-          <div className="grid gap-8">
-            <PlayerIdentity />
+        <div className="mt-8 flex flex-col lg:flex-row gap-8">
+          <div className="flex-1">
+            <CategoryNav
+              categories={categories.map((c) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
+              activeId={selectedCategory || categories[0]?.slug}
+              onSelect={setSelectedCategory}
+            />
 
-            <div>
-              <CategoryNav active={category} onChange={setCategory} />
-              <p className="mt-3 text-sm text-muted-foreground">
-                {activeCategory?.description}
-              </p>
+            <div className="mt-8">
+              <WoodSign className="mb-6">
+                {categories.find(c => c.slug === (selectedCategory || categories[0]?.slug))?.name || "Produtos"}
+              </WoodSign>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={{
+                      id: product.id,
+                      category: (product.category?.slug as any) || "vips",
+                      name: product.name,
+                      shortDescription: product.short_description || "",
+                      fullDescription: product.full_description || "",
+                      perks: product.benefits.map(b => b.description),
+                      commands: [],
+                      priceCents: Math.round(product.price * 100),
+                      previousPriceCents: product.promotional_price 
+                        ? Math.round(product.promotional_price * 100) 
+                        : undefined,
+                      duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
+                      platforms: ["java", "bedrock"],
+                      art: (product.position % 3) as any // Mapeamento temporário para arte
+                    }}
+                    onBuy={() =>
+                      addToCart({
+                        id: product.id,
+                        name: product.name,
+                        priceCents: Math.round((product.promotional_price || product.price) * 100),
+                        quantity: 1,
+                      })
+                    }
+                  />
+                ))}
+                
+                {products.length === 0 && (
+                  <div className="col-span-full py-12 text-center text-muted-foreground">
+                    Nenhum produto encontrado nesta categoria.
+                  </div>
+                )}
+              </div>
             </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAdd={(item) => addToCart(item)}
-                  onDetails={(item) => {
-                    setSelected(item);
-                    setOpen(true);
-                  }}
-                />
-              ))}
-            </div>
+            
+            <FAQSection />
           </div>
 
-          <aside aria-label="Carrinho de compras">
+          <aside className="lg:w-80 shrink-0">
             <CartPanel />
           </aside>
         </div>
-      </Container>
-
-      <section className="bg-dirt/15 border-y-4 border-dirt-dark py-12">
-        <Container>
-          <WoodSign subtitle="Tudo o que você precisa saber antes de comprar.">
-            Ajuda
-          </WoodSign>
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            <ShopFaq />
-            <ShopTerms />
-          </div>
-        </Container>
-      </section>
-
-      <ProductDialog
-        product={selected}
-        open={open}
-        onOpenChange={setOpen}
-        onAdd={(item, quantity) => addToCart(item, quantity)}
-      />
-    </main>
+      </div>
+    </div>
   );
 }
