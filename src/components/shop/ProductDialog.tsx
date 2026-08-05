@@ -7,15 +7,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { formatBRL, type ShopProduct } from "@/data/shop";
+import { formatBRL } from "@/lib/utils/format";
 import { ProductArt } from "./ProductArt";
 
 type Props = {
-  product: ShopProduct | null;
+  product: any | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (product: ShopProduct, quantity: number) => void;
+  onAdd: (product: any, quantity: number) => void;
 };
+
 
 /** Detalhe do produto: galeria, descrição completa, comandos e quantidade. */
 export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
