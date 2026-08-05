@@ -31,8 +31,9 @@ export const Route = createFileRoute("/api/public/mercadopago")({
               // Validar timestamp (evitar replay attacks - 5 min)
               const now = Math.floor(Date.now() / 1000);
               if (Math.abs(now - parseInt(timestamp)) < 300) {
-                const manifest = `id:${body.data?.id || body.id};request-id:${xRequestId || ''};ts:${timestamp};`;
-                const hmac = createHmac("sha256", WEBHOOK_SECRET);
+                const manifest = `id:${body.data?.id || body.id};request-id:${xRequestId ?? ""};ts:${timestamp};`;
+                const hmac = createHmac("sha256", WEBHOOK_SECRET!);
+
 
                 hmac.update(manifest);
                 const expectedSignature = hmac.digest("hex");
