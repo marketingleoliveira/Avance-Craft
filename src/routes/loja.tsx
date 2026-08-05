@@ -10,6 +10,8 @@ import { CartPanel } from "@/components/shop/CartPanel";
 import { ShopFaq, ShopTerms } from "@/components/shop/ShopInfo";
 import { useCart } from "@/components/shop/CartContext";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
+import { StonePanel } from "@/components/ui-kit/StonePanel";
+
 
 export const Route = createFileRoute("/loja")({
   loader: async ({ context }) => {
@@ -31,15 +33,31 @@ function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const cart = useCart();
 
-  const { data: categories } = useSuspenseQuery({
+  const { data: categories, error: catError, refetch: refetchCats } = useSuspenseQuery({
     queryKey: ["categories"],
     queryFn: () => listCategories(),
   });
 
-  const { data: products } = useSuspenseQuery({
+  const { data: products, error: prodError, refetch: refetchProds } = useSuspenseQuery({
     queryKey: ["products", selectedCategory || ""],
     queryFn: () => listProducts({ data: { categorySlug: selectedCategory } }),
   });
+
+  if (catError || prodError) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <WoodSign className="mb-6">Ocorreu um erro</WoodSign>
+        <p className="text-muted-foreground mb-8">Não foi possível carregar o catálogo. Por favor, tente novamente.</p>
+        <button 
+          onClick={() => { refetchCats(); refetchProds(); }}
+          className="px-6 py-2 bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity"
+        >
+          Tentar Novamente
+        </button>
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen pb-20">
@@ -51,46 +69,49 @@ function ShopPage() {
         <div className="mt-8 flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             <CategoryNav
-              categories={categories.map((c: any) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
+              categories={categories.map((c) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
               activeId={selectedCategory || categories[0]?.slug || ""}
               onSelect={setSelectedCategory}
             />
 
             <div className="mt-8">
               <WoodSign className="mb-6">
-                {categories.find((c: any) => c.slug === (selectedCategory || categories[0]?.slug))?.name || "Produtos"}
+                {categories.find((c) => c.slug === (selectedCategory || categories[0]?.slug))?.name || "Produtos"}
               </WoodSign>
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.map((product: any) => (
-                  <ProductCard
-                    key={product.id}
-                    product={{
-                      id: product.id,
-                      category: (product.category?.slug as any) || "vips",
-                      name: product.name,
-                      shortDescription: product.short_description || "",
-                      fullDescription: product.full_description || "",
-                      perks: product.benefits.map((b: any) => b.description),
-                      commands: [],
-                      priceCents: Math.round(product.price * 100),
-                      previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
-                        ? Math.round(product.promotional_price * 100) 
-                        : undefined as any,
-                      duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
-                      platforms: ["java", "bedrock"],
-                      art: (product.position % 3) as any
-                    }}
-                    onBuy={(p: any) => cart.add(p.id, 1, p)}
-                  />
-                ))}
-                
-                {products.length === 0 && (
-                  <div className="col-span-full py-12 text-center text-muted-foreground">
-                    Nenhum produto encontrado nesta categoria.
+                {products.length === 0 ? (
+                  <div className="col-span-full py-20 text-center">
+                    <StonePanel className="max-w-md mx-auto">
+                      <p className="text-muted-foreground">Nenhum produto encontrado nesta categoria.</p>
+                    </StonePanel>
                   </div>
+                ) : (
+                  products.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={{
+                        id: product.id,
+                        category: (product.category?.slug as any) || "vips",
+                        name: product.name,
+                        shortDescription: product.short_description || "",
+                        fullDescription: product.full_description || "",
+                        perks: product.benefits?.map((b) => b.label) || [],
+                        commands: [],
+                        priceCents: Math.round(product.price * 100),
+                        previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
+                          ? Math.round(product.promotional_price * 100) 
+                          : undefined,
+                        duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
+                        platforms: ["java", "bedrock"],
+                        art: (product.position % 3)
+                      }}
+                      onBuy={(p: any) => cart.add(p.id, 1, p)}
+                    />
+                  ))
                 )}
               </div>
+
             </div>
             
             <div className="mt-12 grid gap-8">

@@ -42,9 +42,10 @@ export type SiteSetting = Tables<"site_settings">;
 
 /** Produto com os relacionamentos usados na vitrine da loja. */
 export type ProductWithDetails = Product & {
-  category: Pick<Category, "id" | "name" | "slug"> | null;
+  category: Pick<Category, "id" | "name" | "slug" | "active"> | null;
   benefits: ProductBenefit[];
 };
+
 
 /** Pedido com itens — usado no perfil do jogador. */
 export type OrderWithItems = Order & { items: OrderItem[] };

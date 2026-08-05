@@ -7,15 +7,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { formatBRL, type ShopProduct } from "@/data/shop";
+import { formatBRL } from "@/lib/utils/format";
 import { ProductArt } from "./ProductArt";
 
 type Props = {
-  product: ShopProduct | null;
+  product: any | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (product: ShopProduct, quantity: number) => void;
+  onAdd: (product: any, quantity: number) => void;
 };
+
 
 /** Detalhe do produto: galeria, descrição completa, comandos e quantidade. */
 export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
@@ -54,7 +55,7 @@ export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
           <div>
             <h4 className="font-pixel text-[10px] uppercase text-grass-dark">Vantagens</h4>
             <ul className="mt-2 grid gap-1.5 text-sm">
-              {product.perks.map((perk) => (
+              {product.perks.map((perk: any) => (
                 <li key={perk} className="flex items-start gap-2">
                   <span className="mt-1.5 h-2.5 w-2.5 shrink-0 bg-emerald-block" aria-hidden />
                   {perk}
@@ -65,7 +66,7 @@ export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
           <div>
             <h4 className="font-pixel text-[10px] uppercase text-grass-dark">Comandos</h4>
             <ul className="mt-2 grid gap-1.5 font-mono text-sm">
-              {product.commands.map((command) => (
+              {product.commands.map((command: any) => (
                 <li key={command} className="bg-stone/30 px-2 py-1">
                   {command}
                 </li>
@@ -84,7 +85,7 @@ export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
               Compatibilidade
             </dt>
             <dd className="font-semibold">
-              {product.platforms.map((p) => (p === "java" ? "Java" : "Bedrock")).join(" e ")}
+              {product.platforms.map((p: any) => (p === "java" ? "Java" : "Bedrock")).join(" e ")}
             </dd>
           </div>
         </dl>

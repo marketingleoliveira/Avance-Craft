@@ -8,9 +8,14 @@ import {
 } from "react";
 import { MOCK_COUPONS } from "@/data/shop";
 import type { Platform } from "@/lib/payments/checkout-service";
-import type { ShopProduct } from "@/data/shop";
 
-export type CartLine = { productId: string; quantity: number; product?: any };
+export type CartLine = { 
+  productId: string; 
+  quantity: number; 
+  /** @deprecated Dados para exibição local, servidor valida preços */
+  product?: any 
+};
+
 
 type CartContextValue = {
   nickname: string;
@@ -20,7 +25,7 @@ type CartContextValue = {
   confirmed: boolean;
   setConfirmed: (value: boolean) => void;
   lines: CartLine[];
-  detailed: { product: ShopProduct; quantity: number }[];
+  detailed: { product: any; quantity: number }[];
   add: (productId: string, quantity?: number, productData?: any) => void;
   setQuantity: (productId: string, quantity: number) => void;
   remove: (productId: string) => void;
@@ -101,9 +106,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [coupon]);
 
   const detailed = useMemo(
-    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as ShopProduct, quantity: l.quantity })),
+    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as any, quantity: l.quantity })),
     [lines],
   );
+
 
   const subtotalCents = useMemo(
     () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),

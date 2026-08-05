@@ -1,8 +1,10 @@
 /**
- * DADOS MOCKADOS DA LOJA — placeholders visuais.
- * Nenhum preço aqui é real e nenhum pagamento está habilitado.
- * Substituir por dados do backend (Lovable Cloud) no futuro.
+ * @deprecated ESTE ARQUIVO ESTÁ DEPRECIADO.
+ * A rota /loja e o sistema de catálogo agora utilizam exclusivamente catalog.functions.ts 
+ * para buscar dados reais do banco (Lovable Cloud).
+ * Não utilize SHOP_PRODUCTS ou SHOP_CATEGORIES para novas implementações.
  */
+
 
 export type ShopCategoryId =
   | "vips"
