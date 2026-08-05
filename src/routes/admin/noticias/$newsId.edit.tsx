@@ -50,7 +50,7 @@ const newsSchema = z.object({
 
 type NewsFormValues = z.infer<typeof newsSchema>;
 
-export const Route = createFileRoute("/admin/noticias/$newsId/edit" as any)({
+export const Route = createFileRoute("/admin/noticias/$newsId/edit")({
   component: EditNewsPage,
 });
 

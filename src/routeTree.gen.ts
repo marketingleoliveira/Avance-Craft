@@ -15,7 +15,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ComoJogarRouteImport } from './routes/como-jogar'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as LojaRouteImport } from './routes/loja'
-import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as RankingRouteImport } from './routes/ranking'
@@ -25,12 +24,10 @@ import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin/auditoria'
-import { Route as AdminCategoriasRouteImport } from './routes/admin/categorias'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
 import { Route as AdminJogadoresRouteImport } from './routes/admin/jogadores'
-import { Route as AdminNoticiasRouteImport } from './routes/admin/noticias'
 import { Route as AdminPagamentosRouteImport } from './routes/admin/pagamentos'
 import { Route as AdminPedidosRouteImport } from './routes/admin/pedidos'
 import { Route as AdminProdutosRouteImport } from './routes/admin/produtos'
@@ -38,6 +35,9 @@ import { Route as AdminRankingRouteImport } from './routes/admin/ranking'
 import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
 import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
 import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
+import { Route as NoticiasIndexRouteImport } from './routes/noticias/index'
+import { Route as NoticiasSlugRouteImport } from './routes/noticias/$slug'
+import { Route as AdminCategoriasIndexRouteImport } from './routes/admin/categorias/index'
 import { Route as AdminCategoriasNewRouteImport } from './routes/admin/categorias/new'
 import { Route as AdminNoticiasIndexRouteImport } from './routes/admin/noticias/index'
 import { Route as AdminNoticiasCategoriasRouteImport } from './routes/admin/noticias/categorias'
@@ -45,6 +45,7 @@ import { Route as AdminNoticiasNewRouteImport } from './routes/admin/noticias/ne
 import { Route as ApiPublicMercadopagoRouteImport } from './routes/api/public/mercadopago'
 import { Route as ApiPublicPluginRouteImport } from './routes/api/public/plugin'
 import { Route as AdminCategoriasCategoryIdEditRouteImport } from './routes/admin/categorias/$categoryId.edit'
+import { Route as AdminNoticiasNewsIdEditRouteImport } from './routes/admin/noticias/$newsId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -74,11 +75,6 @@ const EquipeRoute = EquipeRouteImport.update({
 const LojaRoute = LojaRouteImport.update({
   id: '/loja',
   path: '/loja',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NoticiasRoute = NoticiasRouteImport.update({
-  id: '/noticias',
-  path: '/noticias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -126,11 +122,6 @@ const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
   path: '/auditoria',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
-  id: '/categorias',
-  path: '/categorias',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
   id: '/configuracoes',
   path: '/configuracoes',
@@ -149,11 +140,6 @@ const AdminEntregasRoute = AdminEntregasRouteImport.update({
 const AdminJogadoresRoute = AdminJogadoresRouteImport.update({
   id: '/jogadores',
   path: '/jogadores',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminNoticiasRoute = AdminNoticiasRouteImport.update({
-  id: '/noticias',
-  path: '/noticias',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPagamentosRoute = AdminPagamentosRouteImport.update({
@@ -191,25 +177,40 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
+const NoticiasIndexRoute = NoticiasIndexRouteImport.update({
+  id: '/noticias/',
+  path: '/noticias/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasSlugRoute = NoticiasSlugRouteImport.update({
+  id: '/noticias/$slug',
+  path: '/noticias/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategoriasIndexRoute = AdminCategoriasIndexRouteImport.update({
+  id: '/categorias/',
+  path: '/categorias/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriasNewRoute = AdminCategoriasNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminCategoriasRoute,
+  id: '/categorias/new',
+  path: '/categorias/new',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminNoticiasIndexRoute = AdminNoticiasIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminNoticiasRoute,
+  id: '/noticias/',
+  path: '/noticias/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminNoticiasCategoriasRoute = AdminNoticiasCategoriasRouteImport.update({
-  id: '/categorias',
-  path: '/categorias',
-  getParentRoute: () => AdminNoticiasRoute,
+  id: '/noticias/categorias',
+  path: '/noticias/categorias',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminNoticiasNewRoute = AdminNoticiasNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminNoticiasRoute,
+  id: '/noticias/new',
+  path: '/noticias/new',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicMercadopagoRoute = ApiPublicMercadopagoRouteImport.update({
   id: '/api/public/mercadopago',
@@ -223,10 +224,15 @@ const ApiPublicPluginRoute = ApiPublicPluginRouteImport.update({
 } as any)
 const AdminCategoriasCategoryIdEditRoute =
   AdminCategoriasCategoryIdEditRouteImport.update({
-    id: '/$categoryId/edit',
-    path: '/$categoryId/edit',
-    getParentRoute: () => AdminCategoriasRoute,
+    id: '/categorias/$categoryId/edit',
+    path: '/categorias/$categoryId/edit',
+    getParentRoute: () => AdminRoute,
   } as any)
+const AdminNoticiasNewsIdEditRoute = AdminNoticiasNewsIdEditRouteImport.update({
+  id: '/noticias/$newsId/edit',
+  path: '/noticias/$newsId/edit',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -235,7 +241,6 @@ export interface FileRoutesByFullPath {
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/loja': typeof LojaRoute
-  '/noticias': typeof NoticiasRoute
   '/perfil': typeof PerfilRoute
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
@@ -244,12 +249,10 @@ export interface FileRoutesByFullPath {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
-  '/admin/categorias': typeof AdminCategoriasRouteWithChildren
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
-  '/admin/noticias': typeof AdminNoticiasRouteWithChildren
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -257,14 +260,18 @@ export interface FileRoutesByFullPath {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/noticias/': typeof NoticiasIndexRoute
   '/admin/categorias/new': typeof AdminCategoriasNewRoute
   '/admin/noticias/categorias': typeof AdminNoticiasCategoriasRoute
   '/admin/noticias/new': typeof AdminNoticiasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/categorias/': typeof AdminCategoriasIndexRoute
   '/admin/noticias/': typeof AdminNoticiasIndexRoute
   '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
+  '/admin/noticias/$newsId/edit': typeof AdminNoticiasNewsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -272,7 +279,6 @@ export interface FileRoutesByTo {
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/loja': typeof LojaRoute
-  '/noticias': typeof NoticiasRoute
   '/perfil': typeof PerfilRoute
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
@@ -281,7 +287,6 @@ export interface FileRoutesByTo {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
-  '/admin/categorias': typeof AdminCategoriasRouteWithChildren
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -293,14 +298,18 @@ export interface FileRoutesByTo {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/noticias': typeof NoticiasIndexRoute
   '/admin/categorias/new': typeof AdminCategoriasNewRoute
   '/admin/noticias/categorias': typeof AdminNoticiasCategoriasRoute
   '/admin/noticias/new': typeof AdminNoticiasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/categorias': typeof AdminCategoriasIndexRoute
   '/admin/noticias': typeof AdminNoticiasIndexRoute
   '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
+  '/admin/noticias/$newsId/edit': typeof AdminNoticiasNewsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -310,7 +319,6 @@ export interface FileRoutesById {
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/loja': typeof LojaRoute
-  '/noticias': typeof NoticiasRoute
   '/perfil': typeof PerfilRoute
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
@@ -319,12 +327,10 @@ export interface FileRoutesById {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
-  '/admin/categorias': typeof AdminCategoriasRouteWithChildren
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
-  '/admin/noticias': typeof AdminNoticiasRouteWithChildren
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -332,14 +338,18 @@ export interface FileRoutesById {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/noticias/': typeof NoticiasIndexRoute
   '/admin/categorias/new': typeof AdminCategoriasNewRoute
   '/admin/noticias/categorias': typeof AdminNoticiasCategoriasRoute
   '/admin/noticias/new': typeof AdminNoticiasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/categorias/': typeof AdminCategoriasIndexRoute
   '/admin/noticias/': typeof AdminNoticiasIndexRoute
   '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
+  '/admin/noticias/$newsId/edit': typeof AdminNoticiasNewsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -350,7 +360,6 @@ export interface FileRouteTypes {
     | '/como-jogar'
     | '/equipe'
     | '/loja'
-    | '/noticias'
     | '/perfil'
     | '/privacidade'
     | '/ranking'
@@ -359,12 +368,10 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
-    | '/admin/categorias'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
     | '/admin/jogadores'
-    | '/admin/noticias'
     | '/admin/pagamentos'
     | '/admin/pedidos'
     | '/admin/produtos'
@@ -372,14 +379,18 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/noticias/$slug'
     | '/admin/'
+    | '/noticias/'
     | '/admin/categorias/new'
     | '/admin/noticias/categorias'
     | '/admin/noticias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/categorias/'
     | '/admin/noticias/'
     | '/admin/categorias/$categoryId/edit'
+    | '/admin/noticias/$newsId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -387,7 +398,6 @@ export interface FileRouteTypes {
     | '/como-jogar'
     | '/equipe'
     | '/loja'
-    | '/noticias'
     | '/perfil'
     | '/privacidade'
     | '/ranking'
@@ -396,7 +406,6 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
-    | '/admin/categorias'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -408,14 +417,18 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/noticias/$slug'
     | '/admin'
+    | '/noticias'
     | '/admin/categorias/new'
     | '/admin/noticias/categorias'
     | '/admin/noticias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/categorias'
     | '/admin/noticias'
     | '/admin/categorias/$categoryId/edit'
+    | '/admin/noticias/$newsId/edit'
   id:
     | '__root__'
     | '/'
@@ -424,7 +437,6 @@ export interface FileRouteTypes {
     | '/como-jogar'
     | '/equipe'
     | '/loja'
-    | '/noticias'
     | '/perfil'
     | '/privacidade'
     | '/ranking'
@@ -433,12 +445,10 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
-    | '/admin/categorias'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
     | '/admin/jogadores'
-    | '/admin/noticias'
     | '/admin/pagamentos'
     | '/admin/pedidos'
     | '/admin/produtos'
@@ -446,14 +456,18 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/noticias/$slug'
     | '/admin/'
+    | '/noticias/'
     | '/admin/categorias/new'
     | '/admin/noticias/categorias'
     | '/admin/noticias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/categorias/'
     | '/admin/noticias/'
     | '/admin/categorias/$categoryId/edit'
+    | '/admin/noticias/$newsId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -463,7 +477,6 @@ export interface RootRouteChildren {
   ComoJogarRoute: typeof ComoJogarRoute
   EquipeRoute: typeof EquipeRoute
   LojaRoute: typeof LojaRoute
-  NoticiasRoute: typeof NoticiasRoute
   PerfilRoute: typeof PerfilRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   RankingRoute: typeof RankingRoute
@@ -471,6 +484,8 @@ export interface RootRouteChildren {
   SucessoRoute: typeof SucessoRoute
   SuporteRoute: typeof SuporteRoute
   TermosRoute: typeof TermosRoute
+  NoticiasSlugRoute: typeof NoticiasSlugRoute
+  NoticiasIndexRoute: typeof NoticiasIndexRoute
   ApiPublicMercadopagoRoute: typeof ApiPublicMercadopagoRoute
   ApiPublicPluginRoute: typeof ApiPublicPluginRoute
 }
@@ -517,13 +532,6 @@ declare module '@tanstack/react-router' {
       path: '/loja'
       fullPath: '/loja'
       preLoaderRoute: typeof LojaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/noticias': {
-      id: '/noticias'
-      path: '/noticias'
-      fullPath: '/noticias'
-      preLoaderRoute: typeof NoticiasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -589,13 +597,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuditoriaRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/categorias': {
-      id: '/admin/categorias'
-      path: '/categorias'
-      fullPath: '/admin/categorias'
-      preLoaderRoute: typeof AdminCategoriasRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/configuracoes': {
       id: '/admin/configuracoes'
       path: '/configuracoes'
@@ -622,13 +623,6 @@ declare module '@tanstack/react-router' {
       path: '/jogadores'
       fullPath: '/admin/jogadores'
       preLoaderRoute: typeof AdminJogadoresRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/noticias': {
-      id: '/admin/noticias'
-      path: '/noticias'
-      fullPath: '/admin/noticias'
-      preLoaderRoute: typeof AdminNoticiasRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/pagamentos': {
@@ -680,33 +674,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/noticias/': {
+      id: '/noticias/'
+      path: '/noticias'
+      fullPath: '/noticias/'
+      preLoaderRoute: typeof NoticiasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias/$slug': {
+      id: '/noticias/$slug'
+      path: '/noticias/$slug'
+      fullPath: '/noticias/$slug'
+      preLoaderRoute: typeof NoticiasSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/categorias/': {
+      id: '/admin/categorias/'
+      path: '/categorias'
+      fullPath: '/admin/categorias/'
+      preLoaderRoute: typeof AdminCategoriasIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categorias/new': {
       id: '/admin/categorias/new'
-      path: '/new'
+      path: '/categorias/new'
       fullPath: '/admin/categorias/new'
       preLoaderRoute: typeof AdminCategoriasNewRouteImport
-      parentRoute: typeof AdminCategoriasRoute
+      parentRoute: typeof AdminRoute
     }
     '/admin/noticias/': {
       id: '/admin/noticias/'
-      path: '/'
+      path: '/noticias'
       fullPath: '/admin/noticias/'
       preLoaderRoute: typeof AdminNoticiasIndexRouteImport
-      parentRoute: typeof AdminNoticiasRoute
+      parentRoute: typeof AdminRoute
     }
     '/admin/noticias/categorias': {
       id: '/admin/noticias/categorias'
-      path: '/categorias'
+      path: '/noticias/categorias'
       fullPath: '/admin/noticias/categorias'
       preLoaderRoute: typeof AdminNoticiasCategoriasRouteImport
-      parentRoute: typeof AdminNoticiasRoute
+      parentRoute: typeof AdminRoute
     }
     '/admin/noticias/new': {
       id: '/admin/noticias/new'
-      path: '/new'
+      path: '/noticias/new'
       fullPath: '/admin/noticias/new'
       preLoaderRoute: typeof AdminNoticiasNewRouteImport
-      parentRoute: typeof AdminNoticiasRoute
+      parentRoute: typeof AdminRoute
     }
     '/api/public/mercadopago': {
       id: '/api/public/mercadopago'
@@ -724,52 +739,27 @@ declare module '@tanstack/react-router' {
     }
     '/admin/categorias/$categoryId/edit': {
       id: '/admin/categorias/$categoryId/edit'
-      path: '/$categoryId/edit'
+      path: '/categorias/$categoryId/edit'
       fullPath: '/admin/categorias/$categoryId/edit'
       preLoaderRoute: typeof AdminCategoriasCategoryIdEditRouteImport
-      parentRoute: typeof AdminCategoriasRoute
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/noticias/$newsId/edit': {
+      id: '/admin/noticias/$newsId/edit'
+      path: '/noticias/$newsId/edit'
+      fullPath: '/admin/noticias/$newsId/edit'
+      preLoaderRoute: typeof AdminNoticiasNewsIdEditRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
 
-interface AdminCategoriasRouteChildren {
-  AdminCategoriasNewRoute: typeof AdminCategoriasNewRoute
-  AdminCategoriasCategoryIdEditRoute: typeof AdminCategoriasCategoryIdEditRoute
-}
-
-const AdminCategoriasRouteChildren: AdminCategoriasRouteChildren = {
-  AdminCategoriasNewRoute: AdminCategoriasNewRoute,
-  AdminCategoriasCategoryIdEditRoute: AdminCategoriasCategoryIdEditRoute,
-}
-
-const AdminCategoriasRouteWithChildren = AdminCategoriasRoute._addFileChildren(
-  AdminCategoriasRouteChildren,
-)
-
-interface AdminNoticiasRouteChildren {
-  AdminNoticiasCategoriasRoute: typeof AdminNoticiasCategoriasRoute
-  AdminNoticiasNewRoute: typeof AdminNoticiasNewRoute
-  AdminNoticiasIndexRoute: typeof AdminNoticiasIndexRoute
-}
-
-const AdminNoticiasRouteChildren: AdminNoticiasRouteChildren = {
-  AdminNoticiasCategoriasRoute: AdminNoticiasCategoriasRoute,
-  AdminNoticiasNewRoute: AdminNoticiasNewRoute,
-  AdminNoticiasIndexRoute: AdminNoticiasIndexRoute,
-}
-
-const AdminNoticiasRouteWithChildren = AdminNoticiasRoute._addFileChildren(
-  AdminNoticiasRouteChildren,
-)
-
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
-  AdminCategoriasRoute: typeof AdminCategoriasRouteWithChildren
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
   AdminJogadoresRoute: typeof AdminJogadoresRoute
-  AdminNoticiasRoute: typeof AdminNoticiasRouteWithChildren
   AdminPagamentosRoute: typeof AdminPagamentosRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
@@ -778,16 +768,21 @@ interface AdminRouteChildren {
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminCategoriasNewRoute: typeof AdminCategoriasNewRoute
+  AdminNoticiasCategoriasRoute: typeof AdminNoticiasCategoriasRoute
+  AdminNoticiasNewRoute: typeof AdminNoticiasNewRoute
+  AdminCategoriasIndexRoute: typeof AdminCategoriasIndexRoute
+  AdminNoticiasIndexRoute: typeof AdminNoticiasIndexRoute
+  AdminCategoriasCategoryIdEditRoute: typeof AdminCategoriasCategoryIdEditRoute
+  AdminNoticiasNewsIdEditRoute: typeof AdminNoticiasNewsIdEditRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
-  AdminCategoriasRoute: AdminCategoriasRouteWithChildren,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
   AdminJogadoresRoute: AdminJogadoresRoute,
-  AdminNoticiasRoute: AdminNoticiasRouteWithChildren,
   AdminPagamentosRoute: AdminPagamentosRoute,
   AdminPedidosRoute: AdminPedidosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
@@ -796,6 +791,13 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTicketsRoute: AdminTicketsRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminCategoriasNewRoute: AdminCategoriasNewRoute,
+  AdminNoticiasCategoriasRoute: AdminNoticiasCategoriasRoute,
+  AdminNoticiasNewRoute: AdminNoticiasNewRoute,
+  AdminCategoriasIndexRoute: AdminCategoriasIndexRoute,
+  AdminNoticiasIndexRoute: AdminNoticiasIndexRoute,
+  AdminCategoriasCategoryIdEditRoute: AdminCategoriasCategoryIdEditRoute,
+  AdminNoticiasNewsIdEditRoute: AdminNoticiasNewsIdEditRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -807,7 +809,6 @@ const rootRouteChildren: RootRouteChildren = {
   ComoJogarRoute: ComoJogarRoute,
   EquipeRoute: EquipeRoute,
   LojaRoute: LojaRoute,
-  NoticiasRoute: NoticiasRoute,
   PerfilRoute: PerfilRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   RankingRoute: RankingRoute,
@@ -815,9 +816,21 @@ const rootRouteChildren: RootRouteChildren = {
   SucessoRoute: SucessoRoute,
   SuporteRoute: SuporteRoute,
   TermosRoute: TermosRoute,
+  NoticiasSlugRoute: NoticiasSlugRoute,
+  NoticiasIndexRoute: NoticiasIndexRoute,
   ApiPublicMercadopagoRoute: ApiPublicMercadopagoRoute,
   ApiPublicPluginRoute: ApiPublicPluginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
