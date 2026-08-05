@@ -161,7 +161,7 @@ function AdminFlagsPage() {
                     <div>
                       <h3 className="font-pixel text-sm flex items-center gap-2">
                         {meta.label}
-                        {meta.critical && <AlertTriangle className="w-3 h-3 text-amber-500" title="Funcionalidade Crítica" />}
+                        {meta.critical && <AlertTriangle className="w-3 h-3 text-amber-500" />}
                       </h3>
                       <p className="text-xs text-muted-foreground mt-1 max-w-md">{meta.description}</p>
                     </div>
