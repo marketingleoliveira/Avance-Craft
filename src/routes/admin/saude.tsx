@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getSystemHealth } from '@/lib/services/health.functions';
-import { StonePanel } from '@/components/ui/StonePanel';
-import { WoodSign } from '@/components/ui/WoodSign';
-import { Container } from '@/components/ui/Container';
+import { StonePanel } from '@/components/ui-kit/StonePanel';
+import { WoodSign } from '@/components/ui-kit/WoodSign';
+import { Container } from '@/components/ui-kit/Container';
 import { 
   Activity, 
   Database, 
@@ -41,7 +41,7 @@ function AdminHealthPage() {
   return (
     <Container className="py-8">
       <div className="mb-8">
-        <WoodSign variant="small" className="mb-2">Painel de Saúde</WoodSign>
+        <WoodSign className="mb-2">Painel de Saúde</WoodSign>
         <p className="text-muted-foreground">Monitoramento em tempo real da infraestrutura do Habblet Mine.</p>
       </div>
 
