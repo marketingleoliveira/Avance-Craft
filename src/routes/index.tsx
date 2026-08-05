@@ -1,9 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { 
-  getHomeData,
-} from "@/lib/services/content.functions";
-
+import { getHomeData } from "@/lib/services/content.functions";
 import { Hero } from "@/components/home/Hero";
 import { NewsSection } from "@/components/home/NewsSection";
 import { ModesSection } from "@/components/home/ModesSection";
@@ -34,7 +31,6 @@ export const Route = createFileRoute("/")({
       queryFn: () => getHomeData(),
     });
   },
-
   component: Index,
 });
 
@@ -59,4 +55,3 @@ function Index() {
     </main>
   );
 }
-
