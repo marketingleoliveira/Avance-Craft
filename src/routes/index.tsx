@@ -165,7 +165,10 @@ function Index() {
                     "Simulação de Lançamento Concluída (Staging)",
                     "Plano de Ativação Gradual (Phased Rollout)",
                     "Feature Flags de Governança Configuradas",
+                    "Compra Real de Validação Preparada",
+                    "Produto Oculto & Comando Seguro Configurados",
                     "🚀 PRONTO PARA LANÇAMENTO V1.0.0"
+
 
 
 
