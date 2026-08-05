@@ -105,7 +105,9 @@ function Index() {
           </ScrollReveal>
         </div>
 
-        <SiteFooter />
+        <ScrollReveal>
+          <SiteFooter />
+        </ScrollReveal>
       </div>
     </main>
     </AnimatePresence>
