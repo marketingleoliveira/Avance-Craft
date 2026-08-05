@@ -1,53 +1,72 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
-import { WoodSign } from "@/components/ui-kit/WoodSign";
-import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { PixelButton } from "@/components/ui-kit/PixelButton";
+import { Button } from "@/components/ui/button";
+import { Monitor, Server, PlayCircle, ChevronRight } from "lucide-react";
+
 const STEPS = [
   {
     step: "01",
-    title: "Abra o Minecraft",
-    text: "Use a versão Java ou Bedrock compatível listada na barra de status.",
+    title: "Inicie o Game",
+    text: "Abra seu Minecraft (Java ou Bedrock) na versão 1.20.x ou superior.",
+    icon: Monitor,
   },
   {
     step: "02",
-    title: "Adicione jogar.avance.com.br",
-    text: "No menu multijogador, adicione o endereço oficial do Avance.",
+    title: "Conecte-se",
+    text: "Adicione o IP jogar.avance.com.br na sua lista de servidores multijogador.",
+    icon: Server,
   },
   {
     step: "03",
-    title: "Entre e comece sua aventura",
-    text: "Escolha um modo de jogo no saguão e faça sua primeira construção.",
+    title: "Divirta-se",
+    text: "Crie sua conta, escolha um modo no lobby e comece sua jornada épica.",
+    icon: PlayCircle,
   },
 ];
 
-
 export function HowToPlay() {
   return (
-    <section className="border-y-4 border-dirt-dark bg-stone/20 py-14" id="how-to-play">
+    <section className="relative py-24 bg-stone-950 overflow-hidden" id="how-to-play">
       <Container>
-        <WoodSign subtitle="Três passos para entrar no servidor.">Como jogar</WoodSign>
+        <div className="space-y-4 mb-16 text-center">
+          <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+            Prepare sua <span className="text-emerald-500">Jornada</span>
+          </h2>
+          <p className="text-stone-400 font-medium text-lg max-w-xl mx-auto">
+            Nunca foi tão fácil começar. Siga os passos abaixo e entre no universo Avance agora mesmo.
+          </p>
+        </div>
 
-        <ol className="mt-10 grid gap-6 md:grid-cols-3">
+        <ol className="grid gap-8 md:grid-cols-3">
           {STEPS.map((step) => (
-            <li key={step.step}>
-              <StonePanel>
-                <span className="font-pixel pixel-border border-dirt-dark bg-wood grid h-11 w-11 place-items-center text-[10px] text-dirt-dark">
-                  {step.step}
-                </span>
-                <h3 className="mt-4 text-lg font-extrabold leading-tight">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            <li key={step.step} className="group relative">
+              <div className="bg-white/[0.02] border border-white/5 p-10 rounded-[2.5rem] h-full transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-2">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
+                    <step.icon className="w-8 h-8" />
+                  </div>
+                  <span className="text-5xl font-[900] italic text-white/5 group-hover:text-emerald-500/10 transition-colors">
+                    {step.step}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-[900] uppercase italic tracking-tight text-white mb-4">
+                  {step.title}
+                </h3>
+                <p className="text-stone-400 text-sm font-medium leading-relaxed">
                   {step.text}
                 </p>
-              </StonePanel>
+              </div>
             </li>
           ))}
         </ol>
 
-        <div className="mt-8 flex justify-center">
-          <Link to="/como-jogar">
-            <PixelButton variant="emerald">Guia completo</PixelButton>
-          </Link>
+        <div className="mt-16 flex justify-center">
+          <Button asChild variant="outline" className="h-16 px-12 rounded-2xl group">
+            <Link to="/como-jogar" className="flex items-center gap-3">
+              Ver Guia Completo para Iniciantes
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Button>
         </div>
       </Container>
     </section>

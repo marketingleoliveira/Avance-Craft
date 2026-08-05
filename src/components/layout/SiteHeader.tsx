@@ -73,7 +73,7 @@ export function SiteHeader() {
                     <ChevronDown className="w-3 h-3 transition-transform group-hover/item:rotate-180" />
                   </button>
                   <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-all duration-300 translate-y-2 group-hover/item:translate-y-0">
-                    <div className="bg-stone-900/95 backdrop-blur-xl border border-white/10 p-2 min-w-[200px] shadow-2xl">
+                    <div className="bg-stone-900/95 backdrop-blur-xl border border-white/10 p-2 min-w-[200px] shadow-2xl rounded-2xl">
                       {link.children.map((child) => (
                         <Link
                           key={child.to}
@@ -95,7 +95,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             to="/perfil"
-            className="hidden sm:flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-colors border border-white/10"
+            className="hidden sm:flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-colors border border-white/10 rounded-xl"
           >
             <User className="w-4 h-4" />
             Perfil
@@ -103,7 +103,7 @@ export function SiteHeader() {
 
           <Link
             to="/como-jogar"
-            className="relative group flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-stone-950 text-[11px] font-black uppercase tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95"
+            className="relative group flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-stone-950 text-[11px] font-black uppercase tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 rounded-xl shadow-lg shadow-emerald-500/20"
           >
             <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
             <Play className="w-3.5 h-3.5 fill-current" />

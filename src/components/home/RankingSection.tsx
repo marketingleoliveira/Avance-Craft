@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
-import { WoodSign } from "@/components/ui-kit/WoodSign";
-import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
 import { cn } from "@/lib/utils";
+import { Trophy, Medal, Crown, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const RANKING_TABS = [
-  { id: "ricos", label: "Mais Ricos", metric: "Saldo" },
-  { id: "clãs", label: "Melhores Clãs", metric: "Nível" },
-  { id: "vips", label: "Top VIPs", metric: "Tempo" },
+  { id: "ricos", label: "Mais Ricos", metric: "Saldo", icon: Trophy },
+  { id: "clãs", label: "Melhores Clãs", metric: "Nível", icon: Crown },
+  { id: "vips", label: "Top VIPs", metric: "Tempo", icon: Medal },
 ];
 
 export function RankingSection() {
@@ -23,63 +22,101 @@ export function RankingSection() {
   });
 
   return (
-    <section className="py-14">
+    <section className="relative py-24 bg-stone-950 overflow-hidden" id="ranking">
       <Container>
-        <WoodSign subtitle="Os melhores jogadores do servidor.">Ranking Global</WoodSign>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-emerald-500 font-black uppercase tracking-[0.2em] text-[10px]">
+              <Trophy className="w-3 h-3" />
+              Lendas do servidor
+            </div>
+            <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+              Hall da <span className="text-emerald-500">Fama</span>
+            </h2>
+            <p className="text-stone-400 font-medium text-lg max-w-xl">
+              Confira os jogadores que estão dominando o Avance nesta semana.
+            </p>
+          </div>
+        </div>
 
-        <div className="mt-10">
-          <div
-            role="tablist"
-            aria-label="Categorias de ranking"
-            className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:none]"
-          >
-            {RANKING_TABS.map((tab) => (
-              <button
-                key={tab.id}
-                role="tab"
-                type="button"
-                aria-selected={tab.id === activeTab.id}
-                onClick={() => setActiveTab(tab)}
-                className={cn(
-                  "font-pixel pixel-border shrink-0 px-4 py-2 text-[9px] uppercase transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  tab.id === activeTab.id
-                    ? "border-grass-dark bg-emerald-block text-accent-foreground pixel-shadow"
-                    : "border-stone-dark bg-stone text-foreground hover:bg-stone/80",
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
+        <div className="grid lg:grid-cols-[1fr_2.5fr] gap-12 items-start">
+          {/* Tabs Sidebar */}
+          <div className="flex flex-col gap-4">
+            {RANKING_TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = tab.id === activeTab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab)}
+                  className={cn(
+                    "group flex items-center justify-between p-6 rounded-2xl transition-all border",
+                    isActive 
+                      ? "bg-emerald-500 border-emerald-500 text-stone-950 shadow-xl shadow-emerald-500/20" 
+                      : "bg-white/[0.02] border-white/5 text-stone-400 hover:bg-white/[0.04] hover:border-white/10"
+                  )}
+                >
+                  <div className="flex items-center gap-4">
+                    <Icon className={cn("w-6 h-6", isActive ? "text-stone-950" : "text-emerald-500")} />
+                    <span className="font-[900] uppercase italic tracking-wider text-sm">{tab.label}</span>
+                  </div>
+                  <ChevronRight className={cn("w-4 h-4 transition-transform", isActive ? "translate-x-1" : "opacity-30 group-hover:translate-x-1")} />
+                </button>
+              );
+            })}
           </div>
 
-          <StonePanel className="mt-4" title={activeTab.label}>
-            <table className="w-full text-left text-sm">
-              <caption className="sr-only">Ranking de {activeTab.label}</caption>
+          {/* Ranking Table */}
+          <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] overflow-hidden p-8 backdrop-blur-xl">
+            <table className="w-full text-left">
               <thead>
-                <tr className="border-b-2 border-dirt-dark/30 text-xs uppercase text-muted-foreground">
-                  <th scope="col" className="py-2">#</th>
-                  <th scope="col" className="py-2">Jogador</th>
-                  <th scope="col" className="py-2 text-right">{activeTab.metric}</th>
+                <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 border-b border-white/5">
+                  <th className="pb-6">Posição</th>
+                  <th className="pb-6">Jogador</th>
+                  <th className="pb-6 text-right">{activeTab.metric}</th>
                 </tr>
               </thead>
-              <tbody>
-                {rankingData.map((row: any) => (
-                  <tr key={row.minecraft_nickname} className="border-b border-dirt-dark/15">
-                    <td className="py-2 font-black text-grass-dark">{row.position}</td>
-                    <td className="py-2 font-semibold">{row.minecraft_nickname}</td>
-                    <td className="py-2 text-right font-semibold">{row.display_value}</td>
+              <tbody className="divide-y divide-white/[0.03]">
+                {rankingData.map((row: any, i: number) => (
+                  <tr key={row.minecraft_nickname} className="group hover:bg-white/[0.02] transition-colors">
+                    <td className="py-6 pr-4">
+                      <div className={cn(
+                        "w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm",
+                        i === 0 ? "bg-emerald-500 text-stone-950 shadow-lg shadow-emerald-500/30" : 
+                        i === 1 ? "bg-stone-200 text-stone-950" :
+                        i === 2 ? "bg-stone-700 text-white" : "bg-white/5 text-stone-400"
+                      )}>
+                        {row.position}
+                      </div>
+                    </td>
+                    <td className="py-6 pr-4">
+                      <div className="flex items-center gap-4">
+                        <img 
+                          src={`https://mc-heads.net/avatar/${row.minecraft_nickname}/32`}
+                          alt={row.minecraft_nickname}
+                          className="w-8 h-8 rounded-lg shadow-lg group-hover:scale-110 transition-transform"
+                        />
+                        <span className="font-[800] text-stone-100 group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
+                          {row.minecraft_nickname}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-6 text-right">
+                      <span className="font-mono font-bold text-stone-400">
+                        {row.display_value}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div className="mt-5">
-              <Link to="/ranking">
-                <PixelButton variant="stone" className="w-full">
-                  Ranking completo
-                </PixelButton>
-              </Link>
+            
+            <div className="mt-10 flex justify-center">
+              <Button asChild variant="outline" className="w-full sm:w-auto px-12 py-6 rounded-2xl">
+                <Link to="/ranking">Ver Ranking Completo</Link>
+              </Button>
             </div>
-          </StonePanel>
+          </div>
         </div>
       </Container>
     </section>

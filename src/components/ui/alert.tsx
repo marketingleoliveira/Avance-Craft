@@ -4,13 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+  "relative w-full rounded-3xl border px-6 py-4 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-6 [&>svg]:top-5 [&>svg]:text-foreground [&>svg~*]:pl-9 backdrop-blur-xl",
   {
     variants: {
       variant: {
-        default: "bg-background text-foreground",
+        default: "bg-white/[0.03] border-white/10 text-stone-200",
         destructive:
-          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+          "bg-red-500/10 border-red-500/20 text-red-400 [&>svg]:text-red-400",
       },
     },
     defaultVariants: {
@@ -31,7 +31,7 @@ const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<H
   ({ className, ...props }, ref) => (
     <h5
       ref={ref}
-      className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+      className={cn("mb-2 font-black uppercase tracking-widest text-xs", className)}
       {...props}
     />
   ),

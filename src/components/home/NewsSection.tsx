@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
-import { WoodSign } from "@/components/ui-kit/WoodSign";
-import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
+import { Newspaper, ChevronRight, Activity, Trophy, Users, Calendar, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
@@ -14,58 +14,68 @@ const NEWS_IMAGES: Record<string, string> = { "1": news1, "2": news2, "3": news3
 
 const statusLabel: Record<string, string> = {
   online: "Online",
-  manutencao: "Em preparação",
+  manutencao: "Preparando",
   offline: "Offline",
 };
 
 function NewsCard({ item }: { item: any }) {
   return (
-    <div className="bg-white/[0.02] border border-white/5 p-6 rounded-2xl transition-all hover:bg-white/[0.04] hover:border-white/10 group">
-      <article className="flex flex-col gap-6 sm:flex-row">
-        <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-xl sm:h-32 sm:w-32">
-          <img
-            src={NEWS_IMAGES[item.id] || news1}
-            alt={`Ilustração voxel da notícia: ${item.title}`}
-            width={640}
-            height={640}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-        </div>
-        <div className="min-w-0 flex-1">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full">
-            {item.category?.name || "Geral"}
-          </span>
-          <h3 className="mt-4 text-2xl font-[800] leading-tight tracking-tight group-hover:text-emerald-400 transition-colors">
-            {item.title}
-          </h3>
-          <p className="mt-3 text-stone-400 leading-relaxed line-clamp-2">
-            {item.excerpt}
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-bold uppercase tracking-wider text-stone-500">
-            <span className="flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-stone-700" />
-              {new Date(item.published_at).toLocaleDateString("pt-BR")}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-stone-700" />
-              por {item.author || "Equipe"}
-            </span>
-            <Link to="/noticias" className="ml-auto text-emerald-500 hover:text-emerald-400 transition-colors">
-              Ler mais →
-            </Link>
+    <Link to="/noticias" className="group block">
+      <article className="bg-white/[0.02] border border-white/5 p-6 rounded-3xl transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1">
+        <div className="flex flex-col gap-8 sm:flex-row items-center">
+          <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-2xl sm:h-40 sm:w-40 border border-white/5">
+            <img
+              src={NEWS_IMAGES[item.id] || news1}
+              alt={item.title}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+          
+          <div className="flex-1 space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 bg-emerald-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-emerald-500/20">
+                {item.category?.name || "Geral"}
+              </span>
+              <div className="flex items-center gap-2 text-[10px] font-bold text-stone-500 uppercase tracking-widest">
+                <Calendar className="w-3 h-3" />
+                {new Date(item.published_at).toLocaleDateString("pt-BR")}
+              </div>
+            </div>
+            
+            <h3 className="text-2xl font-[900] leading-tight tracking-tight text-white group-hover:text-emerald-400 transition-colors uppercase italic">
+              {item.title}
+            </h3>
+            
+            <p className="text-stone-400 font-medium leading-relaxed line-clamp-2">
+              {item.excerpt}
+            </p>
+            
+            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-stone-500 uppercase tracking-widest">
+                <User className="w-3 h-3 text-emerald-500" />
+                Por {item.author || "Equipe Avance"}
+              </div>
+              <span className="text-emerald-500 font-black uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover:gap-3 transition-all">
+                Ler Matéria <ChevronRight className="w-3 h-3" />
+              </span>
+            </div>
           </div>
         </div>
       </article>
-    </div>
+    </Link>
   );
 }
 
-function SidebarRow({ label, value }: { label: string; value: string }) {
+function SidebarRow({ label, value, icon: Icon }: { label: string; value: string; icon: any }) {
   return (
-    <li className="flex items-center justify-between gap-3 border-b border-dirt-dark/15 py-1.5 last:border-0">
-      <span className="text-xs font-bold uppercase text-muted-foreground">{label}</span>
-      <span className="text-sm font-extrabold">{value}</span>
+    <li className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+      <div className="flex items-center gap-3">
+        <Icon className="w-4 h-4 text-emerald-500" />
+        <span className="text-[10px] font-black uppercase tracking-widest text-stone-500">{label}</span>
+      </div>
+      <span className="text-sm font-[900] text-white italic uppercase">{value}</span>
     </li>
   );
 }
@@ -79,8 +89,6 @@ const DEFAULT_STATUS = {
 };
 
 export function NewsSection({ news, status }: { news: any[]; status: any }) {
-
-
   const { data: rankings } = useSuspenseQuery({
     queryKey: ["rankings", "ricos", "weekly", 3],
     queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 3 } }),
@@ -89,78 +97,89 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
   const currentStatus = status ?? DEFAULT_STATUS;
   const statusKey = currentStatus.online ? "online" : "offline";
 
-
   return (
-    <section className="py-24" id="news">
+    <section className="relative py-24 bg-stone-950 overflow-hidden" id="news">
       <Container>
-        <div className="space-y-4 mb-16 text-center md:text-left">
-          <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic">
-            Novidades
-          </h2>
-          <p className="text-stone-400 font-medium text-lg">
-            Fique por dentro de tudo que acontece no universo Avance.
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-emerald-500 font-black uppercase tracking-[0.2em] text-[10px]">
+              <Newspaper className="w-3 h-3" />
+              Diário do Explorador
+            </div>
+            <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+              Últimas <span className="text-emerald-500">Notícias</span>
+            </h2>
+            <p className="text-stone-400 font-medium text-lg max-w-xl">
+              Fique por dentro das atualizações, eventos e anúncios do Avance.
+            </p>
+          </div>
+          <Button asChild variant="ghost" className="hidden md:flex text-emerald-500 hover:text-white hover:bg-emerald-500/10">
+            <Link to="/noticias" className="flex items-center gap-2 font-black uppercase tracking-widest text-xs">
+              Ver Todas <ChevronRight className="w-4 h-4" />
+            </Link>
+          </Button>
         </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1.7fr_1fr]">
-          <div className="grid gap-6">
+        <div className="grid gap-12 lg:grid-cols-[1.8fr_1fr]">
+          {/* Main Feed */}
+          <div className="space-y-6">
             {news.map((item: any) => (
               <NewsCard key={item.id} item={item} />
             ))}
-            <div className="flex justify-center">
-              <Link to="/noticias">
-                <PixelButton variant="stone">Ver todas as notícias</PixelButton>
-              </Link>
+            <div className="md:hidden mt-8">
+              <Button asChild className="w-full h-16 rounded-2xl">
+                <Link to="/noticias">Ver Todas as Notícias</Link>
+              </Button>
             </div>
           </div>
 
-          <aside className="grid content-start gap-6">
-            <div className="bg-white/[0.02] border border-white/5 p-8 rounded-3xl space-y-10 h-full">
-              <div className="space-y-6">
-                <h3 className="text-xl font-[900] uppercase italic tracking-wider border-b border-white/5 pb-4">Status</h3>
-                <ul className="grid gap-4">
-                  <SidebarRow label="Servidor" value={statusLabel[statusKey] || "Offline"} />
-                  <SidebarRow
-                    label="Jogadores"
-                    value={`${currentStatus.players_online}/${currentStatus.max_players}`}
-                  />
-                  <SidebarRow label="Versão" value={currentStatus.version} />
-                </ul>
-                <div className="bg-stone-900/50 p-4 rounded-xl border border-white/5 font-mono text-center text-emerald-400 text-sm font-bold tracking-widest uppercase">
+          {/* Technical Sidebar */}
+          <aside className="space-y-8">
+            {/* Server Status Widget */}
+            <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
+              <h3 className="text-xl font-[900] uppercase italic tracking-wider text-white mb-6 flex items-center gap-3">
+                <Activity className="w-5 h-5 text-emerald-500" />
+                Live Status
+              </h3>
+              <ul className="space-y-3 mb-6">
+                <SidebarRow label="Status" value={statusLabel[statusKey] || "Offline"} icon={Activity} />
+                <SidebarRow label="Jogadores" value={`${currentStatus.players_online}/${currentStatus.max_players}`} icon={Users} />
+                <SidebarRow label="Versão" value={currentStatus.version} icon={Calendar} />
+              </ul>
+              <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center group cursor-pointer active:scale-95 transition-all">
+                <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 mb-2">IP de Conexão</span>
+                <span className="text-lg font-[900] text-white uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
                   {currentStatus.ip}
-                </div>
+                </span>
               </div>
+            </div>
 
-              <div className="space-y-6">
-                <h3 className="text-xl font-[900] uppercase italic tracking-wider border-b border-white/5 pb-4">Ranking Semanal</h3>
-                <ol className="grid gap-4">
-                  {rankings.map((row: any) => (
-                    <li key={row.minecraft_nickname} className="flex items-center gap-4 group/rank">
-                      <span className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-black text-xs">
-                        {row.position}
-                      </span>
-                      <span className="min-w-0 flex-1 truncate font-bold text-stone-200 group-hover/rank:text-white transition-colors">
+            {/* Top Players Widget */}
+            <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
+              <h3 className="text-xl font-[900] uppercase italic tracking-wider text-white mb-6 flex items-center gap-3">
+                <Trophy className="w-5 h-5 text-emerald-500" />
+                Top Fortune
+              </h3>
+              <ol className="space-y-4">
+                {rankings.map((row: any, i: number) => (
+                  <li key={row.minecraft_nickname} className="flex items-center gap-4 group/item">
+                    <div className={cn(
+                      "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs",
+                      i === 0 ? "bg-emerald-500 text-stone-950" : "bg-white/5 text-stone-400"
+                    )}>
+                      {row.position}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-stone-100 uppercase tracking-tight truncate group-hover/item:text-emerald-400 transition-colors">
                         {row.minecraft_nickname}
-                      </span>
-                      <span className="text-sm font-black text-emerald-500/40">
+                      </p>
+                      <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest italic">
                         {row.display_value}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
-              <div className="space-y-6">
-                <h3 className="text-xl font-[900] uppercase italic tracking-wider border-b border-white/5 pb-4">Comunidade</h3>
-                <p className="text-stone-400 font-medium leading-relaxed">
-                  Junte-se a milhares de jogadores em nosso Discord oficial.
-                </p>
-                <a href="https://discord.gg/avance" target="_blank" rel="noopener noreferrer" className="block">
-                  <button className="w-full py-4 bg-white text-stone-950 font-black uppercase tracking-widest text-xs hover:bg-emerald-500 transition-all active:scale-95">
-                    Entrar no Discord
-                  </button>
-                </a>
-              </div>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
           </aside>
         </div>
