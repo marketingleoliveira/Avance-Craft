@@ -40,7 +40,7 @@ export function HowToPlay() {
         <ol className="grid gap-8 md:grid-cols-3">
           {STEPS.map((step) => (
             <li key={step.step} className="group relative">
-              <div className="bg-white/[0.02] border border-white/5 p-10 rounded-[2.5rem] h-full transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-2">
+              <Card className="p-10 h-full !rounded-[2.5rem]">
                 <div className="flex items-center justify-between mb-8">
                   <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
                     <step.icon className="w-8 h-8" />
@@ -55,7 +55,7 @@ export function HowToPlay() {
                 <p className="text-stone-400 text-sm font-medium leading-relaxed">
                   {step.text}
                 </p>
-              </div>
+              </Card>
             </li>
           ))}
         </ol>

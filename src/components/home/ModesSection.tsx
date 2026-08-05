@@ -26,7 +26,7 @@ export function ModesSection({ modes }: { modes: any[] }) {
           {modes.map((mode: any) => {
             const Icon = ICONS[mode.name] || Boxes;
             return (
-              <div key={mode.id} className="group bg-white/[0.02] border border-white/5 p-8 rounded-3xl transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1">
+              <Card key={mode.id} className="p-8 flex flex-col h-full">
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
                     <Icon className="w-6 h-6" />
@@ -47,7 +47,7 @@ export function ModesSection({ modes }: { modes: any[] }) {
                 <p className="text-stone-400 text-sm font-medium leading-relaxed">
                   {mode.description}
                 </p>
-              </div>
+              </Card>
             );
           })}
         </div>

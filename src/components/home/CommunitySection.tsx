@@ -2,6 +2,7 @@ import { Container } from "@/components/ui-kit/Container";
 import { MessageSquare, Instagram, Youtube, Share2, Users, Bell, LifeBuoy, Sword } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
   const discordUrl = settings?.["discord_url"] || "https://discord.gg/avance";
@@ -40,7 +41,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
 
             <div className="grid sm:grid-cols-2 gap-6">
               {FEATURES.map((item) => (
-                <div key={item.label} className="flex items-center gap-4 bg-white/[0.02] border border-white/5 p-5 rounded-2xl group hover:bg-white/[0.04] transition-colors">
+                <Card key={item.label} className="flex items-center gap-4 p-5">
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
                     <item.icon className="w-5 h-5" />
                   </div>
@@ -63,7 +64,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
           <div className="relative group">
             <div className="absolute inset-0 bg-emerald-500/10 blur-[100px] rounded-full group-hover:bg-emerald-500/20 transition-all" />
             <div className="relative grid gap-4">
-              <div className="bg-white/[0.02] border border-white/5 p-10 rounded-[2.5rem] backdrop-blur-xl">
+              <Card className="p-10 !rounded-[2.5rem]">
                 <h3 className="text-xl font-[900] uppercase italic tracking-wider text-white mb-8 border-b border-white/5 pb-4 flex items-center gap-3">
                   <Share2 className="w-5 h-5 text-emerald-500" />
                   Siga o Avance
@@ -89,7 +90,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
                 <p className="mt-8 text-xs font-medium text-stone-500 text-center uppercase tracking-widest italic opacity-50">
                   Novos conteúdos diariamente
                 </p>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
