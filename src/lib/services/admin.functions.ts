@@ -288,7 +288,7 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
     if (fields.active !== undefined) patch.active = fields.active;
     if (fields.featured !== undefined) patch.featured = fields.featured;
     if (fields.position !== undefined) patch.position = fields.position;
-    if (fields.maxQuantity !== undefined) patch.max_quantity = fields.maxQuantity;
+    if (fields.maxQuantity !== undefined) (patch as any).max_quantity = fields.maxQuantity;
 
     const { data: row, error } = await context.supabase
       .from("products")
