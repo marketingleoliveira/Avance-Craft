@@ -51,46 +51,55 @@ export function ShopHighlight({ products }: { products: any[] }) {
 
         <div className="grid gap-8 md:grid-cols-3">
           {products.map((product: any, index: number) => (
-            <Card key={product.id} className="p-6 flex flex-col">
-              <div className="absolute top-4 right-4 z-20">
-                <span className="px-3 py-1 bg-emerald-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-emerald-500/20">
-                  {product.category?.name || "VIP"}
-                </span>
-              </div>
-              
-              <ChestImage index={index} name={product.name} />
-              
-              <div className="mt-8 flex-1">
-                <h3 className="text-2xl font-[900] uppercase italic tracking-tight text-white group-hover:text-emerald-400 transition-colors">
-                  {product.name}
-                </h3>
-                <div className="mt-2 flex items-center gap-2 text-stone-500 font-bold uppercase tracking-widest text-[10px]">
-                  <Zap className="w-3 h-3" />
-                  {product.duration_days ? `${product.duration_days} dias` : "Permanente"}
-                </div>
-                
-                <ul className="mt-8 space-y-3">
-                  {product.benefits?.slice(0, 3).map((benefit: any) => (
-                    <li key={benefit.id} className="flex items-start gap-3 text-stone-400 text-sm font-medium">
-                      <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                      {benefit.description}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500 italic">Investimento</span>
-                  <span className="text-3xl font-[900] text-white tracking-tighter">
-                    {formatBRL(Math.round(product.price * 100))}
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="flex flex-col h-full"
+            >
+              <Card className="p-6 flex flex-col h-full hover:scale-[1.02] transition-transform duration-300">
+                <div className="absolute top-4 right-4 z-20">
+                  <span className="px-3 py-1 bg-emerald-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-emerald-500/20">
+                    {product.category?.name || "VIP"}
                   </span>
                 </div>
-                <Link to="/loja" className="bg-white text-stone-950 px-8 py-4 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl shadow-black/20">
-                  Comprar
-                </Link>
-              </div>
-            </Card>
+                
+                <ChestImage index={index} name={product.name} />
+                
+                <div className="mt-8 flex-1">
+                  <h3 className="text-2xl font-[900] uppercase italic tracking-tight text-white group-hover:text-emerald-400 transition-colors">
+                    {product.name}
+                  </h3>
+                  <div className="mt-2 flex items-center gap-2 text-stone-500 font-bold uppercase tracking-widest text-[10px]">
+                    <Zap className="w-3 h-3" />
+                    {product.duration_days ? `${product.duration_days} dias` : "Permanente"}
+                  </div>
+                  
+                  <ul className="mt-8 space-y-3">
+                    {product.benefits?.slice(0, 3).map((benefit: any) => (
+                      <li key={benefit.id} className="flex items-start gap-3 text-stone-400 text-sm font-medium">
+                        <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                        {benefit.description}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-10 pt-6 border-t border-white/5 flex items-center justify-between gap-4">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-stone-500 italic">Investimento</span>
+                    <span className="text-3xl font-[900] text-white tracking-tighter">
+                      {formatBRL(Math.round(product.price * 100))}
+                    </span>
+                  </div>
+                  <Link to="/loja" className="bg-white text-stone-950 px-8 py-4 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl shadow-black/20">
+                    Comprar
+                  </Link>
+                </div>
+              </Card>
+            </motion.div>
           ))}
         </div>
         
