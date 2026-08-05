@@ -52,6 +52,93 @@ export type Database = {
           },
         ]
       }
+      beta_invites: {
+        Row: {
+          active: boolean | null
+          campaign: string | null
+          code: string
+          created_at: string | null
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          max_uses: number
+          uses_count: number
+        }
+        Insert: {
+          active?: boolean | null
+          campaign?: string | null
+          code: string
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          max_uses?: number
+          uses_count?: number
+        }
+        Update: {
+          active?: boolean | null
+          campaign?: string | null
+          code?: string
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          max_uses?: number
+          uses_count?: number
+        }
+        Relationships: []
+      }
+      beta_participants: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          id: string
+          invite_id: string | null
+          metadata: Json | null
+          profile_id: string
+          status: Database["public"]["Enums"]["beta_status"]
+          updated_at: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          id?: string
+          invite_id?: string | null
+          metadata?: Json | null
+          profile_id: string
+          status?: Database["public"]["Enums"]["beta_status"]
+          updated_at?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          id?: string
+          invite_id?: string | null
+          metadata?: Json | null
+          profile_id?: string
+          status?: Database["public"]["Enums"]["beta_status"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beta_participants_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "beta_invites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beta_participants_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           active: boolean
@@ -1025,9 +1112,14 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       owns_order: { Args: { _order_id: string }; Returns: boolean }
+      use_beta_invite: {
+        Args: { _code: string; _profile_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      beta_status: "invited" | "registered" | "approved" | "active" | "blocked"
       delivery_status:
         | "queued"
         | "claimed"
@@ -1179,6 +1271,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      beta_status: ["invited", "registered", "approved", "active", "blocked"],
       delivery_status: [
         "queued",
         "claimed",
