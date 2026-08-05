@@ -29,6 +29,7 @@ import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin/auditoria'
 import { Route as AdminBetaConvitesRouteImport } from './routes/admin/beta-convites'
+import { Route as AdminBetaFeedbackRouteImport } from './routes/admin/beta-feedback'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
@@ -154,6 +155,11 @@ const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
 const AdminBetaConvitesRoute = AdminBetaConvitesRouteImport.update({
   id: '/beta-convites',
   path: '/beta-convites',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBetaFeedbackRoute = AdminBetaFeedbackRouteImport.update({
+  id: '/beta-feedback',
+  path: '/beta-feedback',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
@@ -308,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/beta-convites': typeof AdminBetaConvitesRoute
+  '/admin/beta-feedback': typeof AdminBetaFeedbackRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -355,6 +362,7 @@ export interface FileRoutesByTo {
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/beta-convites': typeof AdminBetaConvitesRoute
+  '/admin/beta-feedback': typeof AdminBetaFeedbackRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -404,6 +412,7 @@ export interface FileRoutesById {
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/beta-convites': typeof AdminBetaConvitesRoute
+  '/admin/beta-feedback': typeof AdminBetaFeedbackRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -454,6 +463,7 @@ export interface FileRouteTypes {
     | '/termos'
     | '/admin/auditoria'
     | '/admin/beta-convites'
+    | '/admin/beta-feedback'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -501,6 +511,7 @@ export interface FileRouteTypes {
     | '/termos'
     | '/admin/auditoria'
     | '/admin/beta-convites'
+    | '/admin/beta-feedback'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -549,6 +560,7 @@ export interface FileRouteTypes {
     | '/termos'
     | '/admin/auditoria'
     | '/admin/beta-convites'
+    | '/admin/beta-feedback'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -744,6 +756,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBetaConvitesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/beta-feedback': {
+      id: '/admin/beta-feedback'
+      path: '/beta-feedback'
+      fullPath: '/admin/beta-feedback'
+      preLoaderRoute: typeof AdminBetaFeedbackRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/configuracoes': {
       id: '/admin/configuracoes'
       path: '/configuracoes'
@@ -932,6 +951,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminBetaConvitesRoute: typeof AdminBetaConvitesRoute
+  AdminBetaFeedbackRoute: typeof AdminBetaFeedbackRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
@@ -959,6 +979,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminBetaConvitesRoute: AdminBetaConvitesRoute,
+  AdminBetaFeedbackRoute: AdminBetaFeedbackRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,

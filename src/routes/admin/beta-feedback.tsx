@@ -28,10 +28,10 @@ export const Route = createFileRoute('/admin/beta-feedback')({
 
 function AdminFeedbackPage() {
   const [filters, setFilters] = useState<{
-    status?: string;
-    type?: string;
-    severity?: string;
-  }>({})
+    status: string | undefined;
+    type: string | undefined;
+    severity: string | undefined;
+  }>({ status: undefined, type: undefined, severity: undefined })
 
   const queryClient = useQueryClient()
   const getFeedbacksFn = useServerFn(getAdminFeedbacks)
@@ -165,7 +165,7 @@ function AdminFeedbackPage() {
 
           <div className="flex items-end">
             <PixelButton 
-              onClick={() => setFilters({})} 
+              onClick={() => setFilters({ status: undefined, type: undefined, severity: undefined })} 
               className="w-full py-2.5 opacity-60 hover:opacity-100"
             >
               Limpar Filtros
