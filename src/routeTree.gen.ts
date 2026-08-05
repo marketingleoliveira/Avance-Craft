@@ -39,6 +39,9 @@ import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
 import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
 import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
 import { Route as AdminCategoriasNewRouteImport } from './routes/admin/categorias/new'
+import { Route as AdminNoticiasIndexRouteImport } from './routes/admin/noticias/index'
+import { Route as AdminNoticiasCategoriasRouteImport } from './routes/admin/noticias/categorias'
+import { Route as AdminNoticiasNewRouteImport } from './routes/admin/noticias/new'
 import { Route as ApiPublicMercadopagoRouteImport } from './routes/api/public/mercadopago'
 import { Route as ApiPublicPluginRouteImport } from './routes/api/public/plugin'
 import { Route as AdminCategoriasCategoryIdEditRouteImport } from './routes/admin/categorias/$categoryId.edit'
@@ -193,6 +196,21 @@ const AdminCategoriasNewRoute = AdminCategoriasNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AdminCategoriasRoute,
 } as any)
+const AdminNoticiasIndexRoute = AdminNoticiasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminNoticiasRoute,
+} as any)
+const AdminNoticiasCategoriasRoute = AdminNoticiasCategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => AdminNoticiasRoute,
+} as any)
+const AdminNoticiasNewRoute = AdminNoticiasNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminNoticiasRoute,
+} as any)
 const ApiPublicMercadopagoRoute = ApiPublicMercadopagoRouteImport.update({
   id: '/api/public/mercadopago',
   path: '/api/public/mercadopago',
@@ -231,7 +249,7 @@ export interface FileRoutesByFullPath {
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
-  '/admin/noticias': typeof AdminNoticiasRoute
+  '/admin/noticias': typeof AdminNoticiasRouteWithChildren
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -241,8 +259,11 @@ export interface FileRoutesByFullPath {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/categorias/new': typeof AdminCategoriasNewRoute
+  '/admin/noticias/categorias': typeof AdminNoticiasCategoriasRoute
+  '/admin/noticias/new': typeof AdminNoticiasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/noticias/': typeof AdminNoticiasIndexRoute
   '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -265,7 +286,6 @@ export interface FileRoutesByTo {
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
-  '/admin/noticias': typeof AdminNoticiasRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -275,8 +295,11 @@ export interface FileRoutesByTo {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin': typeof AdminIndexRoute
   '/admin/categorias/new': typeof AdminCategoriasNewRoute
+  '/admin/noticias/categorias': typeof AdminNoticiasCategoriasRoute
+  '/admin/noticias/new': typeof AdminNoticiasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/noticias': typeof AdminNoticiasIndexRoute
   '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
 }
 export interface FileRoutesById {
@@ -301,7 +324,7 @@ export interface FileRoutesById {
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
-  '/admin/noticias': typeof AdminNoticiasRoute
+  '/admin/noticias': typeof AdminNoticiasRouteWithChildren
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
@@ -311,8 +334,11 @@ export interface FileRoutesById {
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/categorias/new': typeof AdminCategoriasNewRoute
+  '/admin/noticias/categorias': typeof AdminNoticiasCategoriasRoute
+  '/admin/noticias/new': typeof AdminNoticiasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/noticias/': typeof AdminNoticiasIndexRoute
   '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
 }
 export interface FileRouteTypes {
@@ -348,8 +374,11 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/admin/'
     | '/admin/categorias/new'
+    | '/admin/noticias/categorias'
+    | '/admin/noticias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/noticias/'
     | '/admin/categorias/$categoryId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -372,7 +401,6 @@ export interface FileRouteTypes {
     | '/admin/cupons'
     | '/admin/entregas'
     | '/admin/jogadores'
-    | '/admin/noticias'
     | '/admin/pagamentos'
     | '/admin/pedidos'
     | '/admin/produtos'
@@ -382,8 +410,11 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/admin'
     | '/admin/categorias/new'
+    | '/admin/noticias/categorias'
+    | '/admin/noticias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/noticias'
     | '/admin/categorias/$categoryId/edit'
   id:
     | '__root__'
@@ -417,8 +448,11 @@ export interface FileRouteTypes {
     | '/admin/usuarios'
     | '/admin/'
     | '/admin/categorias/new'
+    | '/admin/noticias/categorias'
+    | '/admin/noticias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/noticias/'
     | '/admin/categorias/$categoryId/edit'
   fileRoutesById: FileRoutesById
 }
@@ -653,6 +687,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriasNewRouteImport
       parentRoute: typeof AdminCategoriasRoute
     }
+    '/admin/noticias/': {
+      id: '/admin/noticias/'
+      path: '/'
+      fullPath: '/admin/noticias/'
+      preLoaderRoute: typeof AdminNoticiasIndexRouteImport
+      parentRoute: typeof AdminNoticiasRoute
+    }
+    '/admin/noticias/categorias': {
+      id: '/admin/noticias/categorias'
+      path: '/categorias'
+      fullPath: '/admin/noticias/categorias'
+      preLoaderRoute: typeof AdminNoticiasCategoriasRouteImport
+      parentRoute: typeof AdminNoticiasRoute
+    }
+    '/admin/noticias/new': {
+      id: '/admin/noticias/new'
+      path: '/new'
+      fullPath: '/admin/noticias/new'
+      preLoaderRoute: typeof AdminNoticiasNewRouteImport
+      parentRoute: typeof AdminNoticiasRoute
+    }
     '/api/public/mercadopago': {
       id: '/api/public/mercadopago'
       path: '/api/public/mercadopago'
@@ -691,6 +746,22 @@ const AdminCategoriasRouteWithChildren = AdminCategoriasRoute._addFileChildren(
   AdminCategoriasRouteChildren,
 )
 
+interface AdminNoticiasRouteChildren {
+  AdminNoticiasCategoriasRoute: typeof AdminNoticiasCategoriasRoute
+  AdminNoticiasNewRoute: typeof AdminNoticiasNewRoute
+  AdminNoticiasIndexRoute: typeof AdminNoticiasIndexRoute
+}
+
+const AdminNoticiasRouteChildren: AdminNoticiasRouteChildren = {
+  AdminNoticiasCategoriasRoute: AdminNoticiasCategoriasRoute,
+  AdminNoticiasNewRoute: AdminNoticiasNewRoute,
+  AdminNoticiasIndexRoute: AdminNoticiasIndexRoute,
+}
+
+const AdminNoticiasRouteWithChildren = AdminNoticiasRoute._addFileChildren(
+  AdminNoticiasRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminCategoriasRoute: typeof AdminCategoriasRouteWithChildren
@@ -698,7 +769,7 @@ interface AdminRouteChildren {
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
   AdminJogadoresRoute: typeof AdminJogadoresRoute
-  AdminNoticiasRoute: typeof AdminNoticiasRoute
+  AdminNoticiasRoute: typeof AdminNoticiasRouteWithChildren
   AdminPagamentosRoute: typeof AdminPagamentosRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
@@ -716,7 +787,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
   AdminJogadoresRoute: AdminJogadoresRoute,
-  AdminNoticiasRoute: AdminNoticiasRoute,
+  AdminNoticiasRoute: AdminNoticiasRouteWithChildren,
   AdminPagamentosRoute: AdminPagamentosRoute,
   AdminPedidosRoute: AdminPedidosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
