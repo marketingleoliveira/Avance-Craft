@@ -21,12 +21,13 @@ export const createPaymentPreference = createServerFn({ method: "POST" })
       .parse(data)
   )
   .handler(async ({ data, context }) => {
+    const couponCode = typeof data.couponCode === 'string' ? data.couponCode : undefined;
     return createCheckoutRequest(
       {
         nickname: data.nickname,
         edition: data.edition,
         items: data.items,
-        couponCode: data.couponCode ?? undefined,
+        couponCode,
       },
       context.supabase,
       context.userId
