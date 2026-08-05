@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { getServerFlags } from "../config/flags";
 
 export const getSystemHealth = createServerFn({ method: "GET" })
   .handler(async () => {

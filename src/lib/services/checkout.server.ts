@@ -127,12 +127,12 @@ export async function createCheckoutRequest(
   }
 
   // 5. Integração com Mercado Pago ou Modo Mock
-  if (!MP_ACCESS_TOKEN) {
+  if (!MP_ACCESS_TOKEN || !flags.REAL_PAYMENTS_ENABLED) {
     if (IS_PROD) {
-      throw new Error("Configuração de pagamento incompleta para produção.");
+      throw new Error("Configuração de pagamento incompleta ou desabilitada para produção.");
     }
 
-    // Modo Mock para Desenvolvimento
+    // Modo Mock para Desenvolvimento ou Staging
     return {
       orderId: order.id,
       checkoutUrl: `${APP_URL}/sucesso?mock_order_id=${order.id}`,
