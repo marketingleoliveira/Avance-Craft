@@ -197,7 +197,7 @@ function RootComponent() {
           <Outlet />
         </main>
 
-        <SiteFooter />
+        {/* O Footer é renderizado diretamente nas páginas de conteúdo para permitir animações específicas e melhor controle de scroll reveal */}
       </div>
       <Toaster />
     </QueryClientProvider>
