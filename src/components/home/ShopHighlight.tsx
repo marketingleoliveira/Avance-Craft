@@ -88,7 +88,7 @@ export function ShopHighlight({ products }: { products: any[] }) {
                 <Link to="/loja" className="bg-white text-stone-950 px-8 py-4 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl shadow-black/20">
                   Comprar
                 </Link>
-              </div>
+            </Card>
             </div>
           ))}
         </div>
