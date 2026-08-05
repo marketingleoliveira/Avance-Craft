@@ -1,4 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { validateMinecraftNickname } from "./minecraft-validator.server";
+
 import { Database } from "@/integrations/supabase/types";
 
 /**
@@ -31,9 +33,19 @@ export async function createCheckoutRequest(
     throw new Error("A loja está temporariamente fechada para manutenção.");
   }
 
-  // 1. Chamar RPC Transacional
+  // 1. Validar Nickname Minecraft
+  const mcValidation = await validateMinecraftNickname(data.nickname, data.edition);
+  if (!mcValidation.valid) {
+    throw new Error(`Nickname inválido: ${mcValidation.error}`);
+  }
+
+  // Usar o nickname oficial (corrige capitalização)
+  const officialNickname = mcValidation.nickname;
+
+  // 2. Chamar RPC Transacional
+
   const { data: result, error: rpcError } = await supabase.rpc('process_checkout' as any, {
-    p_nickname: data.nickname,
+    p_nickname: officialNickname,
     p_edition: data.edition,
     p_items: data.items,
     p_coupon_code: data.couponCode || null
