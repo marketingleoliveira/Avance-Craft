@@ -17,11 +17,13 @@ import {
   Lock,
   Globe,
   RefreshCw,
-  MessageSquare
+  MessageSquare,
+  Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { FeatureFlag } from '@/lib/config/flags';
+import { useServerFn } from '@tanstack/react-start';
 
 export const Route = createFileRoute('/admin/configuracoes')({
   component: AdminFlagsPage,
