@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
@@ -17,6 +17,7 @@ const RANKING_TABS = [
 
 export function RankingSection() {
   const [activeTab, setActiveTab] = useState(RANKING_TABS[0]!);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const { data: rankingData } = useSuspenseQuery({
     queryKey: ["rankings", activeTab.id, "weekly", 5],
@@ -24,7 +25,7 @@ export function RankingSection() {
   });
 
   return (
-    <section className="relative overflow-hidden" id="ranking">
+    <section className="relative overflow-hidden" id="ranking" ref={containerRef}>
       <Container>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div className="space-y-4">
@@ -53,7 +54,9 @@ export function RankingSection() {
               const Icon = tab.icon;
               const isActive = tab.id === activeTab.id;
               return (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   key={tab.id}
                   onClick={() => setActiveTab(tab)}
                   className={cn(
@@ -68,7 +71,7 @@ export function RankingSection() {
                     <span className="font-[900] uppercase italic tracking-wider text-sm">{tab.label}</span>
                   </div>
                   <ChevronRight className={cn("w-4 h-4 transition-transform", isActive ? "translate-x-1" : "opacity-30 group-hover:translate-x-1")} />
-                </button>
+                </motion.button>
               );
             })}
           </div>
