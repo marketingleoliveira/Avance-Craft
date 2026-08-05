@@ -66,7 +66,7 @@ export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
           <div>
             <h4 className="font-pixel text-[10px] uppercase text-grass-dark">Comandos</h4>
             <ul className="mt-2 grid gap-1.5 font-mono text-sm">
-              {product.commands.map((command) => (
+              {product.commands.map((command: any) => (
                 <li key={command} className="bg-stone/30 px-2 py-1">
                   {command}
                 </li>
