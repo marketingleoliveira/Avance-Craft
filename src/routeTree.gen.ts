@@ -23,6 +23,21 @@ import { Route as RegrasRouteImport } from './routes/regras'
 import { Route as SucessoRouteImport } from './routes/sucesso'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as TermosRouteImport } from './routes/termos'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAuditoriaRouteImport } from './routes/admin/auditoria'
+import { Route as AdminCategoriasRouteImport } from './routes/admin/categorias'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configuracoes'
+import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
+import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
+import { Route as AdminJogadoresRouteImport } from './routes/admin/jogadores'
+import { Route as AdminNoticiasRouteImport } from './routes/admin/noticias'
+import { Route as AdminPagamentosRouteImport } from './routes/admin/pagamentos'
+import { Route as AdminPedidosRouteImport } from './routes/admin/pedidos'
+import { Route as AdminProdutosRouteImport } from './routes/admin/produtos'
+import { Route as AdminRankingRouteImport } from './routes/admin/ranking'
+import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
+import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
+import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
 import { Route as ApiPublicMercadopagoRouteImport } from './routes/api/public/mercadopago'
 import { Route as ApiPublicPluginRouteImport } from './routes/api/public/plugin'
 
@@ -96,6 +111,81 @@ const TermosRoute = TermosRouteImport.update({
   path: '/termos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCuponsRoute = AdminCuponsRouteImport.update({
+  id: '/cupons',
+  path: '/cupons',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEntregasRoute = AdminEntregasRouteImport.update({
+  id: '/entregas',
+  path: '/entregas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminJogadoresRoute = AdminJogadoresRouteImport.update({
+  id: '/jogadores',
+  path: '/jogadores',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminNoticiasRoute = AdminNoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPagamentosRoute = AdminPagamentosRouteImport.update({
+  id: '/pagamentos',
+  path: '/pagamentos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPedidosRoute = AdminPedidosRouteImport.update({
+  id: '/pedidos',
+  path: '/pedidos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProdutosRoute = AdminProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRankingRoute = AdminRankingRouteImport.update({
+  id: '/ranking',
+  path: '/ranking',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServidoresRoute = AdminServidoresRouteImport.update({
+  id: '/servidores',
+  path: '/servidores',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTicketsRoute = AdminTicketsRouteImport.update({
+  id: '/tickets',
+  path: '/tickets',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiPublicMercadopagoRoute = ApiPublicMercadopagoRouteImport.update({
   id: '/api/public/mercadopago',
   path: '/api/public/mercadopago',
@@ -109,7 +199,7 @@ const ApiPublicPluginRoute = ApiPublicPluginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
@@ -122,12 +212,26 @@ export interface FileRoutesByFullPath {
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/entregas': typeof AdminEntregasRoute
+  '/admin/jogadores': typeof AdminJogadoresRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
+  '/admin/pagamentos': typeof AdminPagamentosRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/ranking': typeof AdminRankingRoute
+  '/admin/servidores': typeof AdminServidoresRoute
+  '/admin/tickets': typeof AdminTicketsRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
@@ -140,13 +244,28 @@ export interface FileRoutesByTo {
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/entregas': typeof AdminEntregasRoute
+  '/admin/jogadores': typeof AdminJogadoresRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
+  '/admin/pagamentos': typeof AdminPagamentosRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/ranking': typeof AdminRankingRoute
+  '/admin/servidores': typeof AdminServidoresRoute
+  '/admin/tickets': typeof AdminTicketsRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
+  '/admin': typeof AdminIndexRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
@@ -159,6 +278,21 @@ export interface FileRoutesById {
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/entregas': typeof AdminEntregasRoute
+  '/admin/jogadores': typeof AdminJogadoresRoute
+  '/admin/noticias': typeof AdminNoticiasRoute
+  '/admin/pagamentos': typeof AdminPagamentosRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
+  '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/ranking': typeof AdminRankingRoute
+  '/admin/servidores': typeof AdminServidoresRoute
+  '/admin/tickets': typeof AdminTicketsRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
 }
@@ -179,12 +313,26 @@ export interface FileRouteTypes {
     | '/sucesso'
     | '/suporte'
     | '/termos'
+    | '/admin/auditoria'
+    | '/admin/categorias'
+    | '/admin/configuracoes'
+    | '/admin/cupons'
+    | '/admin/entregas'
+    | '/admin/jogadores'
+    | '/admin/noticias'
+    | '/admin/pagamentos'
+    | '/admin/pedidos'
+    | '/admin/produtos'
+    | '/admin/ranking'
+    | '/admin/servidores'
+    | '/admin/tickets'
+    | '/admin/usuarios'
+    | '/admin/'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/auth'
     | '/como-jogar'
     | '/equipe'
@@ -197,6 +345,21 @@ export interface FileRouteTypes {
     | '/sucesso'
     | '/suporte'
     | '/termos'
+    | '/admin/auditoria'
+    | '/admin/categorias'
+    | '/admin/configuracoes'
+    | '/admin/cupons'
+    | '/admin/entregas'
+    | '/admin/jogadores'
+    | '/admin/noticias'
+    | '/admin/pagamentos'
+    | '/admin/pedidos'
+    | '/admin/produtos'
+    | '/admin/ranking'
+    | '/admin/servidores'
+    | '/admin/tickets'
+    | '/admin/usuarios'
+    | '/admin'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
   id:
@@ -215,13 +378,28 @@ export interface FileRouteTypes {
     | '/sucesso'
     | '/suporte'
     | '/termos'
+    | '/admin/auditoria'
+    | '/admin/categorias'
+    | '/admin/configuracoes'
+    | '/admin/cupons'
+    | '/admin/entregas'
+    | '/admin/jogadores'
+    | '/admin/noticias'
+    | '/admin/pagamentos'
+    | '/admin/pedidos'
+    | '/admin/produtos'
+    | '/admin/ranking'
+    | '/admin/servidores'
+    | '/admin/tickets'
+    | '/admin/usuarios'
+    | '/admin/'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ComoJogarRoute: typeof ComoJogarRoute
   EquipeRoute: typeof EquipeRoute
@@ -338,6 +516,111 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/auditoria': {
+      id: '/admin/auditoria'
+      path: '/auditoria'
+      fullPath: '/admin/auditoria'
+      preLoaderRoute: typeof AdminAuditoriaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categorias': {
+      id: '/admin/categorias'
+      path: '/categorias'
+      fullPath: '/admin/categorias'
+      preLoaderRoute: typeof AdminCategoriasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cupons': {
+      id: '/admin/cupons'
+      path: '/cupons'
+      fullPath: '/admin/cupons'
+      preLoaderRoute: typeof AdminCuponsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/entregas': {
+      id: '/admin/entregas'
+      path: '/entregas'
+      fullPath: '/admin/entregas'
+      preLoaderRoute: typeof AdminEntregasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/jogadores': {
+      id: '/admin/jogadores'
+      path: '/jogadores'
+      fullPath: '/admin/jogadores'
+      preLoaderRoute: typeof AdminJogadoresRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/noticias': {
+      id: '/admin/noticias'
+      path: '/noticias'
+      fullPath: '/admin/noticias'
+      preLoaderRoute: typeof AdminNoticiasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pagamentos': {
+      id: '/admin/pagamentos'
+      path: '/pagamentos'
+      fullPath: '/admin/pagamentos'
+      preLoaderRoute: typeof AdminPagamentosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pedidos': {
+      id: '/admin/pedidos'
+      path: '/pedidos'
+      fullPath: '/admin/pedidos'
+      preLoaderRoute: typeof AdminPedidosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/produtos': {
+      id: '/admin/produtos'
+      path: '/produtos'
+      fullPath: '/admin/produtos'
+      preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/ranking': {
+      id: '/admin/ranking'
+      path: '/ranking'
+      fullPath: '/admin/ranking'
+      preLoaderRoute: typeof AdminRankingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/servidores': {
+      id: '/admin/servidores'
+      path: '/servidores'
+      fullPath: '/admin/servidores'
+      preLoaderRoute: typeof AdminServidoresRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tickets': {
+      id: '/admin/tickets'
+      path: '/tickets'
+      fullPath: '/admin/tickets'
+      preLoaderRoute: typeof AdminTicketsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/usuarios': {
+      id: '/admin/usuarios'
+      path: '/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AdminUsuariosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/mercadopago': {
       id: '/api/public/mercadopago'
       path: '/api/public/mercadopago'
@@ -355,9 +638,47 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminCategoriasRoute: typeof AdminCategoriasRoute
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminCuponsRoute: typeof AdminCuponsRoute
+  AdminEntregasRoute: typeof AdminEntregasRoute
+  AdminJogadoresRoute: typeof AdminJogadoresRoute
+  AdminNoticiasRoute: typeof AdminNoticiasRoute
+  AdminPagamentosRoute: typeof AdminPagamentosRoute
+  AdminPedidosRoute: typeof AdminPedidosRoute
+  AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminRankingRoute: typeof AdminRankingRoute
+  AdminServidoresRoute: typeof AdminServidoresRoute
+  AdminTicketsRoute: typeof AdminTicketsRoute
+  AdminUsuariosRoute: typeof AdminUsuariosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminCategoriasRoute: AdminCategoriasRoute,
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminCuponsRoute: AdminCuponsRoute,
+  AdminEntregasRoute: AdminEntregasRoute,
+  AdminJogadoresRoute: AdminJogadoresRoute,
+  AdminNoticiasRoute: AdminNoticiasRoute,
+  AdminPagamentosRoute: AdminPagamentosRoute,
+  AdminPedidosRoute: AdminPedidosRoute,
+  AdminProdutosRoute: AdminProdutosRoute,
+  AdminRankingRoute: AdminRankingRoute,
+  AdminServidoresRoute: AdminServidoresRoute,
+  AdminTicketsRoute: AdminTicketsRoute,
+  AdminUsuariosRoute: AdminUsuariosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ComoJogarRoute: ComoJogarRoute,
   EquipeRoute: EquipeRoute,
@@ -376,13 +697,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

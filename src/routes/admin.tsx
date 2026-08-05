@@ -1,19 +1,63 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PlaceholderPage } from "@/components/layout/PlaceholderPage";
-
-const title = "Painel Administrativo — Habblet Mine";
-const description = "Painel administrativo do servidor Habblet Mine.";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth"; // Assumindo existência ou criaremos
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: () => <PlaceholderPage title="Admin" description="Painel administrativo restrito à equipe do servidor." />,
+  component: AdminLayout,
 });
+
+function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <div className="flex h-screen bg-stone-light overflow-hidden">
+      {/* Sidebar Desktop */}
+      <AdminSidebar className="hidden w-64 lg:flex shrink-0" />
+
+      {/* Sidebar Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
+      {/* Sidebar Mobile */}
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-50 w-64 transition-transform lg:hidden",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <AdminSidebar className="h-full" />
+        <Button 
+          variant="outline" 
+          size="icon" 
+          className="absolute -right-12 top-4 bg-wood pixel-border border-wood-dark"
+          onClick={() => setSidebarOpen(false)}
+        >
+          <X className="h-5 w-5" />
+        </Button>
+      </div>
+
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="lg:hidden h-16 border-b-4 border-stone-dark bg-stone flex items-center px-4 shrink-0">
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
+            <Menu className="h-6 w-6" />
+          </Button>
+          <span className="font-pixel text-[10px] uppercase ml-4">Habblet Admin</span>
+        </div>
+        
+        <AdminHeader />
+        
+        <main className="flex-1 overflow-y-auto bg-stone-light/50 p-6 [scrollbar-width:thin]">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
+
+import { cn } from "@/lib/utils";
