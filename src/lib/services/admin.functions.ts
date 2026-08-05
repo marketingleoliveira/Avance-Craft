@@ -117,7 +117,7 @@ export const adminCreateCategory = createServerFn({ method: "POST" })
         name: data.name,
         slug: data.slug,
         description: data.description ?? null,
-        image_url: data.imageUrl ?? null,
+        icon: data.icon ?? null,
         active: data.active ?? true,
         position: data.position ?? 0,
       })
@@ -146,7 +146,7 @@ export const adminUpdateCategory = createServerFn({ method: "POST" })
         name: fields.name,
         slug: fields.slug,
         description: fields.description,
-        image_url: fields.imageUrl,
+        icon: fields.icon,
         active: fields.active,
         position: fields.position,
       })
