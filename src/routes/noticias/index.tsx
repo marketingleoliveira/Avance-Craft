@@ -3,6 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { listPublishedNews } from "@/lib/services/content.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { Newspaper, Calendar, ArrowRight } from "lucide-react";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 const title = "Notícias — Avance";
 const description = "Atualizações, eventos e novidades do servidor Avance.";
@@ -104,6 +106,9 @@ function NewsListPage() {
           ))}
         </div>
       )}
+      <ScrollReveal className="mt-20">
+        <SiteFooter />
+      </ScrollReveal>
     </div>
   );
 }
