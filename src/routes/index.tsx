@@ -34,8 +34,8 @@ export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData({
-        queryKey: ["published-news"],
-        queryFn: () => listPublishedNews({ limit: 3 }),
+        queryKey: ["published-news", 3],
+        queryFn: () => listPublishedNews({ data: { limit: 3 } }),
       }),
       context.queryClient.ensureQueryData({
         queryKey: ["server-status"],
@@ -46,12 +46,12 @@ export const Route = createFileRoute("/")({
         queryFn: () => listServerModes(),
       }),
       context.queryClient.ensureQueryData({
-        queryKey: ["featured-products"],
-        queryFn: () => listProducts({ featuredOnly: true, limit: 3 }),
+        queryKey: ["featured-products", true, 3],
+        queryFn: () => listProducts({ data: { featuredOnly: true, limit: 3 } }),
       }),
       context.queryClient.ensureQueryData({
-        queryKey: ["rankings", { category: "ricos", period: "weekly" }],
-        queryFn: () => listRankings({ category: "ricos", period: "weekly", limit: 5 }),
+        queryKey: ["rankings", "ricos", "weekly", 5],
+        queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 5 } }),
       }),
     ]);
   },
@@ -67,8 +67,8 @@ function Index() {
   ] = useSuspenseQueries({
     queries: [
       {
-        queryKey: ["published-news"],
-        queryFn: () => listPublishedNews({ limit: 3 }),
+        queryKey: ["published-news", 3],
+        queryFn: () => listPublishedNews({ data: { limit: 3 } }),
       },
       {
         queryKey: ["server-status"],
@@ -79,25 +79,22 @@ function Index() {
         queryFn: () => listServerModes(),
       },
       {
-        queryKey: ["featured-products"],
-        queryFn: () => listProducts({ featuredOnly: true, limit: 3 }),
+        queryKey: ["featured-products", true, 3],
+        queryFn: () => listProducts({ data: { featuredOnly: true, limit: 3 } }),
       },
     ],
   });
 
   return (
     <main>
-      <Hero serverStatus={statusQuery.data} />
-      <NewsSection 
-        news={newsQuery.data} 
-        serverStatus={statusQuery.data}
-      />
-      <ModesSection modes={modesQuery.data} />
-      <ShopHighlight products={featuredProductsQuery.data} />
+      <Hero />
+      <NewsSection />
+      <ModesSection />
+      <ShopHighlight />
       <RankingSection />
       <HowToPlay />
-      <CommunitySection serverStatus={statusQuery.data} />
-      <FinalCta serverStatus={statusQuery.data} />
+      <CommunitySection />
+      <FinalCta />
     </main>
   );
 }
