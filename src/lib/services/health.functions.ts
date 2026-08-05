@@ -26,7 +26,7 @@ export const getSystemHealth = createServerFn({ method: "GET" })
     const { count: pendingDeliveries } = await supabaseAdmin
       .from('delivery_queue')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'pending');
+      .eq('status', 'queued');
 
     // 4. Check Checkout Config
     const hasMpKeys = !!(process.env['MP_ACCESS_TOKEN'] || process.env['VITE_MP_PUBLIC_KEY']);
