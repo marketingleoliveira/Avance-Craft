@@ -31,14 +31,12 @@ const description = "Central de suporte e chamados do servidor Habblet Mine.";
 export const Route = createFileRoute("/suporte")({
   head: () => ({
     meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { title: "Central de Suporte | Habblet Mine" },
+      { name: "description", content: "Precisa de ajuda com suas compras ou conta? Abra um chamado na nossa central de suporte oficial." },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
+
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData({
