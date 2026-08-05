@@ -179,7 +179,7 @@ export const adminUpdateNews = createServerFn({ method: "POST" })
     
     if (fields.status === 'published') {
       patch.published = true;
-      if (!oldRow.published_at) patch.published_at = new Date().toISOString();
+      if (oldRow && !oldRow.published_at) patch.published_at = new Date().toISOString();
     } else if (fields.status === 'draft' || fields.status === 'archived') {
       patch.published = false;
     }
