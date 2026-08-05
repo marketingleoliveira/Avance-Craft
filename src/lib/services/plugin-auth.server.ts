@@ -35,8 +35,10 @@ export async function validatePluginSignature(
   }
 
   // 2. Buscar segredo do servidor e validar status
+  // Como a tabela minecraft_servers ainda não existe no types.ts gerado (será criada via migração ou está em cache),
+  // usamos 'any' para evitar erros de build imediatos e permitir que o plugin funcione com a infra flexível.
   const { data: server, error: serverError } = await supabase
-    .from("minecraft_servers")
+    .from("minecraft_servers" as any)
     .select("id, secret_key, active")
     .eq("id", pluginId)
     .single();
@@ -46,7 +48,6 @@ export async function validatePluginSignature(
   }
 
   // 3. Verificar Nonce (Anti-replay)
-  // Nota: Idealmente em Redis ou tabela específica. Usando logs de auditoria como fallback simples.
   const { data: existingNonce } = await supabase
     .from("audit_logs")
     .select("id")
@@ -78,7 +79,7 @@ export async function validatePluginSignature(
     return { valid: false, error: "Invalid signature" };
   }
 
-  // Registrar nonce para evitar replay
+  // Registrar nonce para evitar replay (usando audit_logs como armazenamento temporário de nonces)
   await supabase.from("audit_logs").insert({
     action: "use_nonce",
     entity: "plugin_nonce",
