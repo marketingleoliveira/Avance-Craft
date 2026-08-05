@@ -1,6 +1,6 @@
 # Deploy Habblet Mine na Hostinger (VPS)
 
-Este guia descreve como realizar o deploy do Habblet Mine em uma VPS Hostinger, utilizando Docker e TanStack Start.
+Este guia descreve como realizar o deploy do Habblet Mine em uma VPS Hostinger, respeitando a arquitetura atual com TanStack Start e Lovable Cloud.
 
 ## 🏗️ Arquitetura Final
 
@@ -11,82 +11,79 @@ Este guia descreve como realizar o deploy do Habblet Mine em uma VPS Hostinger, 
 ## 📁 Arquivos de Configuração
 
 ### 1. Dockerfile
-Crie um arquivo `Dockerfile` na raiz do projeto:
-
-```dockerfile
-# Estágio de Build
-FROM node:20-slim AS builder
-WORKDIR /app
-RUN corepack enable && corepack prepare pnpm@latest --activate
-COPY . .
-RUN pnpm install
-RUN pnpm build
-
-# Estágio de Produção
-FROM node:20-slim
-WORKDIR /app
-COPY --from=builder /app/.output ./.output
-COPY --from=builder /app/package.json ./package.json
-
-# Segurança: Usuário não-root
-RUN groupadd -r nodejs && useradd -r -g nodejs nodejs
-USER nodejs
-
-ENV NODE_ENV=production
-ENV PORT=3000
-
-EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:3000/ || exit 1
-
-CMD ["node", ".output/server/index.mjs"]
-```
+O arquivo `Dockerfile` na raiz do projeto utiliza uma estratégia de multi-stage build para otimizar o tamanho da imagem final.
 
 ### 2. Docker Compose
-Crie um arquivo `docker-compose.yml`:
+O arquivo `docker-compose.yml` gerencia o ciclo de vida do container e injeta as variáveis de ambiente necessárias.
 
-```yaml
-version: '3.8'
-services:
-  app:
-    build: .
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
-      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
-      - MERCADOPAGO_ACCESS_TOKEN=${MERCADOPAGO_ACCESS_TOKEN}
-      - PLUGIN_SECRET=${PLUGIN_SECRET}
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-```
+### 3. Proxy Reverso (Nginx)
+O arquivo `nginx/habbletmine.conf` contém a configuração otimizada para o Nginx com suporte a SSL, Gzip e headers de segurança.
 
-## 🚀 Passos de Deploy
+## 🚀 Passos de Deploy (VPS Hostinger)
 
-1. **Preparar VPS:** Instalar Docker e Nginx.
-2. **Variáveis de Ambiente:** Configurar o arquivo `.env` na VPS.
-3. **Build & Run:**
+### Pré-requisitos
+1. Uma VPS Hostinger com Ubuntu (recomendado).
+2. Docker e Docker Compose instalados.
+3. Nginx instalado.
+4. Domínio apontado para o IP da VPS (A records).
+
+### Configuração Inicial
+1. **Clone do Repositório:**
+   ```bash
+   git clone <url-do-repositorio>
+   cd tanstack_start_ts
+   ```
+
+2. **Variáveis de Ambiente:**
+   Crie um arquivo `.env` na raiz:
+   ```env
+   VITE_SUPABASE_URL=sua_url_supabase
+   VITE_SUPABASE_ANON_KEY=sua_key_anon
+   MERCADOPAGO_ACCESS_TOKEN=seu_token_mp
+   PLUGIN_SECRET=seu_secret_hmac
+   ```
+
+3. **Build & Startup:**
    ```bash
    docker-compose up -d --build
    ```
-4. **Proxy Reverso (Nginx):**
-   ```nginx
-   server {
-       listen 80;
-       server_name habbletmine.com.br;
-       location / {
-           proxy_pass http://localhost:3000;
-           proxy_set_header Host $host;
-           proxy_set_header X-Real-IP $remote_addr;
-       }
-   }
-   ```
-5. **SSL:** Utilizar Certbot para HTTPS obrigatório.
 
-## ⚠️ Limitações & Observações
-- As **Server Functions** do TanStack Start rodam localmente na VPS, mas se comunicam com o banco de dados remoto no Lovable Cloud.
-- O projeto não pode ser movido integralmente (banco de dados) sem uma migração de dados do Supabase.
+### Configuração do Nginx & SSL
+1. **Ativar Configuração:**
+   ```bash
+   sudo cp nginx/habbletmine.conf /etc/nginx/sites-available/habbletmine
+   sudo ln -s /etc/nginx/sites-available/habbletmine /etc/nginx/sites-enabled/
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+2. **HTTPS com Certbot:**
+   ```bash
+   sudo apt install certbot python3-certbot-nginx
+   sudo certbot --nginx -d habbletmine.com.br -d www.habbletmine.com.br
+   ```
+
+## 🔄 Procedimentos Operacionais
+
+### Atualização (Update)
+```bash
+git pull origin main
+docker-compose up -d --build
+```
+
+### Rollback
+```bash
+# Se houver erro, retorne para a imagem anterior
+docker-compose stop app
+docker pull <tag-da-imagem-estavel>
+docker-compose up -d
+```
+
+### Backup
+As migrations são gerenciadas pelo Lovable Cloud. Para backups transacionais, utilize o exportador do Supabase.
+
+## ⚠️ Limitações & Lovable Cloud
+- **O que permanece no Lovable Cloud:** PostgreSQL, Auth, RLS e Storage.
+- **O que roda na Hostinger:** A lógica de renderização React, Server Functions (SSR) e Webhooks.
+- **Acesso às Server Functions:** O frontend (browser) acessa as Server Functions via HTTP POST na porta exposta pela VPS.
+- **Nota:** O banco de dados não é migrado para a VPS; a aplicação continua consumindo a infraestrutura do Lovable Cloud.
+
