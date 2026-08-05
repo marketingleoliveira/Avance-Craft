@@ -43,27 +43,30 @@ function RegrasPage() {
   }
 
   return (
-    <Container className="py-20">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <WoodSign>{page.title}</WoodSign>
-        </div>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-1">
+        <Container className="py-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <WoodSign>{page.title}</WoodSign>
+            </div>
 
-        <StonePanel className="p-8 md:p-12">
-          <article 
-            className="prose prose-stone prose-invert max-w-none 
-              prose-headings:font-pixel prose-headings:text-primary prose-headings:uppercase
-              prose-p:text-muted-foreground prose-p:leading-relaxed
-              prose-li:text-muted-foreground"
-            dangerouslySetInnerHTML={{ __html: page.content }}
-          />
-        </StonePanel>
-      </div>
-    </Container>
-    
-    <ScrollReveal>
-      <SiteFooter />
-    </ScrollReveal>
-  </main>
+            <StonePanel className="p-8 md:p-12">
+              <article 
+                className="prose prose-stone prose-invert max-w-none 
+                  prose-headings:font-pixel prose-headings:text-primary prose-headings:uppercase
+                  prose-p:text-muted-foreground prose-p:leading-relaxed
+                  prose-li:text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: page.content }}
+              />
+            </StonePanel>
+          </div>
+        </Container>
+      </main>
+      
+      <ScrollReveal>
+        <SiteFooter />
+      </ScrollReveal>
+    </div>
   );
 }
