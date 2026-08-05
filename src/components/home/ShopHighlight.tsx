@@ -54,17 +54,32 @@ export function ShopHighlight({ products }: { products: any[] }) {
           </Link>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15
+              }
+            }
+          }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid gap-8 md:grid-cols-3"
+        >
           {products.map((product: any, index: number) => (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              variants={{
+                hidden: { opacity: 0, y: 30, scale: 0.95 },
+                show: { opacity: 1, y: 0, scale: 1 }
+              }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col h-full"
             >
-              <Card className="p-6 flex flex-col h-full hover:scale-[1.02] transition-transform duration-300">
+              <Card className="p-6 flex flex-col h-full">
                 <div className="absolute top-4 right-4 z-20">
                   <span className="px-3 py-1 bg-emerald-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-emerald-500/20">
                     {product.category?.name || "VIP"}
@@ -99,14 +114,16 @@ export function ShopHighlight({ products }: { products: any[] }) {
                       {formatBRL(Math.round(product.price * 100))}
                     </span>
                   </div>
-                  <Link to="/loja" className="bg-white text-stone-950 px-8 py-4 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl shadow-black/20">
-                    Comprar
-                  </Link>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Link to="/loja" className="inline-block bg-white text-stone-950 px-8 py-4 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all shadow-xl shadow-black/20">
+                      Comprar
+                    </Link>
+                  </motion.div>
                 </div>
               </Card>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
         
         <Link to="/loja" className="mt-12 md:hidden flex items-center justify-center gap-2 text-stone-400 font-bold uppercase tracking-widest text-xs">
           Ver loja completa <ShoppingBag className="w-4 h-4" />
