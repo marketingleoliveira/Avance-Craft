@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Monitor, Server, PlayCircle, ChevronRight } from "lucide-react";
 
