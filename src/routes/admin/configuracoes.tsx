@@ -86,13 +86,16 @@ function AdminFlagsPage() {
   const [reason, setReason] = useState("");
   const [selectedFlag, setSelectedFlag] = useState<string | null>(null);
 
+  const listFlags = useServerFn(adminListFeatureFlags);
+  const updateFlag = useServerFn(adminUpdateFeatureFlag);
+
   const { data: flags, isLoading } = useQuery({
     queryKey: ['admin-feature-flags'],
-    queryFn: () => adminListFeatureFlags(),
+    queryFn: () => listFlags(),
   });
 
   const updateMutation = useMutation({
-    mutationFn: adminUpdateFeatureFlag,
+    mutationFn: (args: { flag: string, value: boolean, reason: string }) => updateFlag({ data: args }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-feature-flags'] });
       toast.success("Configuração atualizada com sucesso!");
