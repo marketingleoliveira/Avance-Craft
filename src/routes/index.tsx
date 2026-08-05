@@ -9,9 +9,6 @@ import { RankingSection } from "@/components/home/RankingSection";
 import { HowToPlay } from "@/components/home/HowToPlay";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
-import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube, CreditCard, Activity, Lock, ShieldAlert } from "lucide-react";
 
 const title = "Avance — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
@@ -50,18 +47,17 @@ function Index() {
   const { news, status, modes, featuredProducts, settings } = homeData;
 
   return (
-    <main className="relative">
+    <main className="relative bg-stone-950 overflow-x-hidden">
       <Hero settings={settings} />
-
-
-      <NewsSection news={news} status={status} />
-      <ModesSection modes={modes} />
-      <ShopHighlight products={featuredProducts} />
-      <RankingSection />
-      <HowToPlay />
-      <CommunitySection settings={settings} />
-      <FinalCta />
+      <div className="relative space-y-0">
+        <NewsSection news={news} status={status} />
+        <ModesSection modes={modes} />
+        <ShopHighlight products={featuredProducts} />
+        <RankingSection />
+        <HowToPlay />
+        <CommunitySection settings={settings} />
+        <FinalCta />
+      </div>
     </main>
   );
 }
-
