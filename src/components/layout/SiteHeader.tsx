@@ -67,7 +67,7 @@ export function SiteHeader() {
               <span className="h-4 w-4 bg-emerald-block" />
             </span>
             <span className="font-pixel min-w-0 text-[10px] uppercase leading-[1.5] text-parchment text-outline sm:text-sm">
-              Habblet<span className="block sm:inline sm:ml-1">Mine</span>
+              Avance
             </span>
           </Link>
 

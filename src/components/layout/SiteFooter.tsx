@@ -15,7 +15,7 @@ const NAV_LINKS = [
 ] as const;
 
 const SOCIAL_LINKS = [
-  { label: "Discord", href: "https://discord.gg/habbletmine" },
+  { label: "Discord", href: "https://discord.gg/avance" },
   { label: "Instagram", href: "#" },
   { label: "TikTok", href: "#" },
   { label: "YouTube", href: "#" },
@@ -32,9 +32,7 @@ export function SiteFooter() {
         <Container className="grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4" id="footer-navigation">
           <div className="flex flex-col h-full">
             <h3 className="font-pixel text-outline text-[13px] uppercase text-emerald-block">
-              Habblet
-              <br />
-              Mine
+              Avance
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-parchment/80">
               Portal comunitário de um servidor brasileiro de blocos, com economia, missões
@@ -43,7 +41,7 @@ export function SiteFooter() {
             <div className="mt-auto pt-4">
               <p className="mb-2 text-[10px] font-pixel uppercase text-parchment/50">Endereço IP</p>
               <p className="break-all bg-black/25 p-2 text-sm font-semibold select-all cursor-pointer hover:bg-black/40 transition-colors" title="Clique para selecionar">
-                jogar.habbletmine.com.br
+                jogar.avance.com.br
               </p>
             </div>
           </div>
@@ -115,7 +113,7 @@ export function SiteFooter() {
         <div className="border-t-4 border-black/25">
           <Container className="py-4">
             <p className="text-xs text-parchment/70">
-              © {year} Habblet Mine. Servidor brasileiro de blocos.
+              © {year} Avance. Servidor brasileiro de blocos.
             </p>
 
           </Container>

@@ -174,7 +174,7 @@ function AdminFlagsPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <WoodSign className="mb-2">Feature Flags</WoodSign>
-          <p className="text-muted-foreground">Controle granular das funcionalidades do Habblet Mine.</p>
+          <p className="text-muted-foreground">Controle granular das funcionalidades do Avance.</p>
         </div>
         <div className="flex gap-2">
           <Link to="/admin/saude" className="flex items-center gap-2 px-4 py-2 bg-stone-700 hover:bg-stone-600 text-stone-100 font-pixel text-[10px] border-b-4 border-stone-900 transition-all">
@@ -201,7 +201,7 @@ function AdminFlagsPage() {
                   type="text"
                   value={siteSettings['business_legal_name'] || ""}
                   onChange={(e) => setSiteSettings(prev => ({ ...prev, business_legal_name: e.target.value }))}
-                  placeholder="Habblet Mine Ltda"
+                  placeholder="Avance Ltda"
                   className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
                 />
               </div>
@@ -221,7 +221,7 @@ function AdminFlagsPage() {
                   type="email"
                   value={siteSettings['business_email'] || ""}
                   onChange={(e) => setSiteSettings(prev => ({ ...prev, business_email: e.target.value }))}
-                  placeholder="contato@habbletmine.com.br"
+                  placeholder="contato@avance.com.br"
                   className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
                 />
               </div>

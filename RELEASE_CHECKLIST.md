@@ -1,4 +1,4 @@
-# Release Checklist - Habblet Mine (RC)
+# Release Checklist - Avance (RC)
 
 Guia de validação final para promoção da versão `v1.0.0-rc.1` para Staging/Produção.
 

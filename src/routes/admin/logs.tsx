@@ -65,7 +65,7 @@ function AdminLogsPage() {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `logs-habbletmine-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    a.download = `logs-avance-${format(new Date(), 'yyyy-MM-dd')}.csv`;
     a.click();
   };
 

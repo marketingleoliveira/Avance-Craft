@@ -12,7 +12,7 @@ const calculateTotal = (price: number, discount: number = 0) => {
   return total < 0 ? 0 : Number(total.toFixed(2));
 };
 
-describe('Habblet Mine - Unit Tests', () => {
+describe('Avance - Unit Tests', () => {
   describe('Nickname Validation', () => {
     it('should validate correct nicknames', () => {
       expect(validateNickname('Steve')).toBe(true);

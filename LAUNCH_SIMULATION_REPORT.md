@@ -1,4 +1,4 @@
-# Relatório de Simulação de Lançamento - Habblet Mine (Staging)
+# Relatório de Simulação de Lançamento - Avance (Staging)
 
 Este relatório detalha a simulação de lançamento executada no ambiente de Staging para validar todos os procedimentos de deploy, rollback e sanidade do sistema.
 
@@ -16,7 +16,7 @@ Este relatório detalha a simulação de lançamento executada no ambiente de St
 | 2. Backup Preventivo | 10:01 | 10:05 | ✅ Sucesso | Snapshot PITR gerado e exportado. |
 | 3. Predeploy Check | 10:05 | 10:07 | ✅ Sucesso | Script `predeploy-check.ts` passou em 100%. |
 | 4. Migrations | 10:07 | 10:08 | ✅ Sucesso | 2 novas migrations aplicadas sem erros. |
-| 5. Deploy App (Docker) | 10:08 | 10:12 | ✅ Sucesso | Container `habbletmine-app` rodando. |
+| 5. Deploy App (Docker) | 10:08 | 10:12 | ✅ Sucesso | Container `avance-app` rodando. |
 | 6. Health Checks | 10:12 | 10:13 | ✅ Sucesso | `/api/health` retornou 200 (OK). |
 | 7. Validação Loja/Auth | 10:13 | 10:18 | ✅ Sucesso | Login e adição ao carrinho funcionais. |
 | 8. Checkout Teste (MP) | 10:18 | 10:25 | ✅ Sucesso | Preferência gerada e Webhook recebido. |

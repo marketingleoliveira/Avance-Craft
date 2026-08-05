@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  habblet-mine:
+  avance:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: habblet-mine-app
+    container_name: avance-app
     restart: always
     ports:
       - "3000:3000"
@@ -22,7 +22,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
     networks:
-      - habblet-network
+      - avance-network
     deploy:
       resources:
         limits:
@@ -34,5 +34,5 @@ services:
       retries: 3
 
 networks:
-  habblet-network:
+  avance-network:
     driver: bridge

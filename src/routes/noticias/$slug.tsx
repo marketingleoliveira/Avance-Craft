@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/noticias/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) return {};
-    const title = `${(loaderData as any).title} — Habblet Mine`;
+    const title = `${(loaderData as any).title} — Avance`;
     const description = (loaderData as any).excerpt || (loaderData as any).title;
     return {
       meta: [
@@ -92,7 +92,7 @@ function NewsArticlePage() {
               </span>
               <span className="flex items-center gap-2">
                 <User className="h-4 w-4 text-emerald-block" />
-                Equipe Habblet Mine
+                Equipe Avance
               </span>
             </div>
 

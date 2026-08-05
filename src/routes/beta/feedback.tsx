@@ -48,7 +48,7 @@ function BetaFeedbackPage() {
   const mutation = useMutation({
     mutationFn: submitFn,
     onSuccess: () => {
-      toast.success('Feedback enviado com sucesso! Obrigado por ajudar o Habblet Mine.')
+      toast.success('Feedback enviado com sucesso! Obrigado por ajudar o Avance.')
       setShowForm(false)
       queryClient.invalidateQueries({ queryKey: ['my-feedbacks'] })
     },
@@ -79,7 +79,7 @@ function BetaFeedbackPage() {
             <h1 className="text-3xl font-minecraft text-white">Feedback do Beta</h1>
           </WoodSign>
           <p className="text-gray-400 max-w-xl">
-            Sua participação é fundamental. Reporte bugs, sugira melhorias e ajude a moldar o futuro do Habblet Mine.
+            Sua participação é fundamental. Reporte bugs, sugira melhorias e ajude a moldar o futuro do Avance.
           </p>
         </div>
 

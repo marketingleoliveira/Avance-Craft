@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Esquema de validação para variáveis de ambiente do Habblet Mine.
+ * Esquema de validação para variáveis de ambiente do Avance.
  * Garante separação clara entre development, staging e production.
  */
 const envSchema = z.object({
@@ -23,7 +23,7 @@ const envSchema = z.object({
   HEARTBEAT_TIMEOUT_SECONDS: z.coerce.number().default(60),
   
   // Suporte e Logs
-  SUPPORT_EMAIL: z.string().email().default("suporte@habblet.com.br"),
+  SUPPORT_EMAIL: z.string().email().default("suporte@avance.com.br"),
   LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
 });
 
@@ -82,7 +82,7 @@ export function validateProductionConfig() {
   }
 
   // Garantia adicional: se for produção real, o e-mail de suporte não pode ser o padrão se solicitado
-  if (currentEnv.APP_ENV === "production" && currentEnv.SUPPORT_EMAIL === "suporte@habblet.com.br" && process.env['FORCE_BRANDED_EMAIL'] === 'true') {
+  if (currentEnv.APP_ENV === "production" && currentEnv.SUPPORT_EMAIL === "suporte@avance.com.br" && process.env['FORCE_BRANDED_EMAIL'] === 'true') {
      throw new Error("BLOQUEIO: E-mail de suporte padrão detectado em produção.");
   }
 }

@@ -2,7 +2,7 @@ import { getEnv } from "./env.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 /**
- * Feature Flags do Habblet Mine
+ * Feature Flags do Avance
  * Gerencia o comportamento do sistema baseado no banco de dados com cache em memória.
  */
 

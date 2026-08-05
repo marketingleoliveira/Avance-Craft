@@ -42,7 +42,7 @@ function AdminHealthPage() {
     <Container className="py-8">
       <div className="mb-8">
         <WoodSign className="mb-2">Painel de Saúde</WoodSign>
-        <p className="text-muted-foreground">Monitoramento em tempo real da infraestrutura do Habblet Mine.</p>
+        <p className="text-muted-foreground">Monitoramento em tempo real da infraestrutura do Avance.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

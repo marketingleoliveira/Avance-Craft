@@ -1,5 +1,5 @@
 /**
- * Tipos de domínio do Habblet Mine derivados do schema do banco.
+ * Tipos de domínio do Avance derivados do schema do banco.
  * Fonte única de verdade: `src/integrations/supabase/types.ts` (gerado).
  */
 import type { Tables, TablesInsert, TablesUpdate, Enums } from "@/integrations/supabase/types";

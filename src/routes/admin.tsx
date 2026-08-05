@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin")({
   },
   head: () => ({
     meta: [
-      { title: "Painel Administrativo | Habblet Mine" },
+      { title: "Painel Administrativo | Avance" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -68,7 +68,7 @@ function AdminLayout() {
           <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-6 w-6" />
           </Button>
-          <span className="font-pixel text-[10px] uppercase ml-4">Habblet Admin</span>
+          <span className="font-pixel text-[10px] uppercase ml-4">Avance Admin</span>
         </div>
         
         <AdminHeader />

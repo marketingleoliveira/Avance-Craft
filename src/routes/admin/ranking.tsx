@@ -95,7 +95,7 @@ function AdminRankingPage() {
           
           <div className="pixel-border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-600 flex gap-3">
             <AlertTriangle className="h-5 w-5 shrink-0" />
-            <p>O heartbeat é enviado automaticamente pelo plugin HabbletMine-Core a cada 30 segundos.</p>
+            <p>O heartbeat é enviado automaticamente pelo plugin AvanceMine-Core a cada 30 segundos.</p>
           </div>
         </div>
 

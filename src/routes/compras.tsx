@@ -8,7 +8,7 @@ import { Container } from "@/components/ui-kit/Container";
 export const Route = createFileRoute("/compras")({
   head: () => ({
     meta: [
-      { title: "Como Comprar — Habblet Mine" },
+      { title: "Como Comprar — Avance" },
       { name: "description", content: "Guia passo a passo de como adquirir VIPs e pacotes na nossa loja." },
     ],
   }),

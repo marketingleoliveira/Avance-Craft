@@ -21,7 +21,7 @@ function SuccessPage() {
             Pagamento Aprovado
           </WoodSign>
           <p className="mt-6 text-muted-foreground leading-relaxed">
-            Obrigado por apoiar o Habblet Mine! Seus itens serão entregues automaticamente no servidor em alguns minutos. Certifique-se de estar online para receber.
+            Obrigado por apoiar o Avance! Seus itens serão entregues automaticamente no servidor em alguns minutos. Certifique-se de estar online para receber.
           </p>
           <div className="mt-8 flex flex-col gap-3">
             <Link to="/perfil">

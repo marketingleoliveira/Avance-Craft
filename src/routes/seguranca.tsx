@@ -8,8 +8,8 @@ import { Container } from "@/components/ui-kit/Container";
 export const Route = createFileRoute("/seguranca")({
   head: () => ({
     meta: [
-      { title: "Segurança e Proteção de Conta — Habblet Mine" },
-      { name: "description", content: "Dicas de segurança e como proteger sua conta no Habblet Mine." },
+      { title: "Segurança e Proteção de Conta — Avance" },
+      { name: "description", content: "Dicas de segurança e como proteger sua conta no Avance." },
     ],
   }),
   loader: async ({ context }) => {

@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
- * Sistema de Seed Idempotente para o Habblet Mine.
+ * Sistema de Seed Idempotente para o Avance.
  */
 export const runDatabaseSeed = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -23,15 +23,15 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
 
     // --- CONFIGURAÇÕES DO SITE ---
     const settings = [
-      { key: "site_name", value: "Habblet Mine" },
-      { key: "server_ip_java", value: "jogar.habbletmine.com.br" },
-      { key: "server_ip_bedrock", value: "bedrock.habbletmine.com.br" },
+      { key: "site_name", value: "Avance" },
+      { key: "server_ip_java", value: "jogar.avance.com.br" },
+      { key: "server_ip_bedrock", value: "bedrock.avance.com.br" },
       { key: "server_port_bedrock", value: "19132" },
-      { key: "discord_url", value: "https://discord.gg/habblet" },
-      { key: "instagram_url", value: "https://instagram.com/habbletmine" },
-      { key: "tiktok_url", value: "https://tiktok.com/@habbletmine" },
-      { key: "youtube_url", value: "https://youtube.com/@habbletmine" },
-      { key: "support_email", value: "suporte@habbletmine.com.br" },
+      { key: "discord_url", value: "https://discord.gg/avance" },
+      { key: "instagram_url", value: "https://instagram.com/avance" },
+      { key: "tiktok_url", value: "https://tiktok.com/@avance" },
+      { key: "youtube_url", value: "https://youtube.com/@avance" },
+      { key: "support_email", value: "suporte@avance.com.br" },
       { key: "maintenance_mode", value: "false" },
       { key: "store_enabled", value: "true" },
     ];
@@ -105,7 +105,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
       online: false,
       players_online: 0,
       max_players: 500,
-      ip: "jogar.habbletmine.com.br",
+      ip: "jogar.avance.com.br",
       version: "1.21+",
     };
     await supabase.from("server_status").upsert(serverStatus, { onConflict: "server_id" });
@@ -127,8 +127,8 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     const news: any[] = [
       { 
         category_id: newsCatMap["novidades"]!, 
-        slug: "habblet-mine-chegando", 
-        title: "Habblet Mine está chegando", 
+        slug: "avance-chegando", 
+        title: "Avance está chegando", 
         excerpt: "O maior servidor brasileiro está em fase final de testes.",
         content: "Prepare-se para uma experiência única...",
         published: true,

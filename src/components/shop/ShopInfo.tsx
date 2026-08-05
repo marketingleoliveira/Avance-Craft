@@ -51,7 +51,7 @@ export function ShopTerms() {
     <StonePanel title="Termos de compra">
       <ul className="grid gap-2 text-sm">
         <li>
-          Todos os produtos são itens virtuais entregues dentro do servidor Habblet Mine e
+          Todos os produtos são itens virtuais entregues dentro do servidor Avance e
           não têm valor fora dele.
         </li>
         <li>

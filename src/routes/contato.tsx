@@ -11,8 +11,8 @@ import { PixelButton } from "@/components/ui-kit/PixelButton";
 export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
-      { title: "Contato — Habblet Mine" },
-      { name: "description", content: "Entre em contato com a equipe do Habblet Mine." },
+      { title: "Contato — Avance" },
+      { name: "description", content: "Entre em contato com a equipe do Avance." },
     ],
   }),
   component: ContatoPage,
@@ -37,7 +37,7 @@ function ContatoPage() {
               <Mail className="w-8 h-8 text-primary" />
             </div>
             <h3 className="font-pixel text-sm mb-2">E-mail</h3>
-            <p className="text-muted-foreground text-xs">{settings['business_email'] || "contato@habbletmine.com.br"}</p>
+            <p className="text-muted-foreground text-xs">{settings['business_email'] || "contato@avance.com.br"}</p>
           </StonePanel>
 
           <StonePanel className="p-8 flex flex-col items-center">
@@ -45,7 +45,7 @@ function ContatoPage() {
               <MessageCircle className="w-8 h-8 text-emerald-500" />
             </div>
             <h3 className="font-pixel text-sm mb-2">Discord</h3>
-            <p className="text-muted-foreground text-xs">discord.gg/habbletmine</p>
+            <p className="text-muted-foreground text-xs">discord.gg/avance</p>
           </StonePanel>
 
           <StonePanel className="p-8 flex flex-col items-center">

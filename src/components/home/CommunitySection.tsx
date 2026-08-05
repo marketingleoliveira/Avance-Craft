@@ -5,7 +5,7 @@ import { PixelButton } from "@/components/ui-kit/PixelButton";
 
 
 export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
-  const discordUrl = settings?.["discord_url"] || "https://discord.gg/habbletmine";
+  const discordUrl = settings?.["discord_url"] || "https://discord.gg/avance";
   const socialLinks = [
     { label: "Instagram", href: settings?.["instagram_url"] || "#" },
     { label: "TikTok", href: settings?.["tiktok_url"] || "#" },
@@ -24,7 +24,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
           <StonePanel title="Discord oficial">
             <p className="text-sm leading-relaxed">
-              Nosso Discord é o ponto de encontro do Habblet Mine: avisos, suporte, eventos,
+              Nosso Discord é o ponto de encontro do Avance: avisos, suporte, eventos,
               busca por clãs e canais de voz para jogar acompanhado.
             </p>
             <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">

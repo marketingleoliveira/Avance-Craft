@@ -66,7 +66,7 @@ const DEFAULT_STATUS = {
   players_online: 0,
   max_players: 100,
   version: "1.21+",
-  ip: "jogar.habbletmine.com.br"
+  ip: "jogar.avance.com.br"
 };
 
 export function NewsSection({ news, status }: { news: any[]; status: any }) {
@@ -137,7 +137,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
               <p className="text-sm text-muted-foreground">
                 Junte-se a milhares de jogadores em nosso Discord oficial.
               </p>
-              <a href="https://discord.gg/habbletmine" target="_blank" rel="noopener noreferrer" className="mt-4 block">
+              <a href="https://discord.gg/avance" target="_blank" rel="noopener noreferrer" className="mt-4 block">
                 <PixelButton variant="emerald" className="w-full">
                   Entrar no Discord
                 </PixelButton>

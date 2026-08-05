@@ -26,7 +26,7 @@ const DEFAULT_STATUS = {
   players_online: 0,
   max_players: 100,
   version: "1.21+",
-  ip: "jogar.habbletmine.com.br"
+  ip: "jogar.avance.com.br"
 };
 
 export function StatusBar() {

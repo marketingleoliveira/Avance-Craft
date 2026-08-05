@@ -1,4 +1,4 @@
-# Política de Backup - Habblet Mine
+# Política de Backup - Avance
 
 Esta política define os procedimentos e requisitos para a salvaguarda de dados e continuidade operacional.
 

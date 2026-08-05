@@ -1,4 +1,4 @@
-# Plano de Ativação Gradual (Phased Rollout) - Habblet Mine
+# Plano de Ativação Gradual (Phased Rollout) - Avance
 
 Este plano define a estratégia de lançamento progressivo do portal e do servidor, utilizando Feature Flags para mitigar riscos e garantir a estabilidade operacional.
 

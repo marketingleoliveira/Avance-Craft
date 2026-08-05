@@ -19,7 +19,7 @@ export function ShopBanner() {
           Loja oficial
         </p>
         <h1 className="font-pixel text-outline mt-4 text-xl uppercase text-parchment sm:text-3xl">
-          Loja do Habblet Mine
+          Loja do Avance
         </h1>
         <p className="mt-4 max-w-xl text-sm font-semibold text-parchment/90 sm:text-base">
           Apoie o servidor e leve vantagens cosméticas e de conforto. Entrega automática
