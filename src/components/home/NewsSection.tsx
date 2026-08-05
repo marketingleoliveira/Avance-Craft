@@ -178,10 +178,17 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
               </h3>
               <ol className="space-y-4">
                 {rankings.map((row: any, i: number) => (
-                  <li key={row.minecraft_nickname} className="flex items-center gap-4 group/item">
+                  <motion.li 
+                    key={row.minecraft_nickname} 
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-center gap-4 group/item"
+                  >
                     <div className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs",
-                      i === 0 ? "bg-emerald-500 text-stone-950" : "bg-white/5 text-stone-400"
+                      "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs transition-all duration-300 group-hover/item:scale-110",
+                      i === 0 ? "bg-emerald-500 text-stone-950 shadow-lg shadow-emerald-500/20" : "bg-white/5 text-stone-400"
                     )}>
                       {row.position}
                     </div>
@@ -193,7 +200,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                         {row.display_value}
                       </p>
                     </div>
-                  </li>
+                  </motion.li>
                 ))}
               </ol>
             </Card>
