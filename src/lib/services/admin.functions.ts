@@ -8,7 +8,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
-import type { AuditLog, Product } from "@/lib/types/database";
+import type { AuditLog, Product, ProductUpdate } from "@/lib/types/database";
 
 const productInput = z.object({
   categoryId: z.string().uuid(),
@@ -29,10 +29,13 @@ const productInput = z.object({
   featured: z.boolean().optional(),
 });
 
-async function assertAdmin(
-  supabase: Parameters<typeof Object.keys>[0] extends never ? never : any,
-  userId: string,
-): Promise<void> {
+type AuthedSupabase = Parameters<
+  Parameters<ReturnType<typeof createServerFn>["handler"]>[0]
+>[0] extends never
+  ? never
+  : { rpc: (fn: "has_role", args: { _user_id: string; _role: "admin" }) => Promise<{ data: boolean | null; error: { message: string } | null }> };
+
+async function assertAdmin(supabase: AuthedSupabase, userId: string): Promise<void> {
   const { data, error } = await supabase.rpc("has_role", {
     _user_id: userId,
     _role: "admin",
@@ -78,21 +81,21 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase, context.userId);
 
     const { id, ...fields } = data;
-    const patch: Record<string, unknown> = {};
-    if (fields.categoryId !== undefined) patch["category_id"] = fields.categoryId;
-    if (fields.name !== undefined) patch["name"] = fields.name;
-    if (fields.slug !== undefined) patch["slug"] = fields.slug;
+    const patch: ProductUpdate = {};
+    if (fields.categoryId !== undefined) patch.category_id = fields.categoryId;
+    if (fields.name !== undefined) patch.name = fields.name;
+    if (fields.slug !== undefined) patch.slug = fields.slug;
     if (fields.shortDescription !== undefined)
-      patch["short_description"] = fields.shortDescription;
+      patch.short_description = fields.shortDescription;
     if (fields.fullDescription !== undefined)
-      patch["full_description"] = fields.fullDescription;
-    if (fields.price !== undefined) patch["price"] = fields.price;
+      patch.full_description = fields.fullDescription;
+    if (fields.price !== undefined) patch.price = fields.price;
     if (fields.promotionalPrice !== undefined)
-      patch["promotional_price"] = fields.promotionalPrice;
-    if (fields.durationDays !== undefined) patch["duration_days"] = fields.durationDays;
-    if (fields.imageUrl !== undefined) patch["image_url"] = fields.imageUrl;
-    if (fields.active !== undefined) patch["active"] = fields.active;
-    if (fields.featured !== undefined) patch["featured"] = fields.featured;
+      patch.promotional_price = fields.promotionalPrice;
+    if (fields.durationDays !== undefined) patch.duration_days = fields.durationDays;
+    if (fields.imageUrl !== undefined) patch.image_url = fields.imageUrl;
+    if (fields.active !== undefined) patch.active = fields.active;
+    if (fields.featured !== undefined) patch.featured = fields.featured;
 
     const { data: row, error } = await context.supabase
       .from("products")

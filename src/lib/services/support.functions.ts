@@ -71,7 +71,6 @@ export const listTicketMessages = createServerFn({ method: "GET" })
       .from("support_messages")
       .select("*")
       .eq("ticket_id", data.ticketId)
-      .eq("internal", false)
       .order("created_at", { ascending: true });
 
     if (error) throw new Error(`Falha ao carregar as mensagens: ${error.message}`);
