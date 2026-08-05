@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { validatePluginSignature } from "@/lib/services/plugin-auth.server";
 import { handleDeliverySuccess, handleDeliveryFailure } from "@/lib/services/delivery-processor.server";
+import { logger } from "@/lib/config/logger.server";
 
 export const Route = createFileRoute("/api/public/plugin")({
   server: {
@@ -12,6 +13,9 @@ export const Route = createFileRoute("/api/public/plugin")({
         // 1. Autenticação Forte com Assinatura HMAC
         const auth = await validatePluginSignature(request, bodyText, supabaseAdmin);
         if (!auth.valid || !auth.serverId) {
+          await logger.warn("plugin-api", "Unauthorized access attempt", { 
+            context: { error: auth.error, ip: request.headers.get("x-forwarded-for") } 
+          });
           return new Response(auth.error || "Unauthorized", { status: 401 });
         }
 
