@@ -18,6 +18,7 @@ import { isStaging } from "@/lib/config/env.server";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { StatusBar } from "@/components/layout/StatusBar";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -192,6 +193,7 @@ function RootComponent() {
             <AlertTriangle className="w-3 h-3" /> Ambiente de Staging — Dados podem ser resetados
           </div>
         )}
+        <StatusBar />
         <SiteHeader />
         <main className="flex-1">
           <Outlet />

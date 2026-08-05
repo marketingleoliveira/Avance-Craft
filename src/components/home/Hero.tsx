@@ -90,18 +90,24 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
             transition={{ delay: 0.7, duration: 1 }}
             className="flex flex-col sm:flex-row items-center gap-6 mb-24"
           >
-            <button className="group relative px-12 py-6 bg-emerald-500 text-stone-950 font-black uppercase tracking-widest text-sm transition-all hover:scale-105 hover:shadow-[0_0_50px_rgba(16,185,129,0.3)] active:scale-95 overflow-hidden">
+            <Link
+              to="/como-jogar"
+              className="group relative px-12 py-6 bg-emerald-500 text-stone-950 font-black uppercase tracking-widest text-sm transition-all hover:scale-105 hover:shadow-[0_0_50px_rgba(16,185,129,0.3)] active:scale-95 overflow-hidden flex items-center gap-3 rounded-xl"
+            >
               <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
-              <span className="relative flex items-center gap-3">
-                <Play className="w-5 h-5 fill-current" />
-                Jogar Agora
-              </span>
-            </button>
+              <Play className="w-5 h-5 fill-current" />
+              Jogar Agora
+            </Link>
 
-            <button className="group px-12 py-6 border-2 border-white/10 text-white font-bold uppercase tracking-widest text-sm hover:bg-white/5 hover:border-white/20 transition-all flex items-center gap-3">
+            <a 
+              href={settings?.['discord_url'] || "https://discord.gg/avance"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group px-12 py-6 border-2 border-white/10 text-white font-bold uppercase tracking-widest text-sm hover:bg-white/5 hover:border-white/20 transition-all flex items-center gap-3 rounded-xl"
+            >
               <MessageSquare className="w-5 h-5" />
               Entrar no Discord
-            </button>
+            </a>
           </motion.div>
 
           {/* Minimalist Status Bar */}
