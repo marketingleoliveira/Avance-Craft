@@ -5,13 +5,20 @@ import { cn } from "@/lib/utils";
 export function Container({
   children,
   className,
+  id,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
 }) {
+
   return (
-    <div className={cn("mx-auto w-full max-w-[1180px] px-4 sm:px-6", className)}>
+    <div 
+      id={id}
+      className={cn("mx-auto w-full max-w-[1180px] px-4 sm:px-6", className)}
+    >
       {children}
     </div>
   );
 }
+
