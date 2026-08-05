@@ -29,6 +29,7 @@ import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin/auditoria'
 import { Route as AdminBetaConvitesRouteImport } from './routes/admin/beta-convites'
+import { Route as AdminBetaFeedbackRouteImport } from './routes/admin/beta-feedback'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
@@ -43,6 +44,7 @@ import { Route as AdminSaudeRouteImport } from './routes/admin/saude'
 import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
 import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
 import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
+import { Route as BetaFeedbackRouteImport } from './routes/beta/feedback'
 import { Route as NoticiasIndexRouteImport } from './routes/noticias/index'
 import { Route as NoticiasSlugRouteImport } from './routes/noticias/$slug'
 import { Route as AdminCategoriasIndexRouteImport } from './routes/admin/categorias/index'
@@ -155,6 +157,11 @@ const AdminBetaConvitesRoute = AdminBetaConvitesRouteImport.update({
   path: '/beta-convites',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBetaFeedbackRoute = AdminBetaFeedbackRouteImport.update({
+  id: '/beta-feedback',
+  path: '/beta-feedback',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
   id: '/configuracoes',
   path: '/configuracoes',
@@ -225,6 +232,11 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
+const BetaFeedbackRoute = BetaFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => BetaRoute,
+} as any)
 const NoticiasIndexRoute = NoticiasIndexRouteImport.update({
   id: '/noticias/',
   path: '/noticias/',
@@ -286,7 +298,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
-  '/beta': typeof BetaRoute
+  '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -302,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/beta-convites': typeof AdminBetaConvitesRoute
+  '/admin/beta-feedback': typeof AdminBetaFeedbackRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -316,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/noticias/': typeof NoticiasIndexRoute
@@ -332,7 +346,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/beta': typeof BetaRoute
+  '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -348,6 +362,7 @@ export interface FileRoutesByTo {
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/beta-convites': typeof AdminBetaConvitesRoute
+  '/admin/beta-feedback': typeof AdminBetaFeedbackRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -362,6 +377,7 @@ export interface FileRoutesByTo {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin': typeof AdminIndexRoute
   '/noticias': typeof NoticiasIndexRoute
@@ -380,7 +396,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
-  '/beta': typeof BetaRoute
+  '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -396,6 +412,7 @@ export interface FileRoutesById {
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/beta-convites': typeof AdminBetaConvitesRoute
+  '/admin/beta-feedback': typeof AdminBetaFeedbackRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -410,6 +427,7 @@ export interface FileRoutesById {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/noticias/': typeof NoticiasIndexRoute
@@ -445,6 +463,7 @@ export interface FileRouteTypes {
     | '/termos'
     | '/admin/auditoria'
     | '/admin/beta-convites'
+    | '/admin/beta-feedback'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -459,6 +478,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin/'
     | '/noticias/'
@@ -491,6 +511,7 @@ export interface FileRouteTypes {
     | '/termos'
     | '/admin/auditoria'
     | '/admin/beta-convites'
+    | '/admin/beta-feedback'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -505,6 +526,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin'
     | '/noticias'
@@ -538,6 +560,7 @@ export interface FileRouteTypes {
     | '/termos'
     | '/admin/auditoria'
     | '/admin/beta-convites'
+    | '/admin/beta-feedback'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -552,6 +575,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin/'
     | '/noticias/'
@@ -570,7 +594,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
-  BetaRoute: typeof BetaRoute
+  BetaRoute: typeof BetaRouteWithChildren
   ComoJogarRoute: typeof ComoJogarRoute
   EquipeRoute: typeof EquipeRoute
   FalhaRoute: typeof FalhaRoute
@@ -732,6 +756,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBetaConvitesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/beta-feedback': {
+      id: '/admin/beta-feedback'
+      path: '/beta-feedback'
+      fullPath: '/admin/beta-feedback'
+      preLoaderRoute: typeof AdminBetaFeedbackRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/configuracoes': {
       id: '/admin/configuracoes'
       path: '/configuracoes'
@@ -830,6 +861,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/beta/feedback': {
+      id: '/beta/feedback'
+      path: '/feedback'
+      fullPath: '/beta/feedback'
+      preLoaderRoute: typeof BetaFeedbackRouteImport
+      parentRoute: typeof BetaRoute
+    }
     '/noticias/': {
       id: '/noticias/'
       path: '/noticias'
@@ -913,6 +951,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminBetaConvitesRoute: typeof AdminBetaConvitesRoute
+  AdminBetaFeedbackRoute: typeof AdminBetaFeedbackRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
@@ -940,6 +979,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminBetaConvitesRoute: AdminBetaConvitesRoute,
+  AdminBetaFeedbackRoute: AdminBetaFeedbackRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
@@ -966,11 +1006,21 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface BetaRouteChildren {
+  BetaFeedbackRoute: typeof BetaFeedbackRoute
+}
+
+const BetaRouteChildren: BetaRouteChildren = {
+  BetaFeedbackRoute: BetaFeedbackRoute,
+}
+
+const BetaRouteWithChildren = BetaRoute._addFileChildren(BetaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
-  BetaRoute: BetaRoute,
+  BetaRoute: BetaRouteWithChildren,
   ComoJogarRoute: ComoJogarRoute,
   EquipeRoute: EquipeRoute,
   FalhaRoute: FalhaRoute,

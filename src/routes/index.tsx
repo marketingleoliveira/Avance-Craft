@@ -82,6 +82,12 @@ function Index() {
                       Beta Program
                     </PixelButton>
                   </Link>
+                  <Link to="/beta/feedback">
+                    <PixelButton className="px-6 w-full bg-green-600 hover:bg-green-500 border-green-700">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Beta Feedback
+                    </PixelButton>
+                  </Link>
                 </div>
                 <PixelButton 
                   variant="stone"
