@@ -26,6 +26,7 @@ export async function logEvent(
   // In a real environment, this would go to a logging service or a dedicated DB table
   // For Habblet Mine, we use audit_logs table for traceability
   try {
+    const { error } = await supabaseAdmin
       .from('audit_logs')
       .insert({
         action: `[${level.toUpperCase()}] ${event}`,
