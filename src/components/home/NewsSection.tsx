@@ -3,6 +3,7 @@ import { Container } from "@/components/ui-kit/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
 import { Newspaper, ChevronRight, Activity, Trophy, Users, Calendar, User } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
