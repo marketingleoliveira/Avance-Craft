@@ -157,7 +157,10 @@ export function CartPanel() {
           <dt className="font-black">Total</dt>
           <dd className="font-black">{formatBRL(cart.totalCents)}</dd>
         </div>
+      </dl>
+
       <div className="mt-6 space-y-3 bg-black/5 p-3 rounded pixel-border border-black/10">
+
         <label className="flex items-start gap-3 cursor-pointer group">
           <input 
             type="checkbox" 
