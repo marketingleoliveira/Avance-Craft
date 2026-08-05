@@ -7,6 +7,8 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { listRankings } from "@/lib/services/content.functions";
 import { cn } from "@/lib/utils";
 import { Search, Trophy, Timer, Sword, Scroll, Vote } from "lucide-react";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 const RANKING_TABS = [
   { id: "ricos", label: "Mais Ricos", metric: "Saldo", icon: Trophy },
@@ -167,6 +169,10 @@ function RankingPage() {
           </div>
         </div>
       </Container>
+      
+      <ScrollReveal>
+        <SiteFooter />
+      </ScrollReveal>
     </main>
   );
 }
