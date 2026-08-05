@@ -1,11 +1,12 @@
-import { getEnv, isProd, isStaging } from "./env.server";
+import { getEnv } from "./env.server";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 /**
  * Feature Flags do Habblet Mine
- * Gerencia o comportamento do sistema baseado no ambiente e configurações.
+ * Gerencia o comportamento do sistema baseado no banco de dados com cache em memória.
  */
 
-export const FLAGS = {
+export const DEFAULT_FLAGS = {
   STORE_ENABLED: true,
   REAL_PAYMENTS_ENABLED: false,
   PLUGIN_DELIVERY_ENABLED: true,
@@ -17,54 +18,74 @@ export const FLAGS = {
   GOOGLE_LOGIN_ENABLED: true,
 } as const;
 
-export type FeatureFlag = keyof typeof FLAGS;
+export type FeatureFlag = keyof typeof DEFAULT_FLAGS;
+
+// Cache interno no servidor (Stale-while-revalidate pattern)
+let flagCache: {
+  data: Partial<Record<FeatureFlag, boolean>> | null;
+  lastFetch: number;
+} = {
+  data: null,
+  lastFetch: 0,
+};
+
+const CACHE_TTL = 30000; // 30 segundos
 
 /**
- * Verifica se uma funcionalidade está ativa no servidor.
- * Pode ler de variáveis de ambiente para sobrescrever padrões.
+ * Busca as flags do banco com estratégia de cache.
  */
-export function isFeatureEnabled(flag: FeatureFlag): boolean {
-  const env = getEnv();
+export async function getPublicFeatureFlags(): Promise<Partial<Record<FeatureFlag, boolean>>> {
+  const now = Date.now();
   
-  // Sobrescritas via variável de ambiente (ex: VITE_FLAG_STORE_ENABLED)
-  const envKey = `VITE_FLAG_${flag}`;
-  if (process.env[envKey] !== undefined) {
-    return process.env[envKey] === "true";
+  // Se tiver cache válido, retorna imediatamente
+  if (flagCache.data && (now - flagCache.lastFetch < CACHE_TTL)) {
+    return flagCache.data;
   }
 
-  // Regras de negócio por ambiente
-  if (isProd()) {
-    if (flag === "DEMO_RANKINGS_ENABLED") return false;
-    if (flag === "REAL_PAYMENTS_ENABLED") return process.env['REAL_PAYMENTS_ENABLED'] === "true";
-  }
+  try {
+    const env = getEnv();
+    const { data, error } = await supabaseAdmin
+      .from("feature_flags")
+      .select("key, value")
+      .eq("environment", env.APP_ENV);
 
-  if (isStaging()) {
-    if (flag === "REAL_PAYMENTS_ENABLED") return false; // Staging sempre sandbox
-  }
+    if (error) throw error;
 
-  return FLAGS[flag];
+    const dbFlags: Partial<Record<FeatureFlag, boolean>> = {};
+    data.forEach((row: any) => {
+      dbFlags[row.key as FeatureFlag] = row.value;
+    });
+
+    // Merge com os defaults para chaves que não existem no banco
+    const finalFlags = { ...DEFAULT_FLAGS, ...dbFlags };
+    
+    flagCache = {
+      data: finalFlags,
+      lastFetch: now,
+    };
+
+    return finalFlags;
+  } catch (err) {
+    console.error("Erro ao carregar Feature Flags do banco, usando defaults:", err);
+    return flagCache.data || DEFAULT_FLAGS;
+  }
+}
+
+/**
+ * Verifica se uma funcionalidade está ativa.
+ */
+export async function isFeatureEnabled(flag: FeatureFlag): Promise<boolean> {
+  const flags = await getPublicFeatureFlags();
+  return !!flags[flag];
 }
 
 /**
  * Lança um erro se a funcionalidade estiver desativada.
  */
-export function requireFeature(flag: FeatureFlag) {
-  if (!isFeatureEnabled(flag)) {
+export async function requireFeature(flag: FeatureFlag) {
+  if (!(await isFeatureEnabled(flag))) {
     throw new Error(`Funcionalidade temporariamente indisponível: ${flag}`);
   }
-}
-
-/**
- * Retorna flags seguras para o frontend.
- */
-export function getPublicFeatureFlags() {
-  const publicFlags: Partial<Record<FeatureFlag, boolean>> = {};
-  
-  for (const flag of Object.keys(FLAGS) as FeatureFlag[]) {
-    publicFlags[flag] = isFeatureEnabled(flag);
-  }
-  
-  return publicFlags;
 }
 
 export const getServerFlags = async () => getPublicFeatureFlags();

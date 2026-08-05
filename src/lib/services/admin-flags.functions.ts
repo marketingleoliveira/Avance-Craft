@@ -1,8 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
-import { isFeatureEnabled, getPublicFeatureFlags, FeatureFlag } from "@/lib/config/flags";
+import { getPublicFeatureFlags, FeatureFlag } from "@/lib/config/flags";
 import { assertAdmin } from "@/lib/services/admin.functions";
+import { getEnv } from "@/lib/config/env.server";
+
 
 /**
  * Função para buscar as flags atuais no admin.
@@ -29,9 +31,22 @@ export const adminUpdateFeatureFlag = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase, context.userId);
     
     const { flag, value, reason } = data;
+    const env = getEnv();
 
-    // Em produção, não permitir desativar segurança básica ou ativar pagamentos reais sem confirmação extra
-    
+    // 1. Persistir no banco
+    const { error: dbError } = await context.supabase
+      .from("feature_flags")
+      .upsert({ 
+        key: flag, 
+        value, 
+        environment: env.APP_ENV,
+        updated_by: context.userId,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'key,environment' });
+
+    if (dbError) throw new Error(`Falha ao persistir flag: ${dbError.message}`);
+
+    // 2. Registrar Auditoria
     await context.supabase.from("audit_logs").insert({
       actor_profile_id: context.userId,
       action: `update_flag_${value ? 'enabled' : 'disabled'}`,
@@ -40,9 +55,10 @@ export const adminUpdateFeatureFlag = createServerFn({ method: "POST" })
       metadata: { 
         value, 
         reason,
-        old_value: isFeatureEnabled(flag as FeatureFlag)
+        environment: env.APP_ENV
       }
     });
 
     return { success: true };
+
   });

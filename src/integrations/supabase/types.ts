@@ -485,6 +485,36 @@ export type Database = {
           },
         ]
       }
+      feature_flags: {
+        Row: {
+          description: string | null
+          environment: string
+          id: string
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: boolean
+        }
+        Insert: {
+          description?: string | null
+          environment?: string
+          id?: string
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: boolean
+        }
+        Update: {
+          description?: string | null
+          environment?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: boolean
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           author_profile_id: string | null
