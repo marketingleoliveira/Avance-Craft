@@ -30,11 +30,12 @@ export const adminUpdateSiteSettings = createServerFn({ method: "POST" })
 
     // Registrar no log de auditoria
     await supabaseAdmin.from("audit_logs").insert({
-      actor_id: context.userId,
+      actor_profile_id: context.userId,
       action: "UPDATE_SITE_SETTINGS",
-      target_type: "SYSTEM",
-      details: { updated_keys: Object.keys(data.settings) }
+      entity: "SYSTEM",
+      metadata: { updated_keys: Object.keys(data.settings) }
     });
+
 
     return { success: true };
   });
