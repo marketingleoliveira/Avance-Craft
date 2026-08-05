@@ -19,6 +19,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as RegrasRouteImport } from './routes/regras'
+import { Route as StatusRouteImport } from './routes/status'
 import { Route as SucessoRouteImport } from './routes/sucesso'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as TermosRouteImport } from './routes/termos'
@@ -95,6 +96,11 @@ const RankingRoute = RankingRouteImport.update({
 const RegrasRoute = RegrasRouteImport.update({
   id: '/regras',
   path: '/regras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusRoute = StatusRouteImport.update({
+  id: '/status',
+  path: '/status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SucessoRoute = SucessoRouteImport.update({
@@ -245,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
   '/regras': typeof RegrasRoute
+  '/status': typeof StatusRoute
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
@@ -283,6 +290,7 @@ export interface FileRoutesByTo {
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
   '/regras': typeof RegrasRoute
+  '/status': typeof StatusRoute
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
@@ -323,6 +331,7 @@ export interface FileRoutesById {
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
   '/regras': typeof RegrasRoute
+  '/status': typeof StatusRoute
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
@@ -364,6 +373,7 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/ranking'
     | '/regras'
+    | '/status'
     | '/sucesso'
     | '/suporte'
     | '/termos'
@@ -402,6 +412,7 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/ranking'
     | '/regras'
+    | '/status'
     | '/sucesso'
     | '/suporte'
     | '/termos'
@@ -441,6 +452,7 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/ranking'
     | '/regras'
+    | '/status'
     | '/sucesso'
     | '/suporte'
     | '/termos'
@@ -481,6 +493,7 @@ export interface RootRouteChildren {
   PrivacidadeRoute: typeof PrivacidadeRoute
   RankingRoute: typeof RankingRoute
   RegrasRoute: typeof RegrasRoute
+  StatusRoute: typeof StatusRoute
   SucessoRoute: typeof SucessoRoute
   SuporteRoute: typeof SuporteRoute
   TermosRoute: typeof TermosRoute
@@ -560,6 +573,13 @@ declare module '@tanstack/react-router' {
       path: '/regras'
       fullPath: '/regras'
       preLoaderRoute: typeof RegrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/status': {
+      id: '/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sucesso': {
@@ -813,6 +833,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacidadeRoute: PrivacidadeRoute,
   RankingRoute: RankingRoute,
   RegrasRoute: RegrasRoute,
+  StatusRoute: StatusRoute,
   SucessoRoute: SucessoRoute,
   SuporteRoute: SuporteRoute,
   TermosRoute: TermosRoute,
@@ -824,13 +845,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
