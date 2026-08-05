@@ -4,6 +4,8 @@ import { getNewsBySlug } from "@/lib/services/content.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { Calendar, User, ArrowLeft, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 export const Route = createFileRoute("/noticias/$slug")({
   head: ({ loaderData }) => {
@@ -135,6 +137,10 @@ function NewsArticlePage() {
           </div>
         </StonePanel>
       </article>
+
+      <ScrollReveal className="mt-20">
+        <SiteFooter />
+      </ScrollReveal>
     </div>
   );
 }
