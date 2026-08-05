@@ -142,7 +142,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                 Live Status
               </h3>
               <ul className="space-y-3 mb-6">
-                <SidebarRow label="Status" value={statusLabel[statusKey]} icon={Activity} />
+                <SidebarRow label="Status" value={statusLabel[statusKey] || "Offline"} icon={Activity} />
                 <SidebarRow label="Jogadores" value={`${currentStatus.players_online}/${currentStatus.max_players}`} icon={Users} />
                 <SidebarRow label="Versão" value={currentStatus.version} icon={Calendar} />
               </ul>
