@@ -11,7 +11,7 @@ import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube } from "lucide-react";
+import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube, CreditCard, Activity } from "lucide-react";
 
 const title = "Habblet Mine — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
