@@ -28,7 +28,7 @@ export const listProducts = createServerFn({ method: "GET" })
       .object({
         categorySlug: z.string().optional(),
         featuredOnly: z.boolean().optional(),
-        limit: z.number().int().min(1).max(50).optional(),
+        limit: z.number().int().min(1).max(100).optional(),
       })
       .parse(input ?? {}),
   )
@@ -36,13 +36,13 @@ export const listProducts = createServerFn({ method: "GET" })
     const { getPublicServerClient } = await import("@/lib/supabase/public-client.server");
     let query = getPublicServerClient()
       .from("products")
-      .select("*, category:categories(id, name, slug), benefits:product_benefits(*)")
+      .select(`
+        *,
+        category:categories(id, name, slug, active),
+        benefits:product_benefits(*)
+      `)
       .eq("active", true)
       .order("position", { ascending: true });
-
-    if (data.categorySlug) {
-      query = query.filter("category.slug", "eq", data.categorySlug);
-    }
 
     if (data.featuredOnly) {
       query = query.eq("featured", true);
@@ -58,14 +58,19 @@ export const listProducts = createServerFn({ method: "GET" })
       console.error("[catalog] listProducts", error.message);
       return [];
     }
-    
-    let result = rows ?? [];
+
+    let result = (rows as unknown as ProductWithDetails[]) ?? [];
+
+    // Filtro de categoria ativa e slug (PostgREST nested filter pode ser chato, filtramos no servidor para segurança)
+    result = result.filter(p => p.category && p.category.active);
+
     if (data.categorySlug) {
-      result = result.filter((r: any) => r.category && r.category.slug === data.categorySlug);
+      result = result.filter(p => p.category?.slug === data.categorySlug);
     }
 
-    return (result as unknown as ProductWithDetails[]) ?? [];
+    return result;
   });
+
 
 export const getProductBySlug = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) =>
