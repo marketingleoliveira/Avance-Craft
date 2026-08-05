@@ -44,7 +44,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [coupon, setCoupon] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
 
-  // Alterar nick ou plataforma invalida a confirmação anterior.
   const setNickname = useCallback((value: string) => {
     setNicknameState(value);
     setConfirmed(false);
@@ -100,18 +99,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return false;
   }, [coupon]);
 
+  // TODO: Em um sistema real com TanStack Query, buscaríamos esses produtos do cache global
+  // ou passaríamos o objeto completo no add. Por enquanto, retornamos vazio para evitar erros.
   const detailed = useMemo(
-    () =>
-      lines.flatMap((line) => {
-        // Agora o contexto do carrinho não deve depender do MOCK_PRODUCTS.
-        // O ideal é passar o objeto do produto completo no add ou buscar via cache.
-        // Como o design atual envia apenas o productId, vamos manter como está por enquanto,
-        // mas o ShopPage precisará passar as informações necessárias.
-        return []; 
-      }),
-    [lines],
+    () => [] as { product: ShopProduct; quantity: number }[],
+    [],
   );
-
 
   const subtotalCents = useMemo(
     () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),
