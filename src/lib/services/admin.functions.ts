@@ -49,8 +49,6 @@ const productInput = z.object({
   active: z.boolean().optional(),
   featured: z.boolean().optional(),
   position: z.number().int().optional(),
-  compatibility: z.enum(['java', 'bedrock', 'both']).optional(),
-  maxQuantity: z.number().int().positive().nullable().optional(),
 });
 
 /** Contrato mínimo necessário para checar o papel do chamador via RLS. */
