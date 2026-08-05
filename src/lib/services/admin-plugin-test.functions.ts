@@ -14,11 +14,26 @@ function ensureStaging() {
   }
 }
 
+export type PluginIntegrationStatus = {
+  heartbeat: {
+    updated_at: string | null;
+    players_online: number;
+    online: boolean;
+  } | null;
+  stats: {
+    queued: number;
+    delivered: number;
+    failed: number;
+    total_attempts: number;
+  };
+  logs: any[];
+};
+
 /**
  * Busca o status detalhado da integração com o plugin
  */
 export const adminGetPluginIntegrationStatus = createServerFn({ method: "GET" })
-  .handler(async () => {
+  .handler(async (): Promise<PluginIntegrationStatus> => {
     ensureStaging();
 
     // 1. Status do Servidor (Heartbeat)
@@ -26,6 +41,12 @@ export const adminGetPluginIntegrationStatus = createServerFn({ method: "GET" })
       .from('server_status' as any)
       .select('updated_at, players_online, online')
       .maybeSingle();
+
+    const heartbeat = serverStatus ? {
+      updated_at: serverStatus.updated_at as string,
+      players_online: Number(serverStatus.players_online || 0),
+      online: Boolean(serverStatus.online)
+    } : null;
 
     // 2. Estatísticas da Fila de Entrega
     const { data: queueStats } = await supabaseAdmin
@@ -48,11 +69,18 @@ export const adminGetPluginIntegrationStatus = createServerFn({ method: "GET" })
       .limit(20);
 
     return {
-      heartbeat: serverStatus,
+      heartbeat,
       stats,
       logs: pluginLogs || []
     };
   });
+
+export type PluginSimulationResult = {
+  success: boolean;
+  status: number;
+  description: string;
+  payload: string;
+};
 
 /**
  * Simula uma requisição do plugin para testar cenários específicos
@@ -64,7 +92,7 @@ export const adminSimulatePluginRequest = createServerFn({ method: "POST" })
     secretKey: z.string().optional(),
     customPayload: z.any().optional(),
   }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<PluginSimulationResult> => {
     ensureStaging();
 
     const { scenario, pluginId = "test-server-id", secretKey = "test-secret-key", customPayload } = data;
@@ -98,7 +126,7 @@ export const adminSimulatePluginRequest = createServerFn({ method: "POST" })
       };
     };
 
-    let body = JSON.stringify(customPayload || { type: "HEARTBEAT" });
+    let body = JSON.stringify(customPayload || { action: "heartbeat" });
     let headers: any = {};
     let description = "";
 
