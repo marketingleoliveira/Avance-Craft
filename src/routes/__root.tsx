@@ -177,7 +177,7 @@ function RootComponent() {
             Voltaremos em breve com novidades!
           </p>
           <div className="pt-4 border-t border-stone-800">
-            <p className="text-[10px] font-pixel text-stone-500">HABBLET MINE — STATUS: EM MANUTENÇÃO</p>
+            <p className="text-[10px] font-pixel text-stone-500">AVANCE — STATUS: EM MANUTENÇÃO</p>
           </div>
         </StonePanel>
       </div>

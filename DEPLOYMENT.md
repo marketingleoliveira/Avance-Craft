@@ -8,7 +8,7 @@
 ## 🔑 Variáveis de Ambiente (Secrets)
 | Variável | Descrição | Obrigatória em Prod |
 |----------|-----------|----------------------|
-| `APP_BASE_URL` | URL base do site (ex: https://habblet.com.br) | ✅ |
+| `APP_BASE_URL` | URL base do site (ex: https://avance.com.br) | ✅ |
 | `MERCADOPAGO_ACCESS_TOKEN` | Token de produção do Mercado Pago | ✅ |
 | `MERCADOPAGO_WEBHOOK_SECRET` | Secret para validar x-signature do MP | ✅ |
 | `PLUGIN_SECRET_KEY` | Chave HMAC para comunicação com o Plugin | ✅ |

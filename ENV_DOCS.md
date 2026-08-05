@@ -17,7 +17,7 @@ Este documento descreve as variáveis de ambiente necessárias para operar o por
 | `APP_ENV` | Define o ambiente (`development`, `staging`, `production`) | `development` |
 | `APP_BASE_URL` | URL base do portal para redirecionamentos | `http://localhost:8080` |
 | `LOG_LEVEL` | Nível de detalhamento dos logs (`error`, `info`, `debug`) | `info` |
-| `SUPPORT_EMAIL` | E-mail oficial exibido no portal | `suporte@habblet.com.br` |
+| `SUPPORT_EMAIL` | E-mail oficial exibido no portal | `suporte@avance.com.br` |
 
 ## Integração Mercado Pago
 
@@ -54,7 +54,7 @@ O sistema **não iniciará** se:
 
 ```bash
 APP_ENV=production
-APP_BASE_URL=https://mine.habblet.com.br
+APP_BASE_URL=https://mine.avance.com.br
 LOG_LEVEL=info
 
 MERCADOPAGO_ACCESS_TOKEN=APP_USR-xxxx-xxxx

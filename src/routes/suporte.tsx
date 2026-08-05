@@ -287,7 +287,7 @@ function SupportPage() {
                 <div>
                   <h4 className="font-bold text-indigo-600 text-sm uppercase font-pixel">Discord</h4>
                   <p className="text-[10px] text-zinc-500 font-bold uppercase">Atendimento comunitário e denúncias.</p>
-                  <a href="#" className="text-[11px] text-indigo-500 font-bold hover:underline mt-1 inline-block uppercase font-pixel">discord.gg/habblet</a>
+                  <a href="#" className="text-[11px] text-indigo-500 font-bold hover:underline mt-1 inline-block uppercase font-pixel">discord.gg/avance</a>
                 </div>
               </div>
 

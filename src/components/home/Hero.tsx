@@ -108,8 +108,8 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
           </div>
 
           <Character
-            src={charPickaxe}
-            alt="Personagem voxel picareta"
+            src="/mnt/documents/avance-logo.png"
+            alt="Avance Logo"
             className="order-2 mx-auto w-40 max-w-full sm:w-52 lg:order-1 lg:w-full"
           />
           <Character

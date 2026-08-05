@@ -27,7 +27,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
       { key: "server_ip_java", value: "jogar.avance.com.br" },
       { key: "server_ip_bedrock", value: "bedrock.avance.com.br" },
       { key: "server_port_bedrock", value: "19132" },
-      { key: "discord_url", value: "https://discord.gg/habblet" },
+      { key: "discord_url", value: "https://discord.gg/avance" },
       { key: "instagram_url", value: "https://instagram.com/avance" },
       { key: "tiktok_url", value: "https://tiktok.com/@avance" },
       { key: "youtube_url", value: "https://youtube.com/@avance" },
