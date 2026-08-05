@@ -51,7 +51,7 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-9xl md:text-[14rem] font-[900] tracking-[-0.05em] text-white uppercase italic leading-[0.75] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              className="text-9xl md:text-[14rem] font-[900] tracking-[-0.05em] text-white uppercase italic leading-[0.75] drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]"
             >
               Avance
             </motion.h1>
