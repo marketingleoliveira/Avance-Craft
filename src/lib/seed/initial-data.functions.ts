@@ -55,7 +55,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     const catMap = Object.fromEntries(dbCats?.map(c => [c.slug, c.id]) || []);
 
     // --- PRODUTOS ---
-    const products = [
+    const products: any[] = [
       { category_id: catMap["vips"]!, slug: "vip-bronze", name: "VIP Bronze", short_description: "Vantagens iniciais essenciais.", price: 19.90, duration_days: 30, active: true, featured: true, position: 1 },
       { category_id: catMap["vips"]!, slug: "vip-ouro", name: "VIP Ouro", short_description: "O melhor custo-benefício.", price: 39.90, duration_days: 30, active: true, featured: true, position: 2 },
       { category_id: catMap["vips"]!, slug: "vip-esmeralda", name: "VIP Esmeralda", short_description: "O nível máximo de prestígio.", price: 69.90, duration_days: 30, active: true, featured: true, position: 3 },
@@ -75,13 +75,13 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     const prodMap = Object.fromEntries(dbProds?.map(p => [p.slug, p.id]) || []);
 
     // --- BENEFÍCIOS ---
-    const benefits = [
+    const benefits: any[] = [
       { product_id: prodMap["vip-bronze"]!, label: "Prefixo [Bronze] no chat", position: 1 },
       { product_id: prodMap["vip-bronze"]!, label: "Acesso a 5 homes extras", position: 2 },
-      { product_id: prodMap["vip-ouro"]!, label: "Prefixo [Ouro] no chat", position: 1 },
+      { product_id: prodMap["vip-ouro"]!, label: "Prefixo [Ouro] chat", position: 1 },
       { product_id: prodMap["vip-ouro"]!, label: "Acesso a 15 homes extras", position: 2 },
       { product_id: prodMap["vip-ouro"]!, label: "Prioridade na fila", position: 3 },
-      { product_id: prodMap["vip-esmeralda"]!, label: "Prefixo [Esmeralda] no chat", position: 1 },
+      { product_id: prodMap["vip-esmeralda"]!, label: "Prefixo [Esmeralda] chat", position: 1 },
       { product_id: prodMap["vip-esmeralda"]!, label: "Homes ilimitadas", position: 2 },
       { product_id: prodMap["vip-esmeralda"]!, label: "Kit Diário Exclusivo", position: 3 },
     ];
@@ -100,7 +100,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     results["server_modes"] = { total: modes.length };
 
     // --- STATUS DO SERVIDOR ---
-    const serverStatus = {
+    const serverStatus: any = {
       server_id: "main",
       online: false,
       players_online: 0,
@@ -124,7 +124,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     const newsCatMap = Object.fromEntries(dbNewsCats?.map(nc => [nc.slug, nc.id]) || []);
 
     // --- NOTÍCIAS ---
-    const news = [
+    const news: any[] = [
       { 
         category_id: newsCatMap["novidades"]!, 
         slug: "habblet-mine-chegando", 
@@ -156,7 +156,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     results["news"] = { total: news.length };
 
     // --- RANKINGS ---
-    const rankings = [
+    const rankings: any[] = [
       { category: "ricos", minecraft_nickname: "Vini_Player", value: 1500000, position: 1, period: "weekly" },
       { category: "ricos", minecraft_nickname: "Gabs_Mine", value: 900000, position: 2, period: "weekly" },
       { category: "tempo_online", minecraft_nickname: "Hardcore_User", value: 3600, position: 1, period: "weekly" },
