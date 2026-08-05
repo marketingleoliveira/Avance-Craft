@@ -7,7 +7,6 @@ import { Database } from "@/integrations/supabase/types";
 export const adminGetPaymentDetails = createServerFn({ method: "GET" })
   .validator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
   .handler(async ({ data }) => {
-    // PROTEÇÃO: Somente staging ou dev
     if (!isStaging() && !isDev()) {
       throw new Error("Este recurso está disponível apenas em ambiente de Staging.");
     }
@@ -41,14 +40,13 @@ export const adminSimulateWebhook = createServerFn({ method: "POST" })
     status: z.enum(["approved", "pending", "rejected", "refunded"])
   }).parse(data))
   .handler(async ({ data }) => {
-    // PROTEÇÃO: Somente staging ou dev
     if (!isStaging() && !isDev()) {
       throw new Error("Este recurso está disponível apenas em ambiente de Staging.");
     }
 
     const { data: order } = await supabaseAdmin
       .from("orders")
-      .select("total")
+      .select("total, order_items(id, product_id, quantity)")
       .eq("id", data.orderId)
       .single();
 
@@ -56,7 +54,6 @@ export const adminSimulateWebhook = createServerFn({ method: "POST" })
 
     const paymentId = crypto.randomUUID();
 
-    // 1. Criar registro em payments
     const { error: pError } = await supabaseAdmin.from("payments").insert({
       order_id: data.orderId,
       provider_payment_id: `MOCK-${paymentId}`,
@@ -68,9 +65,8 @@ export const adminSimulateWebhook = createServerFn({ method: "POST" })
 
     if (pError) throw new Error(`Falha ao registrar pagamento: ${pError.message}`);
 
-    // 2. Criar evento
     await supabaseAdmin.from("payment_events").insert({
-      order_id: data.orderId,
+      order_id: data.orderId as any, // Bypass mapping mismatch in mock
       event_type: "payment.updated",
       payload: { 
         action: "payment.created", 
@@ -80,24 +76,18 @@ export const adminSimulateWebhook = createServerFn({ method: "POST" })
       } as any
     });
 
-    // 3. Se aprovado, atualizar pedido e enfileirar entrega
     if (data.status === "approved") {
       await supabaseAdmin.from("orders").update({ 
         status: "paid",
         paid_at: new Date().toISOString()
       }).eq("id", data.orderId);
 
-      const { data: items } = await supabaseAdmin
-        .from("order_items")
-        .select("product_id, quantity")
-        .eq("order_id", data.orderId);
-
-      if (items) {
-        for (const item of items) {
+      if (order.order_items) {
+        for (const item of order.order_items) {
           await supabaseAdmin.from("delivery_queue").insert({
-            order_id: data.orderId,
-            product_id: item.product_id,
-            quantity: item.quantity,
+            order_item_id: item.id,
+            command: "say Simulação de entrega staging", // Placeholder, o real viria do produto
+            idempotency_key: `mock-deliv-${item.id}-${Date.now()}`,
             status: "queued"
           });
         }
