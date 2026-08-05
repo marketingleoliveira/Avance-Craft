@@ -48,6 +48,7 @@ import { Route as AdminSaudeRouteImport } from './routes/admin/saude'
 import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
 import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
 import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as BetaFeedbackRouteImport } from './routes/beta/feedback'
 import { Route as NoticiasIndexRouteImport } from './routes/noticias/index'
 import { Route as NoticiasSlugRouteImport } from './routes/noticias/$slug'
@@ -256,6 +257,11 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BetaFeedbackRoute = BetaFeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
@@ -357,6 +363,7 @@ export interface FileRoutesByFullPath {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/api/health': typeof ApiHealthRoute
   '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -409,6 +416,7 @@ export interface FileRoutesByTo {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/api/health': typeof ApiHealthRoute
   '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -463,6 +471,7 @@ export interface FileRoutesById {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/api/health': typeof ApiHealthRoute
   '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -518,6 +527,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/api/health'
     | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin/'
@@ -570,6 +580,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/api/health'
     | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin'
@@ -623,6 +634,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/api/health'
     | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin/'
@@ -660,6 +672,7 @@ export interface RootRouteChildren {
   SucessoRoute: typeof SucessoRoute
   SuporteRoute: typeof SuporteRoute
   TermosRoute: typeof TermosRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   NoticiasSlugRoute: typeof NoticiasSlugRoute
   NoticiasIndexRoute: typeof NoticiasIndexRoute
   ApiPublicMercadopagoRoute: typeof ApiPublicMercadopagoRoute
@@ -941,6 +954,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/beta/feedback': {
       id: '/beta/feedback'
       path: '/feedback'
@@ -1118,6 +1138,7 @@ const rootRouteChildren: RootRouteChildren = {
   SucessoRoute: SucessoRoute,
   SuporteRoute: SuporteRoute,
   TermosRoute: TermosRoute,
+  ApiHealthRoute: ApiHealthRoute,
   NoticiasSlugRoute: NoticiasSlugRoute,
   NoticiasIndexRoute: NoticiasIndexRoute,
   ApiPublicMercadopagoRoute: ApiPublicMercadopagoRoute,
