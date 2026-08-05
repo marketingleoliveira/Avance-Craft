@@ -109,10 +109,7 @@ export const adminUpdateServerConfig = createServerFn({ method: "POST" })
       .from("server_status")
       .update({
         ip: fields.ip,
-        ip_bedrock: fields.ipBedrock,
-        port_bedrock: fields.portBedrock,
         version: fields.version,
-        heartbeat_timeout_seconds: fields.heartbeatTimeout
       } as any)
       .eq("server_id", serverId);
       

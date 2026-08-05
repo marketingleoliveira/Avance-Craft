@@ -75,7 +75,7 @@ function StatusPage() {
   const isOnline = status?.online ?? false;
   // Heartbeat check: if last_heartbeat is older than timeout, it's offline
   const lastHeartbeat = status?.updated_at ? new Date(status.updated_at) : null;
-  const timeoutSeconds = status?.heartbeat_timeout_seconds ?? 60;
+  const timeoutSeconds = 60; // fallback hardcoded for now or from site settings
   const isHeartbeatValid = lastHeartbeat && (Date.now() - lastHeartbeat.getTime()) < (timeoutSeconds * 1000);
   const effectivelyOnline = isOnline && isHeartbeatValid;
 
@@ -123,7 +123,7 @@ function StatusPage() {
                       <div className="flex items-center gap-2">
                         <span className={cn(
                           "h-2 w-2",
-                          mode.active ? "bg-emerald-block" : "bg-destructive"
+                          mode.available ? "bg-emerald-block" : "bg-destructive"
                         )} />
                         <span className="font-bold text-sm">{mode.name}</span>
                       </div>
@@ -152,17 +152,17 @@ function StatusPage() {
                 <div>
                   <label className="font-pixel text-[9px] uppercase text-muted-foreground block mb-2">Bedrock Edition</label>
                   <div className="space-y-2">
-                    <button 
-                      onClick={() => copy(status?.ip_bedrock ?? "bedrock.habbletmine.com.br", 'bedrock')}
-                      className="pixel-border flex w-full items-center justify-between border-dirt-dark bg-dirt-dark/10 p-3 text-left hover:bg-dirt-dark/20 transition-colors"
-                    >
-                      <span className="font-bold truncate">{status?.ip_bedrock ?? "bedrock.habbletmine.com.br"}</span>
-                      {copiedIp === 'bedrock' ? <Check className="h-4 w-4 text-emerald-block" /> : <Copy className="h-4 w-4" />}
-                    </button>
-                    <div className="flex items-center gap-2 px-1">
-                      <span className="font-pixel text-[8px] uppercase text-muted-foreground">Porta:</span>
-                      <span className="font-bold text-sm">{status?.port_bedrock ?? 19132}</span>
-                    </div>
+                  <button 
+                    onClick={() => copy("bedrock.habbletmine.com.br", 'bedrock')}
+                    className="pixel-border flex w-full items-center justify-between border-dirt-dark bg-dirt-dark/10 p-3 text-left hover:bg-dirt-dark/20 transition-colors"
+                  >
+                    <span className="font-bold truncate">bedrock.habbletmine.com.br</span>
+                    {copiedIp === 'bedrock' ? <Check className="h-4 w-4 text-emerald-block" /> : <Copy className="h-4 w-4" />}
+                  </button>
+                  <div className="flex items-center gap-2 px-1">
+                    <span className="font-pixel text-[8px] uppercase text-muted-foreground">Porta:</span>
+                    <span className="font-bold text-sm">19132</span>
+                  </div>
                   </div>
                 </div>
 

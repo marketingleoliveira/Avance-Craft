@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PlaceholderPage } from "@/components/layout/PlaceholderPage";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/servidores")({
-  component: () => <PlaceholderPage title="Servidores" description="Monitoramento de instâncias e status de rede." />,
+  beforeLoad: () => {
+    throw redirect({ to: "/admin/ranking" });
+  },
 });
