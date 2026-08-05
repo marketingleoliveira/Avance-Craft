@@ -11,7 +11,7 @@ import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck } from "lucide-react";
+import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck, TestTube } from "lucide-react";
 
 const title = "Habblet Mine — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
@@ -53,87 +53,90 @@ function Index() {
     <main className="relative">
       <Hero settings={settings} />
 
-      {/* Checklist de Pré-deploy (Apenas em Dev/Staging ou para Staff) */}
+      {/* Checklist de Pré-deploy & Test Harness (Apenas em Dev/Staging ou para Staff) */}
       <section className="py-16 bg-background/50 border-y border-white/5 overflow-hidden">
         <div className="container mx-auto px-4 max-w-[1180px]">
           <StonePanel className="p-8 border-yellow-600/30">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-white/10 pb-6">
               <div>
-                <h2 className="text-3xl font-minecraft text-yellow-500 mb-2">Checklist de Pré-deploy</h2>
-                <p className="text-muted-foreground italic">Garantindo a estabilidade do Habblet Mine v1.0.0-rc.1</p>
+                <h2 className="text-3xl font-minecraft text-yellow-500 mb-2">Controle de Qualidade Staging</h2>
+                <p className="text-muted-foreground italic">Validação técnica completa da integração Mercado Pago & Pré-deploy.</p>
               </div>
               <div className="flex gap-4">
-                <Link to="/admin/saude">
-                  <PixelButton variant="stone" className="px-6">Painel de Saúde</PixelButton>
+                <Link to="/admin/pagamentos-teste">
+                  <PixelButton className="px-6 bg-blue-600 hover:bg-blue-500 border-blue-700">
+                    <TestTube className="w-4 h-4 mr-2" />
+                    Test Harness
+                  </PixelButton>
                 </Link>
                 <PixelButton 
-                  className="px-6 bg-green-600 hover:bg-green-500 border-green-700"
-                  onClick={() => window.open('https://github.com', '_blank')}
+                  variant="stone"
+                  className="px-6"
+                  onClick={() => window.open('/admin/saude', '_self')}
                 >
-                  <Terminal className="w-4 h-4 mr-2" />
-                  Rodar Verificação
+                  <Activity className="w-4 h-4 mr-2" />
+                  Saúde do Sistema
                 </PixelButton>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* AUTOMATIZADO */}
+              {/* TEST HARNESS PAGAMENTOS */}
               <div className="space-y-4">
                 <h3 className="text-xl font-minecraft text-blue-400 flex items-center gap-2">
-                  <Terminal className="w-5 h-5" />
-                  AUTOMATIZAR
+                  <CreditCard className="w-5 h-5 text-blue-400" />
+                  TESTE MERCADO PAGO
                 </h3>
                 <div className="grid grid-cols-1 gap-2">
                   {[
-                    "Typecheck (TypeScript)",
-                    "Build de Produção",
-                    "Testes Unitários & Integração",
-                    "Migrations Pendentes",
-                    "Variáveis Obrigatórias (env.server.ts)",
-                    "Vazamento de Mocks/Fixtures",
-                    "Segredos Hardcoded (sb_secret_)",
-                    "Proteção de Rotas Admin",
-                    "Assinatura de Webhooks/HMAC"
+                    "Criação de Pedido & Recálculo Server-side",
+                    "Geração de Preferência (init_point)",
+                    "Retornos: Sucesso, Pendente, Falha",
+                    "Recebimento & Validação de Webhook",
+                    "Consulta Direta no Provedor (API MP)",
+                    "Persistência em payments & events",
+                    "Idempotência da Fila de Entrega",
+                    "Webhooks Duplicados ou Inválidos"
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-3 p-3 bg-black/20 border border-white/5 rounded-sm group hover:border-blue-500/30 transition-colors">
-                      <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
-                      <span className="text-sm font-medium group-hover:text-blue-200 transition-colors">{item}</span>
+                      <CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" />
+                      <span className="text-[11px] font-medium group-hover:text-blue-200 transition-colors">{item}</span>
                     </div>
                   ))}
                 </div>
                 
                 <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-sm">
-                  <code className="text-xs text-blue-300 font-mono">npm run predeploy:check</code>
-                  <p className="text-xs text-muted-foreground mt-2">Script configurado em package.json com exit code rigoroso.</p>
+                  <p className="text-[10px] text-blue-300">Ambiente isolado. Webhooks simulam assinatura válida sem expor secrets de produção.</p>
                 </div>
               </div>
 
-              {/* MANUAL */}
+              {/* CHECKLIST PRÉ-DEPLOY */}
               <div className="space-y-4">
                 <h3 className="text-xl font-minecraft text-orange-400 flex items-center gap-2">
                   <ClipboardCheck className="w-5 h-5" />
-                  CHECKLIST MANUAL
+                  CHECKLIST PRÉ-DEPLOY
                 </h3>
                 <div className="grid grid-cols-1 gap-2">
                   {[
-                    "Backup recente do banco gerado",
-                    "Restauração testada em staging",
-                    "Domínio validado e SSL ativo",
-                    "Webhook configurado no Mercado Pago",
-                    "Plugin Java online (produção)",
-                    "Termos & Políticas publicados",
-                    "Contas Admin/User testadas"
+                    "Typecheck, Build & Testes Unitários",
+                    "Vazamento de Mocks/Fixtures (Audit)",
+                    "Segredos Hardcoded (rg scan)",
+                    "Proteção de Rotas & RLS Ativo",
+                    "Backup & Restauração Testada",
+                    "SSL & Webhook MP Configurados",
+                    "Plugin Online & Fila Controlada",
+                    "Termos & Políticas Publicados"
                   ].map((item) => (
                     <label key={item} className="flex items-center gap-3 p-3 bg-black/20 border border-white/5 rounded-sm cursor-pointer hover:bg-black/30 transition-colors">
                       <input type="checkbox" className="w-4 h-4 rounded border-white/10 bg-black/40 text-orange-500 focus:ring-orange-500/50" />
-                      <span className="text-sm font-medium">{item}</span>
+                      <span className="text-[11px] font-medium">{item}</span>
                     </label>
                   ))}
                 </div>
 
                 <div className="mt-4 p-4 bg-orange-500/10 border border-orange-500/20 rounded-sm flex gap-3">
                   <AlertCircle className="w-5 h-5 text-orange-400 shrink-0" />
-                  <p className="text-xs text-orange-200/80">Bloqueadores manuais exigem confirmação assinada pela gerência técnica antes do merge em main.</p>
+                  <p className="text-[10px] text-orange-200/80">Bloqueadores automáticos via <code>npm run predeploy:check</code> no repositório.</p>
                 </div>
               </div>
             </div>
@@ -151,3 +154,4 @@ function Index() {
     </main>
   );
 }
+
