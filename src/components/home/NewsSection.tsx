@@ -3,6 +3,7 @@ import { Container } from "@/components/ui-kit/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
 import { Newspaper, ChevronRight, Activity, Trophy, Users, Calendar, User } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -108,9 +109,14 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
               <Newspaper className="w-3 h-3" />
               Diário do Explorador
             </div>
-            <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white"
+            >
               Últimas <span className="text-emerald-500">Notícias</span>
-            </h2>
+            </motion.h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
               Atualizações e eventos do Avance.
             </p>
@@ -125,8 +131,16 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
         <div className="grid gap-12 lg:grid-cols-[1.8fr_1fr]">
           {/* Main Feed */}
           <div className="space-y-6">
-            {news.map((item: any) => (
-              <NewsCard key={item.id} item={item} />
+            {news.map((item: any, index: number) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <NewsCard item={item} />
+              </motion.div>
             ))}
             <div className="md:hidden mt-8">
               <Button asChild className="w-full h-16 rounded-2xl">
@@ -164,10 +178,17 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
               </h3>
               <ol className="space-y-4">
                 {rankings.map((row: any, i: number) => (
-                  <li key={row.minecraft_nickname} className="flex items-center gap-4 group/item">
+                  <motion.li 
+                    key={row.minecraft_nickname} 
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-center gap-4 group/item"
+                  >
                     <div className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs",
-                      i === 0 ? "bg-emerald-500 text-stone-950" : "bg-white/5 text-stone-400"
+                      "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs transition-all duration-300 group-hover/item:scale-110",
+                      i === 0 ? "bg-emerald-500 text-stone-950 shadow-lg shadow-emerald-500/20" : "bg-white/5 text-stone-400"
                     )}>
                       {row.position}
                     </div>
@@ -179,7 +200,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                         {row.display_value}
                       </p>
                     </div>
-                  </li>
+                  </motion.li>
                 ))}
               </ol>
             </Card>

@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X, User, Play, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui-kit/Container";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Início", to: "/" },
@@ -33,7 +34,10 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header 
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         scrolled 
@@ -170,6 +174,6 @@ export function SiteHeader() {
           </div>
         </Container>
       </div>
-    </header>
+    </motion.header>
   );
 }

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AnimatePresence } from "framer-motion";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getHomeData } from "@/lib/services/content.functions";
 import { Hero } from "@/components/home/Hero";
@@ -10,6 +11,7 @@ import { HowToPlay } from "@/components/home/HowToPlay";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 const title = "Avance — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
@@ -48,48 +50,64 @@ function Index() {
   const { news, status, modes, featuredProducts, settings } = homeData;
 
   return (
-    <main className="relative bg-stone-950 overflow-x-hidden">
+    <AnimatePresence>
+      <main className="relative bg-stone-950 overflow-x-hidden">
       <div className="flex flex-col">
         {/* Section: Hero */}
         <Hero settings={settings} />
         
         {/* Section: Novidades */}
         <div className="py-32 md:py-64 border-t border-white/5">
-          <NewsSection news={news} status={status} />
+          <ScrollReveal>
+            <NewsSection news={news} status={status} />
+          </ScrollReveal>
         </div>
 
         {/* Section: Modalidades */}
         <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
-          <ModesSection modes={modes} />
+          <ScrollReveal>
+            <ModesSection modes={modes} />
+          </ScrollReveal>
         </div>
 
         {/* Section: Por que jogar (HowToPlay) */}
         <div className="py-32 md:py-64">
-          <HowToPlay />
+          <ScrollReveal>
+            <HowToPlay />
+          </ScrollReveal>
         </div>
 
         {/* Section: Loja */}
         <div className="py-32 md:py-64 bg-emerald-500/5 border-y border-emerald-500/10">
-          <ShopHighlight products={featuredProducts} />
+          <ScrollReveal>
+            <ShopHighlight products={featuredProducts} />
+          </ScrollReveal>
         </div>
 
         {/* Section: Ranking */}
         <div className="py-32 md:py-64">
-          <RankingSection />
+          <ScrollReveal>
+            <RankingSection />
+          </ScrollReveal>
         </div>
 
         {/* Section: Comunidade */}
         <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
-          <CommunitySection settings={settings} />
+          <ScrollReveal>
+            <CommunitySection settings={settings} />
+          </ScrollReveal>
         </div>
 
         {/* Section: CTA Final */}
         <div className="py-32 md:py-64">
-          <FinalCta />
+          <ScrollReveal>
+            <FinalCta />
+          </ScrollReveal>
         </div>
 
         <SiteFooter />
       </div>
     </main>
+    </AnimatePresence>
   );
 }
