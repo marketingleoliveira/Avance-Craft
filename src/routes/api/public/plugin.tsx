@@ -12,6 +12,9 @@ export const Route = createFileRoute("/api/public/plugin")({
         // 1. Autenticação Forte com Assinatura HMAC
         const auth = await validatePluginSignature(request, bodyText, supabaseAdmin);
         if (!auth.valid || !auth.serverId) {
+          await logger.warn("plugin-api", "Unauthorized access attempt", { 
+            context: { error: auth.error, ip: request.headers.get("x-forwarded-for") } 
+          });
           return new Response(auth.error || "Unauthorized", { status: 401 });
         }
 

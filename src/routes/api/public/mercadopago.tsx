@@ -45,10 +45,11 @@ export const Route = createFileRoute("/api/public/mercadopago")({
               }
             }
           } catch (err) {
-            console.error("Signature validation error:", err);
+            await logger.error("mercadopago", "Signature validation error", err, { context: { xSignature, xRequestId } });
           }
         } else if (!process.env['NODE_ENV'] || process.env['NODE_ENV'] === 'development') {
           isSignatureValid = true;
+          await logger.info("mercadopago", "Bypassing signature in development mode");
         }
 
         // 3. Registrar evento bruto sanitizado
@@ -61,6 +62,9 @@ export const Route = createFileRoute("/api/public/mercadopago")({
         }).select().single();
 
         if (!isSignatureValid && process.env['NODE_ENV'] === 'production') {
+          await logger.critical("mercadopago", "Invalid signature in production", { 
+            context: { xSignature, xRequestId, body: sanitizePayload(body) } 
+          });
           return new Response("Invalid signature", { status: 401 });
         }
 
@@ -113,7 +117,10 @@ export const Route = createFileRoute("/api/public/mercadopago")({
             // 8. Se aprovado, processar entrega
             if (payment.status === "approved" && order.status !== "paid") {
               if (Math.abs(payment.transaction_amount - order.total) > 0.01) {
-                console.error(`Amount mismatch for order ${order.id}`);
+                await logger.critical("mercadopago", "Amount mismatch", { 
+                  orderId: order.id, 
+                  context: { expected: order.total, actual: payment.transaction_amount } 
+                });
                 return new Response("Amount mismatch", { status: 200 });
               }
 
