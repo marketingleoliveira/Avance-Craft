@@ -15,9 +15,6 @@ const envSchema = z.object({
   // Security
   HMAC_CLOCK_TOLERANCE_SECONDS: z.coerce.number().default(300),
   HEARTBEAT_TIMEOUT_SECONDS: z.coerce.number().default(60),
-  
-  // Database (managed by Lovable Cloud, but we might have custom settings)
-  // VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are usually handled by the client
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -33,7 +30,7 @@ export function getEnv(): Env {
     console.error("❌ Invalid environment variables:", result.error.format());
     
     // In production, we want to fail fast if critical vars are missing
-    if (process.env.NODE_ENV === "production") {
+    if (process.env['NODE_ENV'] === "production") {
       throw new Error("Invalid environment configuration. Check logs for details.");
     }
     
@@ -46,15 +43,15 @@ export function getEnv(): Env {
   return env;
 }
 
-export const isProd = getEnv().NODE_ENV === "production";
-export const isDev = getEnv().NODE_ENV === "development";
-export const isTest = getEnv().NODE_ENV === "test";
+export const isProd = () => getEnv().NODE_ENV === "production";
+export const isDev = () => getEnv().NODE_ENV === "development";
+export const isTest = () => getEnv().NODE_ENV === "test";
 
 /**
  * Validates the environment for production readiness.
  */
 export function validateProductionConfig() {
-  if (!isProd) return;
+  if (!isProd()) return;
   
   const requiredVars = [
     "MERCADOPAGO_ACCESS_TOKEN",
