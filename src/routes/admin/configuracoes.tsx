@@ -21,7 +21,8 @@ import {
   MessageSquare,
   Activity,
   Database,
-  Trash2
+  Trash2,
+  TestTube
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
