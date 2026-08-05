@@ -107,7 +107,7 @@ function AdminRankingPage() {
           <AdminTable 
             data={rankings} 
             columns={columns} 
-            searchPlaceholder="Buscar por nickname..."
+            onSearch={(val) => console.log('Search:', val)}
           />
         </div>
       </div>
