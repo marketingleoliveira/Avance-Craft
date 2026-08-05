@@ -33,11 +33,11 @@ function sanitize(obj: any): any {
   
   const sanitized = Array.isArray(obj) ? [...obj] : { ...obj };
   
-  for (const key in sanitized) {
+  for (const key in (sanitized as any)) {
     if (SENSITIVE_FIELDS.some(field => key.toLowerCase().includes(field))) {
-      sanitized[key] = '[REDACTED]';
-    } else if (typeof sanitized[key] === 'object') {
-      sanitized[key] = sanitize(sanitized[key]);
+      (sanitized as any)[key] = '[REDACTED]';
+    } else if (typeof (sanitized as any)[key] === 'object') {
+      (sanitized as any)[key] = sanitize((sanitized as any)[key]);
     }
   }
   
@@ -52,7 +52,6 @@ async function persistLog(
 ) {
   const env = getEnv();
   
-  // No desenvolvimento, também logamos no console para facilidade
   if (env.APP_ENV === 'development') {
     const consoleMethod = severity === 'error' || severity === 'critical' ? 'error' : 
                          severity === 'warn' ? 'warn' : 'log';
@@ -60,19 +59,21 @@ async function persistLog(
   }
 
   try {
+    // Usamos null explicitamente onde o Supabase espera null em vez de undefined
+    // e tratamos os tipos para bater com o gerado pelo Supabase
     const { error } = await supabaseAdmin.from('error_logs').insert({
-      severity,
+      severity: severity as any,
       environment: env.APP_ENV,
       service,
-      module: options.module,
-      action: options.action,
-      message: message.substring(0, 2000), // Limitar tamanho da mensagem
-      stack: options.stack,
-      context: sanitize(options.context || {}),
-      user_id: options.userId,
-      order_id: options.orderId,
-      payment_id: options.paymentId,
-      plugin_id: options.pluginId
+      module: options.module ?? null,
+      action: options.action ?? null,
+      message: message.substring(0, 2000),
+      stack: options.stack ?? null,
+      context: sanitize(options.context || {}) as any,
+      user_id: options.userId ?? null,
+      order_id: options.orderId ?? null,
+      payment_id: options.paymentId ?? null,
+      plugin_id: options.pluginId ?? null
     });
 
     if (error) {
@@ -93,14 +94,14 @@ export const logger = {
   error: (service: string, message: string, error?: any, options?: LogOptions) => 
     persistLog('error', service, message, {
       ...options,
-      stack: error instanceof Error ? error.stack : undefined,
+      stack: error instanceof Error ? error.stack : (typeof error === 'string' ? error : undefined),
       context: { ...options?.context, error_detail: error?.message || error }
     }),
     
   critical: (service: string, message: string, error?: any, options?: LogOptions) => 
     persistLog('critical', service, message, {
       ...options,
-      stack: error instanceof Error ? error.stack : undefined,
+      stack: error instanceof Error ? error.stack : (typeof error === 'string' ? error : undefined),
       context: { ...options?.context, error_detail: error?.message || error }
     }),
     
