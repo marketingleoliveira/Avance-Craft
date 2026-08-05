@@ -192,7 +192,7 @@ export const adminUpdateNews = createServerFn({ method: "POST" })
       .single();
       
     if (error) throw new Error(error.message);
-    await logAudit(context.supabase, context.userId, "update", "news", id, row, oldRow);
+    await logAudit(context.supabase, context.userId, "update", "news", id, row, oldRow || {});
     return row;
   });
 
