@@ -19,7 +19,6 @@ const statusLabel: Record<string, string> = {
   offline: "Offline",
 };
 
-import { Card } from "@/components/ui/card";
 
 function NewsCard({ item }: { item: any }) {
   return (
