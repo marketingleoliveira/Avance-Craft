@@ -21,10 +21,10 @@ const feedbackFormSchema = z.object({
   steps_to_reproduce: z.string().optional(),
   expected_result: z.string().optional(),
   actual_result: z.string().optional(),
-  minecraft_nickname: z.string().min(3, 'Nickname inválido'),
+  minecraft_nickname: z.string().min(3, 'Nickname inválido').or(z.literal('')),
   edition: z.enum(['java', 'bedrock']).optional(),
   version: z.string().optional(),
-  contact_consent: z.boolean().default(false),
+  contact_consent: z.boolean(),
 })
 
 type FeedbackFormData = z.infer<typeof feedbackFormSchema>
@@ -63,11 +63,12 @@ function BetaFeedbackPage() {
       type: 'bug',
       severity: 'medium',
       contact_consent: false,
+      minecraft_nickname: '',
     }
   })
 
   const onSubmit = (data: FeedbackFormData) => {
-    mutation.mutate(data)
+    mutation.mutate({ data })
   }
 
   return (
@@ -84,7 +85,6 @@ function BetaFeedbackPage() {
 
         <div className="flex justify-center">
           <PixelButton 
-            variant={showForm ? 'stone' : 'grass'}
             onClick={() => setShowForm(!showForm)}
             className="flex items-center gap-2"
           >

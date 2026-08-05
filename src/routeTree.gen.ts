@@ -43,6 +43,7 @@ import { Route as AdminSaudeRouteImport } from './routes/admin/saude'
 import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
 import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
 import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
+import { Route as BetaFeedbackRouteImport } from './routes/beta/feedback'
 import { Route as NoticiasIndexRouteImport } from './routes/noticias/index'
 import { Route as NoticiasSlugRouteImport } from './routes/noticias/$slug'
 import { Route as AdminCategoriasIndexRouteImport } from './routes/admin/categorias/index'
@@ -225,6 +226,11 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
+const BetaFeedbackRoute = BetaFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => BetaRoute,
+} as any)
 const NoticiasIndexRoute = NoticiasIndexRouteImport.update({
   id: '/noticias/',
   path: '/noticias/',
@@ -286,7 +292,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
-  '/beta': typeof BetaRoute
+  '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -316,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/noticias/': typeof NoticiasIndexRoute
@@ -332,7 +339,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/beta': typeof BetaRoute
+  '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -362,6 +369,7 @@ export interface FileRoutesByTo {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin': typeof AdminIndexRoute
   '/noticias': typeof NoticiasIndexRoute
@@ -380,7 +388,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
-  '/beta': typeof BetaRoute
+  '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -410,6 +418,7 @@ export interface FileRoutesById {
   '/admin/servidores': typeof AdminServidoresRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/beta/feedback': typeof BetaFeedbackRoute
   '/noticias/$slug': typeof NoticiasSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/noticias/': typeof NoticiasIndexRoute
@@ -459,6 +468,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin/'
     | '/noticias/'
@@ -505,6 +515,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin'
     | '/noticias'
@@ -552,6 +563,7 @@ export interface FileRouteTypes {
     | '/admin/servidores'
     | '/admin/tickets'
     | '/admin/usuarios'
+    | '/beta/feedback'
     | '/noticias/$slug'
     | '/admin/'
     | '/noticias/'
@@ -570,7 +582,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
-  BetaRoute: typeof BetaRoute
+  BetaRoute: typeof BetaRouteWithChildren
   ComoJogarRoute: typeof ComoJogarRoute
   EquipeRoute: typeof EquipeRoute
   FalhaRoute: typeof FalhaRoute
@@ -830,6 +842,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/beta/feedback': {
+      id: '/beta/feedback'
+      path: '/feedback'
+      fullPath: '/beta/feedback'
+      preLoaderRoute: typeof BetaFeedbackRouteImport
+      parentRoute: typeof BetaRoute
+    }
     '/noticias/': {
       id: '/noticias/'
       path: '/noticias'
@@ -966,11 +985,21 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface BetaRouteChildren {
+  BetaFeedbackRoute: typeof BetaFeedbackRoute
+}
+
+const BetaRouteChildren: BetaRouteChildren = {
+  BetaFeedbackRoute: BetaFeedbackRoute,
+}
+
+const BetaRouteWithChildren = BetaRoute._addFileChildren(BetaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
-  BetaRoute: BetaRoute,
+  BetaRoute: BetaRouteWithChildren,
   ComoJogarRoute: ComoJogarRoute,
   EquipeRoute: EquipeRoute,
   FalhaRoute: FalhaRoute,
