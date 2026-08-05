@@ -85,11 +85,13 @@ function SupportPage() {
 
   const createMutation = useMutation({
     mutationFn: (data: TicketForm) => createTicket({
-      category: data.category,
-      subject: data.subject,
-      message: data.message,
-      orderId: data.orderId || undefined,
-    } as any),
+      data: {
+        category: data.category,
+        subject: data.subject,
+        message: data.message,
+        orderId: data.orderId || undefined,
+      }
+    }),
     onSuccess: () => {
       toast.success("Chamado aberto com sucesso!");
       queryClient.invalidateQueries({ queryKey: ["my-tickets"] });

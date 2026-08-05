@@ -13,9 +13,10 @@ import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/tickets")({
   loader: async ({ context }) => {
+    const filters = { status: "", category: "", search: "" };
     await context.queryClient.ensureQueryData({
-      queryKey: ["admin-tickets", { status: "", category: "", search: "" }],
-      queryFn: () => adminListTickets({ status: "", category: "", search: "" }),
+      queryKey: ["admin-tickets", filters],
+      queryFn: () => adminListTickets({ data: filters }),
     });
   },
   component: AdminTicketsPage,
@@ -30,7 +31,7 @@ function AdminTicketsPage() {
 
   const { data } = useSuspenseQuery({
     queryKey: ["admin-tickets", filters],
-    queryFn: () => adminListTickets(filters),
+    queryFn: () => adminListTickets({ data: filters }),
   });
 
   const getStatusBadge = (status: string) => {

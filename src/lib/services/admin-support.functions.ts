@@ -50,7 +50,7 @@ export const adminListTickets = createServerFn({ method: "GET" })
       .from("support_tickets")
       .select("*, profile:profiles(minecraft_nickname)", { count: 'exact' });
       
-    if (data.status) query = query.eq("status", data.status);
+    if (data.status) query = query.eq("status", data.status as any);
     if (data.category) query = query.eq("category", data.category);
     if (data.search) query = query.ilike("subject", `%${data.search}%`);
     
