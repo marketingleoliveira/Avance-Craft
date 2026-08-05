@@ -185,7 +185,7 @@ function Index() {
                     "16. Ativação Gradual (Phased Rollout)",
                     "17. Compra Real Controlada (Validation)",
                     "18. Quality Gate de Produção Concluído",
-                    "🚀 LANÇAMENTO HABBLET MINE V1.0.0",
+                    "🚀 LANÇAMENTO AVANCE V1.0.0",
                     "✅ HARDENING: Transações Atômicas",
                     "✅ HARDENING: Proteção IDOR Server-side",
                     "✅ HARDENING: Persistência de Flags",

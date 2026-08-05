@@ -31,6 +31,6 @@ insert into public.site_settings (key, value, is_public)
 values 
 ('business_cnpj', '"00.000.000/0000-00"', true),
 ('business_address', '"Endereço Comercial, Cidade - UF"', true),
-('business_email', '"contato@habbletmine.com.br"', true),
-('business_legal_name', '"Habblet Mine Entretenimento Digital LTDA"', true)
+('business_email', '"contato@avance.com.br"', true),
+('business_legal_name', '"Avance Entretenimento Digital LTDA"', true)
 on conflict (key) do nothing;

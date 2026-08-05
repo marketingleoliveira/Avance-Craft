@@ -460,7 +460,7 @@ CREATE TABLE public.server_status (
   players_online INTEGER NOT NULL DEFAULT 0 CHECK (players_online >= 0),
   max_players INTEGER NOT NULL DEFAULT 500 CHECK (max_players > 0),
   version TEXT NOT NULL DEFAULT '1.21+',
-  ip TEXT NOT NULL DEFAULT 'jogar.habbletmine.com.br',
+  ip TEXT NOT NULL DEFAULT 'jogar.avance.com.br',
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE TRIGGER trg_server_status_updated BEFORE UPDATE ON public.server_status FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();

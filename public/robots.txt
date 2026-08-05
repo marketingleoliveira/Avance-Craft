@@ -5,4 +5,4 @@ Disallow: /perfil
 Disallow: /suporte
 Disallow: /api
 
-Sitemap: https://habbletmine.lovable.app/sitemap.xml
+Sitemap: https://avance.lovable.app/sitemap.xml

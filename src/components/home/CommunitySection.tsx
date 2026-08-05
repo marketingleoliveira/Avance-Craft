@@ -5,7 +5,7 @@ import { PixelButton } from "@/components/ui-kit/PixelButton";
 
 
 export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
-  const discordUrl = settings?.["discord_url"] || "https://discord.gg/habbletmine";
+  const discordUrl = settings?.["discord_url"] || "https://discord.gg/avance";
   const socialLinks = [
     { label: "Instagram", href: settings?.["instagram_url"] || "#" },
     { label: "TikTok", href: settings?.["tiktok_url"] || "#" },

@@ -17,7 +17,7 @@ O arquivo `Dockerfile` na raiz do projeto utiliza uma estratégia de multi-stage
 O arquivo `docker-compose.yml` gerencia o ciclo de vida do container e injeta as variáveis de ambiente necessárias.
 
 ### 3. Proxy Reverso (Nginx)
-O arquivo `nginx/habbletmine.conf` contém a configuração otimizada para o Nginx com suporte a SSL, Gzip e headers de segurança.
+O arquivo `nginx/avance.conf` contém a configuração otimizada para o Nginx com suporte a SSL, Gzip e headers de segurança.
 
 ## 🚀 Passos de Deploy (VPS Hostinger)
 
@@ -51,15 +51,15 @@ O arquivo `nginx/habbletmine.conf` contém a configuração otimizada para o Ngi
 ### Configuração do Nginx & SSL
 1. **Ativar Configuração:**
    ```bash
-   sudo cp nginx/habbletmine.conf /etc/nginx/sites-available/habbletmine
-   sudo ln -s /etc/nginx/sites-available/habbletmine /etc/nginx/sites-enabled/
+   sudo cp nginx/avance.conf /etc/nginx/sites-available/avance
+   sudo ln -s /etc/nginx/sites-available/avance /etc/nginx/sites-enabled/
    sudo nginx -t && sudo systemctl reload nginx
    ```
 
 2. **HTTPS com Certbot:**
    ```bash
    sudo apt install certbot python3-certbot-nginx
-   sudo certbot --nginx -d habbletmine.com.br -d www.habbletmine.com.br
+   sudo certbot --nginx -d avance.com.br -d www.avance.com.br
    ```
 
 ## 🔄 Procedimentos Operacionais

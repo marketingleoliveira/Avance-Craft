@@ -141,10 +141,10 @@ function StatusPage() {
                 <div>
                   <label className="font-pixel text-[9px] uppercase text-muted-foreground block mb-2">Java Edition</label>
                   <button 
-                    onClick={() => copy(status?.ip ?? "jogar.habbletmine.com.br", 'java')}
+                    onClick={() => copy(status?.ip ?? "jogar.avance.com.br", 'java')}
                     className="pixel-border flex w-full items-center justify-between border-grass-dark bg-grass-dark/10 p-3 text-left hover:bg-grass-dark/20 transition-colors"
                   >
-                    <span className="font-bold truncate">{status?.ip ?? "jogar.habbletmine.com.br"}</span>
+                    <span className="font-bold truncate">{status?.ip ?? "jogar.avance.com.br"}</span>
                     {copiedIp === 'java' ? <Check className="h-4 w-4 text-emerald-block" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
@@ -153,10 +153,10 @@ function StatusPage() {
                   <label className="font-pixel text-[9px] uppercase text-muted-foreground block mb-2">Bedrock Edition</label>
                   <div className="space-y-2">
                   <button 
-                    onClick={() => copy("bedrock.habbletmine.com.br", 'bedrock')}
+                    onClick={() => copy("bedrock.avance.com.br", 'bedrock')}
                     className="pixel-border flex w-full items-center justify-between border-dirt-dark bg-dirt-dark/10 p-3 text-left hover:bg-dirt-dark/20 transition-colors"
                   >
-                    <span className="font-bold truncate">bedrock.habbletmine.com.br</span>
+                    <span className="font-bold truncate">bedrock.avance.com.br</span>
                     {copiedIp === 'bedrock' ? <Check className="h-4 w-4 text-emerald-block" /> : <Copy className="h-4 w-4" />}
                   </button>
                   <div className="flex items-center gap-2 px-1">

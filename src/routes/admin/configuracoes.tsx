@@ -221,7 +221,7 @@ function AdminFlagsPage() {
                   type="email"
                   value={siteSettings['business_email'] || ""}
                   onChange={(e) => setSiteSettings(prev => ({ ...prev, business_email: e.target.value }))}
-                  placeholder="contato@habbletmine.com.br"
+                  placeholder="contato@avance.com.br"
                   className="w-full bg-stone-900 border border-stone-700 p-2 font-sans text-sm text-stone-100 focus:outline-none focus:border-primary"
                 />
               </div>

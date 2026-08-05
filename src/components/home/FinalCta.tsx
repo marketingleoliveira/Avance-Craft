@@ -27,7 +27,7 @@ export function FinalCta() {
           Avance.
         </p>
         <p className="font-pixel mt-5 text-[9px] uppercase text-parchment text-outline sm:text-[11px]">
-          jogar.habbletmine.com.br
+          jogar.avance.com.br
         </p>
         <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
           <PixelButton variant="emerald">Jogar agora</PixelButton>

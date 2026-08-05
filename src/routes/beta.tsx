@@ -221,7 +221,7 @@ function BetaPage() {
                         </div>
                         <div className="p-3 bg-green-500/10 border border-green-500/20 rounded flex items-center gap-3">
                           <span className="w-5 h-5 bg-green-500 text-black text-[10px] font-bold rounded flex items-center justify-center shrink-0">3</span>
-                          <span className="text-xs text-green-200 text-left">Conecte-se ao IP: <code>beta.habbletmine.com</code>.</span>
+                          <span className="text-xs text-green-200 text-left">Conecte-se ao IP: <code>beta.avance.com</code>.</span>
                         </div>
                       </div>
                     </div>
