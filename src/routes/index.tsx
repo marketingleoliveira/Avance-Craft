@@ -163,8 +163,10 @@ function Index() {
                     "Plano de Rollback & Runbook de Emergência",
                     "Estratégia de Reconciliação de Pedidos",
                     "Simulação de Lançamento Concluída (Staging)",
-                    "Smoke Tests & Healthchecks Validados",
+                    "Plano de Ativação Gradual (Phased Rollout)",
+                    "Feature Flags de Governança Configuradas",
                     "🚀 PRONTO PARA LANÇAMENTO V1.0.0"
+
 
 
 
