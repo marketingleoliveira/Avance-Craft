@@ -12,7 +12,8 @@ import { useEffect, type ReactNode, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getServerFlags } from "@/lib/config/flags";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { Lock } from "lucide-react";
+import { Lock, AlertTriangle } from "lucide-react";
+import { isStaging } from "@/lib/config/env.server";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -91,6 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ...(isStaging() ? [{ name: "robots", content: "noindex, nofollow" }] : []),
       { title: "Habblet Mine" },
       { name: "description", content: "Portal do servidor brasileiro Habblet Mine." },
       { property: "og:type", content: "website" },
@@ -185,6 +187,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col bg-background font-sans">
+        {isStaging() && (
+          <div className="bg-amber-500 text-amber-950 py-1 px-4 text-center font-pixel text-[8px] flex items-center justify-center gap-2 sticky top-0 z-[100] shadow-md uppercase">
+            <AlertTriangle className="w-3 h-3" /> Ambiente de Staging — Dados podem ser resetados
+          </div>
+        )}
         <SiteHeader />
         <div className="flex-1">
           <Outlet />
