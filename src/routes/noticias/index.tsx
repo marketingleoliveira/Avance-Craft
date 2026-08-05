@@ -53,7 +53,8 @@ function NewsListPage() {
           {news.map((item) => (
             <Link 
               key={item.id} 
-              to={`/noticias/${item.slug}`} 
+              to="/noticias/$slug"
+              params={{ slug: item.slug }}
               className="group flex flex-col h-full"
             >
               <StonePanel className="flex-1 flex flex-col p-0 overflow-hidden" bodyClassName="p-0 flex flex-col flex-1">
