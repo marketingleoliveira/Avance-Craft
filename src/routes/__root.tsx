@@ -186,16 +186,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background font-sans">
+      <div className="flex min-h-screen flex-col bg-stone-950 font-sans selection:bg-emerald-500/30 selection:text-emerald-400">
         {isStaging() && (
           <div className="bg-amber-500 text-amber-950 py-1 px-4 text-center font-pixel text-[8px] flex items-center justify-center gap-2 sticky top-0 z-[100] shadow-md uppercase">
             <AlertTriangle className="w-3 h-3" /> Ambiente de Staging — Dados podem ser resetados
           </div>
         )}
         <SiteHeader />
-        <div className="flex-1">
+        <main className="flex-1">
           <Outlet />
-        </div>
+        </main>
 
         <SiteFooter />
       </div>
