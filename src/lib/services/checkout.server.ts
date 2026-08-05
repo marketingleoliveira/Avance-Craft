@@ -4,9 +4,8 @@ import { Database } from "@/integrations/supabase/types";
 /**
  * Cria uma preferência de pagamento segura e transacional.
  * REGRAS:
- * - Nunca confia em valores do frontend (preço, desconto, nome).
- * - Valida produtos, cupons e estoque no banco.
- * - Suporta Modo Mock quando as credenciais MP não estão presentes.
+ * - Utiliza process_checkout() RPC para atomicidade total.
+ * - Validação financeira ocorre exclusivamente dentro do banco de dados.
  */
 export async function createCheckoutRequest(
   data: {
@@ -28,128 +27,52 @@ export async function createCheckoutRequest(
   const APP_URL = env.APP_BASE_URL;
   const IS_PROD = isProd();
 
-  // 0. Verificar se a loja está ativa
   if (!flags.STORE_ENABLED) {
     throw new Error("A loja está temporariamente fechada para manutenção.");
   }
 
-  // 1. Validar produtos e calcular valores reais do banco
-  const productIds = data.items.map((i) => i.productId);
-  const { data: products } = await supabase
-    .from("products")
-    .select("*")
-    .in("id", productIds)
-    .eq("active", true);
-
-  if (!products || products.length === 0) {
-    throw new Error("Nenhum produto disponível foi encontrado.");
-  }
-
-  let subtotal = 0;
-  const orderItemsData = data.items.map((item) => {
-    const p = products.find((prod) => prod.id === item.productId);
-    if (!p) throw new Error(`Produto inválido ou inativo: ${item.productId}`);
-    
-    // Preço oficial do banco (centavos ou decimal consistente)
-    const price = p.promotional_price !== null ? Number(p.promotional_price) : Number(p.price);
-    const itemTotal = price * item.quantity;
-    subtotal += itemTotal;
-
-    return {
-      product_id: p.id,
-      product_name: p.name,
-      unit_price: price,
-      quantity: item.quantity,
-      total: itemTotal,
-    };
+  // 1. Chamar RPC Transacional
+  const { data: result, error: rpcError } = await supabase.rpc('process_checkout', {
+    p_nickname: data.nickname,
+    p_edition: data.edition,
+    p_items: data.items,
+    p_coupon_code: data.couponCode || null
   });
 
-  // 2. Validar cupom no servidor
-  let discount = 0;
-  let couponId = null;
-  if (data.couponCode) {
-    const { validateCouponServer } = await import("./coupon-validation.server");
-    const result = await validateCouponServer(data.couponCode, subtotal * 100, userId, supabase);
-    
-    if (result.valid) {
-      couponId = result.couponId;
-      discount = result.discountCents / 100;
-    }
+  if (rpcError) {
+    throw new Error(`Falha técnica no checkout: ${rpcError.message}`);
   }
 
-  const total = Math.round((subtotal - discount) * 100) / 100;
-  const idempotencyKey = crypto.randomUUID();
-
-  // 3. Criar o pedido (Transação implícita via RPC ou sequência de inserts)
-  // Nota: Idealmente usar uma função SQL customizada para garantir atomicidade total
-  
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("user_id", userId)
-    .single();
-
-  const { data: order, error: orderError } = await supabase
-    .from("orders")
-    .insert({
-      profile_id: profile?.id ?? null,
-      minecraft_nickname: data.nickname.trim(),
-      edition: data.edition,
-      status: "pending",
-      subtotal,
-      discount,
-      total: Math.max(0, total),
-      coupon_id: couponId ?? null,
-      idempotency_key: idempotencyKey,
-      payment_provider: "mercadopago"
-    } as any)
-    .select()
-    .single();
-
-  if (orderError) throw new Error(`Falha ao criar pedido: ${orderError.message}`);
-
-  // Registrar uso do cupom se válido
-  if (couponId) {
-    await supabase.from("coupon_uses").insert({
-      coupon_id: couponId,
-      profile_id: profile?.id ?? null,
-      order_id: order.id
-    });
-    
-    // Incrementar contador de usos via update simples já que o RPC não está gerado no TS
-    await supabase.rpc('increment_coupon_uses' as any, { coupon_id: couponId });
+  const checkoutResult = result as any;
+  if (!checkoutResult.success) {
+    throw new Error(checkoutResult.error || "Erro desconhecido no processamento do pedido.");
   }
 
-  // 4. Criar itens do pedido
-  const { error: itemsError } = await supabase
-    .from("order_items")
-    .insert(orderItemsData.map(item => ({ ...item, order_id: order.id })));
+  const orderId = checkoutResult.orderId;
 
-  if (itemsError) {
-    // Tentar deletar pedido órfão (compensação simples)
-    await supabase.from("orders").delete().eq("id", order.id);
-    throw new Error("Falha ao registrar itens do pedido.");
-  }
-
-  // 5. Integração com Mercado Pago ou Modo Mock
+  // 2. Integração com Mercado Pago ou Modo Mock
   if (!MP_ACCESS_TOKEN || !flags.REAL_PAYMENTS_ENABLED) {
     if (IS_PROD) {
-      throw new Error("Configuração de pagamento incompleta ou desabilitada para produção.");
+      throw new Error("Configuração de pagamento incompleta para produção.");
     }
 
-    // Modo Mock para Desenvolvimento ou Staging
     return {
-      orderId: order.id,
-      checkoutUrl: `${APP_URL}/sucesso?mock_order_id=${order.id}`,
+      orderId,
+      checkoutUrl: `${APP_URL}/sucesso?mock_order_id=${orderId}`,
       isMock: true
     };
   }
 
   try {
-    // Aqui seria a chamada real para https://api.mercadopago.com/checkout/preferences
-    // Como não podemos fazer chamadas externas reais sem SDK/fetch verificado,
-    // mantemos a estrutura pronta para injeção.
-    
+    // 3. Buscar dados do pedido gerado para enviar ao MP (Garante sincronia)
+    const { data: orderData } = await supabase
+      .from("orders")
+      .select("*, items:order_items(*)")
+      .eq("id", orderId)
+      .single();
+
+    if (!orderData) throw new Error("Pedido não encontrado após criação.");
+
     const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
       headers: {
@@ -157,13 +80,13 @@ export async function createCheckoutRequest(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        items: orderItemsData.map(item => ({
+        items: orderData.items.map((item: any) => ({
           title: item.product_name,
-          unit_price: item.unit_price,
+          unit_price: Number(item.unit_price),
           quantity: item.quantity,
           currency_id: 'BRL'
         })),
-        external_reference: order.id,
+        external_reference: orderId,
         back_urls: {
           success: `${APP_URL}/sucesso`,
           pending: `${APP_URL}/pendente`,
@@ -177,13 +100,8 @@ export async function createCheckoutRequest(
     const preference = await response.json();
     
     if (preference.init_point) {
-      // Salvar referência externa se necessário
-      await supabase.from("orders").update({ 
-        external_reference: preference.id 
-      }).eq("id", order.id);
-
       return {
-        orderId: order.id,
+        orderId,
         checkoutUrl: preference.init_point,
         isMock: false
       };
@@ -192,14 +110,13 @@ export async function createCheckoutRequest(
     throw new Error("Falha ao gerar preferência no Mercado Pago.");
   } catch (err) {
     console.error("Mercado Pago Error:", err);
-    // Fallback para mock em dev caso a API falhe, ou erro em prod
     if (!IS_PROD) {
       return {
-        orderId: order.id,
-        checkoutUrl: `${APP_URL}/sucesso?mock_order_id=${order.id}`,
+        orderId,
+        checkoutUrl: `${APP_URL}/sucesso?mock_order_id=${orderId}`,
         isMock: true
       };
     }
-    throw new Error("Ocorreu um erro ao processar seu pagamento. Tente novamente.");
+    throw new Error("Erro ao processar pagamento. Tente novamente.");
   }
 }
