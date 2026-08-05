@@ -69,7 +69,7 @@ export async function createCheckoutRequest(
   const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
-      profile_id: (await supabase.from("profiles").select("id").eq("user_id", userId).single()).data?.id,
+      profile_id: (await supabase.from("profiles").select("id").eq("user_id", userId).single()).data?.id ?? null,
       minecraft_nickname: data.nickname,
       edition: data.edition,
       status: "pending",

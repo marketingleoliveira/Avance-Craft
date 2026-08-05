@@ -32,9 +32,10 @@ export const Route = createFileRoute("/api/public/mercadopago")({
             const { data: order } = await supabaseAdmin
               .from("orders")
               .update({ status: "paid", paid_at: new Date().toISOString() })
-              .eq("id", externalReference)
+              .eq("id", externalReference as string)
               .select("*, items:order_items(*)")
               .single();
+
 
             if (order) {
               // 4. Gerar fila de entrega (comandos Minecraft)
@@ -51,9 +52,10 @@ export const Route = createFileRoute("/api/public/mercadopago")({
                     command: cmd.command
                       .replace("{player}", order.minecraft_nickname)
                       .replace("{quantity}", item.quantity.toString()),
-                    status: "queued",
+                    status: "queued" as const,
                     idempotency_key: crypto.randomUUID()
                   }));
+
 
                   await supabaseAdmin.from("delivery_queue").insert(deliveryItems);
                 }

@@ -49,8 +49,9 @@ export async function createCheckout(request: CheckoutRequest): Promise<Checkout
       nickname: request.nickname,
       edition: request.platform,
       items: request.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
-      couponCode: request.coupon
+      couponCode: request.coupon || null
     });
+
 
     return {
       status: "redirect",

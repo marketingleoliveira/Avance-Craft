@@ -16,10 +16,18 @@ export const createPaymentPreference = createServerFn({ method: "POST" })
             quantity: z.number().int().min(1).max(99),
           })
         ),
-        couponCode: z.string().optional(),
+        couponCode: z.string().nullish(),
       })
       .parse(data)
   )
   .handler(async ({ data, context }) => {
-    return createCheckoutRequest(data, context.supabase, context.userId);
+    return createCheckoutRequest(
+      {
+        ...data,
+        couponCode: data.couponCode ?? undefined,
+      },
+      context.supabase,
+      context.userId
+    );
+
   });

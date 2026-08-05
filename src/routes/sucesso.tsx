@@ -12,7 +12,7 @@ export const Route = createFileRoute("/sucesso")({
 function SuccessPage() {
   return (
     <main className="py-20">
-      <Container maxW="600px">
+      <Container className="max-w-[600px]">
         <StonePanel className="text-center p-10">
           <div className="flex justify-center mb-6">
             <CheckCircle2 className="w-16 h-16 text-emerald-block" />

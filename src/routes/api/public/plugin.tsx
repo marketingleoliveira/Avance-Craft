@@ -40,7 +40,7 @@ export const Route = createFileRoute("/api/public/plugin")({
             await supabaseAdmin
               .from("delivery_queue")
               .update({ 
-                status: success ? "delivered" : "failed", 
+                status: (success ? "delivered" : "failed") as any, 
                 delivered_at: success ? new Date().toISOString() : null,
                 last_error: success ? null : response 
               })
