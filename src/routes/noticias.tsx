@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { createFileRoute, Link } from "@tanstack/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { listPublishedNews } from "@/lib/services/content.functions";
