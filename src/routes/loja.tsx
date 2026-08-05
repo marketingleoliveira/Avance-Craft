@@ -81,7 +81,7 @@ function ShopPage() {
                       platforms: ["java", "bedrock"],
                       art: (product.position % 3) as any
                     }}
-                    onBuy={(p: any) => cart.add(p.id)}
+                    onBuy={(p: any) => cart.add(p.id, 1, p)}
                   />
                 ))}
                 

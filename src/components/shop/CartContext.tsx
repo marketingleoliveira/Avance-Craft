@@ -6,10 +6,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { MOCK_COUPONS, type ShopProduct } from "@/data/shop";
+import { MOCK_COUPONS } from "@/data/shop";
 import type { Platform } from "@/lib/payments/checkout-service";
+import type { ShopProduct } from "@/data/shop";
 
-export type CartLine = { productId: string; quantity: number };
+export type CartLine = { productId: string; quantity: number; product?: any };
 
 type CartContextValue = {
   nickname: string;
@@ -20,7 +21,7 @@ type CartContextValue = {
   setConfirmed: (value: boolean) => void;
   lines: CartLine[];
   detailed: { product: ShopProduct; quantity: number }[];
-  add: (productId: string, quantity?: number) => void;
+  add: (productId: string, quantity?: number, productData?: any) => void;
   setQuantity: (productId: string, quantity: number) => void;
   remove: (productId: string) => void;
   clear: () => void;
@@ -53,7 +54,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setConfirmed(false);
   }, []);
 
-  const add = useCallback((productId: string, quantity = 1) => {
+  const add = useCallback((productId: string, quantity = 1, productData?: any) => {
     setLines((prev) => {
       const existing = prev.find((line) => line.productId === productId);
       if (existing) {
@@ -63,7 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             : line,
         );
       }
-      return [...prev, { productId, quantity }];
+      return [...prev, { productId, quantity, product: productData }];
     });
   }, []);
 
@@ -99,11 +100,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return false;
   }, [coupon]);
 
-  // TODO: Em um sistema real com TanStack Query, buscaríamos esses produtos do cache global
-  // ou passaríamos o objeto completo no add. Por enquanto, retornamos vazio para evitar erros.
   const detailed = useMemo(
-    () => [] as { product: ShopProduct; quantity: number }[],
-    [],
+    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as ShopProduct, quantity: l.quantity })),
+    [lines],
   );
 
   const subtotalCents = useMemo(
