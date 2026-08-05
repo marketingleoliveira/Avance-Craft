@@ -4,6 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
 import { Newspaper, ChevronRight, Activity, Trophy, Users, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
@@ -176,18 +177,13 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                         {row.display_value}
                       </p>
                     </div>
-                  </article>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </aside>
-      </div>
-    </Container>
-  </section>
-);
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(" ");
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </Container>
+    </section>
+  );
 }
