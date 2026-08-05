@@ -127,7 +127,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     const news: any[] = [
       { 
         category_id: newsCatMap["novidades"]!, 
-        slug: "habblet-mine-chegando", 
+        slug: "avance-chegando", 
         title: "Avance está chegando", 
         excerpt: "O maior servidor brasileiro está em fase final de testes.",
         content: "Prepare-se para uma experiência única...",
