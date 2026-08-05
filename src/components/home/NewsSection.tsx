@@ -4,6 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
 import { Newspaper, ChevronRight, Activity, Trophy, Users, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 import news1 from "@/assets/news-1.jpg";
