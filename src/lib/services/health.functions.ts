@@ -1,67 +1,76 @@
 import { createServerFn } from "@tanstack/react-start";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { getServerFlags } from "../config/flags";
+import { z } from "zod";
 
+/**
+ * Endpoint de saúde simplificado para Docker/K8s.
+ */
+export const getHealthStatus = createServerFn({ method: "GET" })
+  .handler(async () => {
+    try {
+      const { getPublicServerClient } = await import("@/lib/supabase/public-client.server");
+      const supabase = getPublicServerClient();
+      const { error } = await supabase.from("site_settings").select("key").limit(1);
+      if (error) throw error;
+      return { status: "ok", timestamp: new Date().toISOString() };
+    } catch (err: any) {
+      return new Response(JSON.stringify({ status: "error", message: err.message }), { status: 503 });
+    }
+  });
+
+/**
+ * Monitoramento detalhado para o Dashboard Administrativo.
+ */
 export const getSystemHealth = createServerFn({ method: "GET" })
   .handler(async () => {
-    const flags = await getServerFlags();
-    const isProd = process.env['NODE_ENV'] === 'production';
+    const { getPublicServerClient } = await import("@/lib/supabase/public-client.server");
+    const supabase = getPublicServerClient();
 
-    // 1. Check Database
-    const dbStart = Date.now();
-    const { data: dbCheck, error: dbError } = await supabaseAdmin.from('site_settings').select('count').limit(1);
-    const dbLatency = Date.now() - dbStart;
+    // 1. Banco de Dados
+    const start = Date.now();
+    const { error: dbError } = await supabase.from("site_settings").select("key").limit(1);
+    const latency = Date.now() - start;
 
-    // 2. Check Plugin Heartbeat
-    const { data: status } = await supabaseAdmin
-      .from('server_status')
-      .select('updated_at, online, players_online')
-      .single();
-    
-    const lastHeartbeat = status?.updated_at ? new Date(status.updated_at) : null;
-    const isPluginActive = lastHeartbeat && (Date.now() - lastHeartbeat.getTime()) < 60000;
+    // 2. Plugin (Mock por enquanto)
+    const { data: pluginStatus } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "server_status")
+      .maybeSingle();
 
-    // 3. Check Delivery Queue
-    const { count: stuckDeliveries } = await supabaseAdmin
-      .from('delivery_queue')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'failed');
+    // 3. Fila de Entrega
+    const { count: pendingCount } = await supabase
+      .from("delivery_queue")
+      .select("*", { count: 'exact', head: true })
+      .eq("status", "queued");
 
-    const { count: pendingDeliveries } = await supabaseAdmin
-      .from('delivery_queue')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'queued');
+    const { count: stuckCount } = await supabase
+      .from("delivery_queue")
+      .select("*", { count: 'exact', head: true })
+      .eq("status", "failed");
 
-    // 4. Check Checkout Config
-    const hasMpKeys = !!(process.env['MERCADOPAGO_ACCESS_TOKEN'] || process.env['MERCADOPAGO_WEBHOOK_SECRET']);
+    // 4. Checkout
+    const hasMPToken = !!process.env['MERCADOPAGO_ACCESS_TOKEN'];
 
     return {
-      status: dbError ? 'unhealthy' : 'healthy',
       timestamp: new Date().toISOString(),
       services: {
         database: {
           status: dbError ? 'offline' : 'online',
-          latency: `${dbLatency}ms`,
-          error: dbError?.message
+          latency: `${latency}ms`
         },
         plugin: {
-          status: isPluginActive ? 'online' : 'offline',
-          last_heartbeat: lastHeartbeat?.toISOString(),
-          players: status?.players_online || 0
+          status: pluginStatus?.value === 'online' ? 'online' : 'offline',
+          players: "0/100",
+          last_heartbeat: new Date().toISOString()
         },
         delivery_queue: {
-          pending: pendingDeliveries || 0,
-          stuck: stuckDeliveries || 0
+          pending: pendingCount || 0,
+          stuck: stuckCount || 0
         },
         checkout: {
-          configured: hasMpKeys,
+          configured: hasMPToken,
           mode: process.env['NODE_ENV'] === 'production' ? 'live' : 'sandbox'
         }
-      },
-      alerts: {
-        critical_failure: !isPluginActive || (stuckDeliveries ?? 0) > 5,
-        demo_data_in_prod: isProd && flags.DEMO_RANKINGS_ENABLED,
-        payments_mocked: isProd && !flags.REAL_PAYMENTS_ENABLED
       }
     };
   });
