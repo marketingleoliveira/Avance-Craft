@@ -128,7 +128,7 @@ function AdminDashboard() {
               <span className="text-xs font-pixel uppercase text-muted-foreground flex items-center gap-2">
                 <Server className="h-3 w-3" /> Plugin / Heartbeat
               </span>
-              <Badge variant={metrics?.health.pluginStatus === 'online' ? "success" : "destructive"} className="font-pixel text-[8px]">
+              <Badge variant={metrics?.health.pluginStatus === 'online' ? "secondary" : "destructive"} className="font-pixel text-[8px] bg-emerald-block/20 text-emerald-block border-emerald-block/30">
                 {metrics?.health.pluginStatus === 'online' ? "ONLINE" : "OFFLINE"}
               </Badge>
             </div>
@@ -136,13 +136,13 @@ function AdminDashboard() {
               <span className="text-xs font-pixel uppercase text-muted-foreground flex items-center gap-2">
                 <Activity className="h-3 w-3" /> Banco de Dados
               </span>
-              <Badge variant="success" className="font-pixel text-[8px]">ESTÁVEL</Badge>
+              <Badge variant="secondary" className="font-pixel text-[8px] bg-emerald-block/20 text-emerald-block border-emerald-block/30">ESTÁVEL</Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs font-pixel uppercase text-muted-foreground flex items-center gap-2">
                 <CreditCard className="h-3 w-3" /> Mercado Pago
               </span>
-              <Badge variant="success" className="font-pixel text-[8px]">OPERACIONAL</Badge>
+              <Badge variant="secondary" className="font-pixel text-[8px] bg-emerald-block/20 text-emerald-block border-emerald-block/30">OPERACIONAL</Badge>
             </div>
             <div className="pt-2 border-t border-black/5">
               <p className="text-[10px] text-muted-foreground flex items-center gap-1">
@@ -185,21 +185,19 @@ function AdminDashboard() {
           label="Usuários Totais" 
           value={metrics?.users.total.toString() || "0"} 
           icon={Users}
-          variant="secondary"
         />
         <AdminStatCard 
           label="Contas Vinculadas" 
           value={metrics?.users.linked.toString() || "0"} 
           icon={Activity}
-          variant="secondary"
         />
         <AdminStatCard 
           label="Pagamentos Pendentes" 
           value={metrics?.finance.pending.toString() || "0"} 
           icon={ShoppingBag}
-          variant="secondary"
         />
       </div>
+
     </div>
   );
 }
