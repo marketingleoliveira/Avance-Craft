@@ -38,8 +38,10 @@ import { Route as AdminRankingRouteImport } from './routes/admin/ranking'
 import { Route as AdminServidoresRouteImport } from './routes/admin/servidores'
 import { Route as AdminTicketsRouteImport } from './routes/admin/tickets'
 import { Route as AdminUsuariosRouteImport } from './routes/admin/usuarios'
+import { Route as AdminCategoriasNewRouteImport } from './routes/admin/categorias/new'
 import { Route as ApiPublicMercadopagoRouteImport } from './routes/api/public/mercadopago'
 import { Route as ApiPublicPluginRouteImport } from './routes/api/public/plugin'
+import { Route as AdminCategoriasCategoryIdEditRouteImport } from './routes/admin/categorias/$categoryId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -186,6 +188,11 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCategoriasNewRoute = AdminCategoriasNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminCategoriasRoute,
+} as any)
 const ApiPublicMercadopagoRoute = ApiPublicMercadopagoRouteImport.update({
   id: '/api/public/mercadopago',
   path: '/api/public/mercadopago',
@@ -196,6 +203,12 @@ const ApiPublicPluginRoute = ApiPublicPluginRouteImport.update({
   path: '/api/public/plugin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCategoriasCategoryIdEditRoute =
+  AdminCategoriasCategoryIdEditRouteImport.update({
+    id: '/$categoryId/edit',
+    path: '/$categoryId/edit',
+    getParentRoute: () => AdminCategoriasRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -213,7 +226,7 @@ export interface FileRoutesByFullPath {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
-  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/categorias': typeof AdminCategoriasRouteWithChildren
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -227,8 +240,10 @@ export interface FileRoutesByFullPath {
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/categorias/new': typeof AdminCategoriasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -245,7 +260,7 @@ export interface FileRoutesByTo {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
-  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/categorias': typeof AdminCategoriasRouteWithChildren
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -259,8 +274,10 @@ export interface FileRoutesByTo {
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/categorias/new': typeof AdminCategoriasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -279,7 +296,7 @@ export interface FileRoutesById {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
-  '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/categorias': typeof AdminCategoriasRouteWithChildren
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -293,8 +310,10 @@ export interface FileRoutesById {
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/categorias/new': typeof AdminCategoriasNewRoute
   '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
   '/api/public/plugin': typeof ApiPublicPluginRoute
+  '/admin/categorias/$categoryId/edit': typeof AdminCategoriasCategoryIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -328,8 +347,10 @@ export interface FileRouteTypes {
     | '/admin/tickets'
     | '/admin/usuarios'
     | '/admin/'
+    | '/admin/categorias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/categorias/$categoryId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -360,8 +381,10 @@ export interface FileRouteTypes {
     | '/admin/tickets'
     | '/admin/usuarios'
     | '/admin'
+    | '/admin/categorias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/categorias/$categoryId/edit'
   id:
     | '__root__'
     | '/'
@@ -393,8 +416,10 @@ export interface FileRouteTypes {
     | '/admin/tickets'
     | '/admin/usuarios'
     | '/admin/'
+    | '/admin/categorias/new'
     | '/api/public/mercadopago'
     | '/api/public/plugin'
+    | '/admin/categorias/$categoryId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -621,6 +646,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/categorias/new': {
+      id: '/admin/categorias/new'
+      path: '/new'
+      fullPath: '/admin/categorias/new'
+      preLoaderRoute: typeof AdminCategoriasNewRouteImport
+      parentRoute: typeof AdminCategoriasRoute
+    }
     '/api/public/mercadopago': {
       id: '/api/public/mercadopago'
       path: '/api/public/mercadopago'
@@ -635,12 +667,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPluginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/categorias/$categoryId/edit': {
+      id: '/admin/categorias/$categoryId/edit'
+      path: '/$categoryId/edit'
+      fullPath: '/admin/categorias/$categoryId/edit'
+      preLoaderRoute: typeof AdminCategoriasCategoryIdEditRouteImport
+      parentRoute: typeof AdminCategoriasRoute
+    }
   }
 }
 
+interface AdminCategoriasRouteChildren {
+  AdminCategoriasNewRoute: typeof AdminCategoriasNewRoute
+  AdminCategoriasCategoryIdEditRoute: typeof AdminCategoriasCategoryIdEditRoute
+}
+
+const AdminCategoriasRouteChildren: AdminCategoriasRouteChildren = {
+  AdminCategoriasNewRoute: AdminCategoriasNewRoute,
+  AdminCategoriasCategoryIdEditRoute: AdminCategoriasCategoryIdEditRoute,
+}
+
+const AdminCategoriasRouteWithChildren = AdminCategoriasRoute._addFileChildren(
+  AdminCategoriasRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
-  AdminCategoriasRoute: typeof AdminCategoriasRoute
+  AdminCategoriasRoute: typeof AdminCategoriasRouteWithChildren
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
@@ -658,7 +711,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
-  AdminCategoriasRoute: AdminCategoriasRoute,
+  AdminCategoriasRoute: AdminCategoriasRouteWithChildren,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
