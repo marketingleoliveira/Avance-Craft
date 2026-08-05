@@ -52,6 +52,134 @@ export type Database = {
           },
         ]
       }
+      beta_feedback: {
+        Row: {
+          actual_result: string | null
+          assigned_to: string | null
+          attachments: string[] | null
+          contact_consent: boolean | null
+          created_at: string | null
+          description: string
+          device_info: string | null
+          edition: Database["public"]["Enums"]["minecraft_edition"] | null
+          expected_result: string | null
+          id: string
+          internal_notes: string | null
+          minecraft_nickname: string | null
+          profile_id: string
+          release_tag: string | null
+          server_id: string | null
+          severity: Database["public"]["Enums"]["feedback_severity"]
+          status: Database["public"]["Enums"]["feedback_status"]
+          steps_to_reproduce: string | null
+          tags: string[] | null
+          title: string
+          type: Database["public"]["Enums"]["feedback_type"]
+          updated_at: string | null
+          version: string | null
+        }
+        Insert: {
+          actual_result?: string | null
+          assigned_to?: string | null
+          attachments?: string[] | null
+          contact_consent?: boolean | null
+          created_at?: string | null
+          description: string
+          device_info?: string | null
+          edition?: Database["public"]["Enums"]["minecraft_edition"] | null
+          expected_result?: string | null
+          id?: string
+          internal_notes?: string | null
+          minecraft_nickname?: string | null
+          profile_id: string
+          release_tag?: string | null
+          server_id?: string | null
+          severity?: Database["public"]["Enums"]["feedback_severity"]
+          status?: Database["public"]["Enums"]["feedback_status"]
+          steps_to_reproduce?: string | null
+          tags?: string[] | null
+          title: string
+          type: Database["public"]["Enums"]["feedback_type"]
+          updated_at?: string | null
+          version?: string | null
+        }
+        Update: {
+          actual_result?: string | null
+          assigned_to?: string | null
+          attachments?: string[] | null
+          contact_consent?: boolean | null
+          created_at?: string | null
+          description?: string
+          device_info?: string | null
+          edition?: Database["public"]["Enums"]["minecraft_edition"] | null
+          expected_result?: string | null
+          id?: string
+          internal_notes?: string | null
+          minecraft_nickname?: string | null
+          profile_id?: string
+          release_tag?: string | null
+          server_id?: string | null
+          severity?: Database["public"]["Enums"]["feedback_severity"]
+          status?: Database["public"]["Enums"]["feedback_status"]
+          steps_to_reproduce?: string | null
+          tags?: string[] | null
+          title?: string
+          type?: Database["public"]["Enums"]["feedback_type"]
+          updated_at?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beta_feedback_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      beta_feedback_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          feedback_id: string
+          id: string
+          is_internal: boolean | null
+          profile_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          feedback_id: string
+          id?: string
+          is_internal?: boolean | null
+          profile_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          feedback_id?: string
+          id?: string
+          is_internal?: boolean | null
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beta_feedback_comments_feedback_id_fkey"
+            columns: ["feedback_id"]
+            isOneToOne: false
+            referencedRelation: "beta_feedback"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beta_feedback_comments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beta_invites: {
         Row: {
           active: boolean | null
@@ -1126,6 +1254,26 @@ export type Database = {
         | "delivered"
         | "failed"
         | "cancelled"
+      feedback_severity: "low" | "medium" | "high" | "critical"
+      feedback_status:
+        | "new"
+        | "triaged"
+        | "confirmed"
+        | "in_progress"
+        | "resolved"
+        | "rejected"
+        | "duplicate"
+      feedback_type:
+        | "bug"
+        | "suggestion"
+        | "economy"
+        | "performance"
+        | "bedrock"
+        | "java"
+        | "interface"
+        | "shop"
+        | "delivery"
+        | "other"
       minecraft_edition: "java" | "bedrock"
       order_status:
         | "pending"
@@ -1278,6 +1426,28 @@ export const Constants = {
         "delivered",
         "failed",
         "cancelled",
+      ],
+      feedback_severity: ["low", "medium", "high", "critical"],
+      feedback_status: [
+        "new",
+        "triaged",
+        "confirmed",
+        "in_progress",
+        "resolved",
+        "rejected",
+        "duplicate",
+      ],
+      feedback_type: [
+        "bug",
+        "suggestion",
+        "economy",
+        "performance",
+        "bedrock",
+        "java",
+        "interface",
+        "shop",
+        "delivery",
+        "other",
       ],
       minecraft_edition: ["java", "bedrock"],
       order_status: [
