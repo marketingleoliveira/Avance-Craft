@@ -1,5 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { validateMinecraftNickname } from "./minecraft-validator.server";
+import { logger } from "../config/logger.server";
 
 import { Database } from "@/integrations/supabase/types";
 
@@ -30,12 +31,17 @@ export async function createCheckoutRequest(
   const IS_PROD = isProd();
 
   if (!flags.STORE_ENABLED) {
+    await logger.warn("checkout", "Tentativa de compra com loja desativada", { userId, context: { data } });
     throw new Error("A loja está temporariamente fechada para manutenção.");
   }
 
   // 1. Validar Nickname Minecraft
   const mcValidation = await validateMinecraftNickname(data.nickname, data.edition);
   if (!mcValidation.valid) {
+    await logger.info("checkout", "Nickname inválido no checkout", { 
+      userId, 
+      context: { nickname: data.nickname, error: mcValidation.error } 
+    });
     throw new Error(`Nickname inválido: ${mcValidation.error}`);
   }
 
@@ -52,11 +58,16 @@ export async function createCheckoutRequest(
   });
 
   if (rpcError) {
+    await logger.error("checkout", "Falha na RPC process_checkout", rpcError, { userId, context: { data } });
     throw new Error(`Falha técnica no checkout: ${rpcError.message}`);
   }
 
   const checkoutResult = result as any;
   if (!checkoutResult.success) {
+    await logger.warn("checkout", "Checkout rejeitado pela lógica do banco", { 
+      userId, 
+      context: { error: checkoutResult.error, data } 
+    });
     throw new Error(checkoutResult.error || "Erro desconhecido no processamento do pedido.");
   }
 
@@ -64,7 +75,9 @@ export async function createCheckoutRequest(
 
   // 2. Integração com Mercado Pago ou Modo Mock
   if (!MP_ACCESS_TOKEN || !flags.REAL_PAYMENTS_ENABLED) {
+    await logger.info("checkout", "Checkout concluído em modo MOCK", { orderId, userId });
     if (IS_PROD) {
+      await logger.critical("checkout", "Tentativa de checkout MOCK em produção!", { orderId, userId });
       throw new Error("Configuração de pagamento incompleta para produção.");
     }
 
@@ -111,17 +124,17 @@ export async function createCheckoutRequest(
 
     const preference = await response.json();
     
-    if (preference.init_point) {
-      return {
-        orderId,
-        checkoutUrl: preference.init_point,
-        isMock: false
-      };
-    }
+    await logger.info("checkout", "Preferência Mercado Pago gerada", { orderId, userId });
+    
+    return {
+      orderId,
+      checkoutUrl: preference.init_point,
+      isMock: false
+    };
     
     throw new Error("Falha ao gerar preferência no Mercado Pago.");
   } catch (err) {
-    console.error("Mercado Pago Error:", err);
+    await logger.error("checkout", "Erro na integração com Mercado Pago", err, { orderId, userId });
     if (!IS_PROD) {
       return {
         orderId,
