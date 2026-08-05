@@ -143,6 +143,5 @@ function ShopPage() {
         <SiteFooter />
       </ScrollReveal>
     </div>
-    </div>
   );
 }
