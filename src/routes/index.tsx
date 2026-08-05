@@ -161,7 +161,11 @@ function Index() {
                     "Política de Backup & Restore Definida",
                     "PITR & Snapshots Externos Agendados",
                     "Plano de Rollback & Runbook de Emergência",
-                    "Estratégia de Reconciliação de Pedidos"
+                    "Estratégia de Reconciliação de Pedidos",
+                    "Simulação de Lançamento Concluída (Staging)",
+                    "Smoke Tests & Healthchecks Validados",
+                    "🚀 PRONTO PARA LANÇAMENTO V1.0.0"
+
 
 
 
