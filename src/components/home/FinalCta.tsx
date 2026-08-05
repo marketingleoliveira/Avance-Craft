@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { MOCK_SERVER } from "@/data/mock";
+
 import landscape from "@/assets/voxel-landscape.jpg";
 
 export function FinalCta() {
@@ -27,7 +27,7 @@ export function FinalCta() {
           Habblet Mine.
         </p>
         <p className="font-pixel mt-5 text-[9px] uppercase text-parchment text-outline sm:text-[11px]">
-          {MOCK_SERVER.ip}
+          jogar.habbletmine.com.br
         </p>
         <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
           <PixelButton variant="emerald">Jogar agora</PixelButton>

@@ -3,7 +3,17 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X, User, Play } from "lucide-react";
 import { Container } from "@/components/ui-kit/Container";
 import { StatusBar } from "@/components/layout/StatusBar";
-import { NAV_LINKS } from "@/data/mock";
+const NAV_LINKS = [
+  { label: "Início", to: "/" },
+  { label: "Loja", to: "/loja" },
+  { label: "Notícias", to: "/noticias" },
+  { label: "Ranking", to: "/ranking" },
+  { label: "Como Jogar", to: "/como-jogar" },
+  { label: "Regras", to: "/regras" },
+  { label: "Equipe", to: "/equipe" },
+  { label: "Suporte", to: "/suporte" },
+] as const;
+
 import grassDirt from "@/assets/tex-grass-dirt.jpg";
 import wood from "@/assets/tex-wood.jpg";
 import stone from "@/assets/tex-stone.jpg";

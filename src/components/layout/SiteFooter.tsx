@@ -1,10 +1,29 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { BlockDivider } from "@/components/ui-kit/BlockDivider";
-import { NAV_LINKS, MOCK_SERVER, SOCIAL_LINKS } from "@/data/mock";
+
+
+const NAV_LINKS = [
+  { label: "Início", to: "/" },
+  { label: "Loja", to: "/loja" },
+  { label: "Notícias", to: "/noticias" },
+  { label: "Ranking", to: "/ranking" },
+  { label: "Como Jogar", to: "/como-jogar" },
+  { label: "Regras", to: "/regras" },
+  { label: "Equipe", to: "/equipe" },
+  { label: "Suporte", to: "/suporte" },
+] as const;
+
+const SOCIAL_LINKS = [
+  { label: "Discord", href: "https://discord.gg/habbletmine" },
+  { label: "Instagram", href: "#" },
+  { label: "TikTok", href: "#" },
+  { label: "YouTube", href: "#" },
+] as const;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
+
 
   return (
     <footer className="mt-16">
@@ -22,8 +41,9 @@ export function SiteFooter() {
               e eventos.
             </p>
             <p className="mt-3 break-all bg-black/25 p-2 text-sm font-semibold">
-              {MOCK_SERVER.ip}
+              jogar.habbletmine.com.br
             </p>
+
           </div>
 
           <nav aria-label="Rodapé">
@@ -81,8 +101,9 @@ export function SiteFooter() {
         <div className="border-t-4 border-black/25">
           <Container className="py-4">
             <p className="text-xs text-parchment/70">
-              © {year} Habblet Mine. Conteúdo ilustrativo — dados de exemplo.
+              © {year} Habblet Mine. Servidor brasileiro de blocos.
             </p>
+
           </Container>
         </div>
       </div>

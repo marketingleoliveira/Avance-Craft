@@ -3,7 +3,24 @@ import { Container } from "@/components/ui-kit/Container";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { MOCK_STEPS } from "@/data/mock";
+const STEPS = [
+  {
+    step: "01",
+    title: "Abra o Minecraft",
+    text: "Use a versão Java ou Bedrock compatível listada na barra de status.",
+  },
+  {
+    step: "02",
+    title: "Adicione jogar.habbletmine.com.br",
+    text: "No menu multijogador, adicione o endereço oficial do Habblet Mine.",
+  },
+  {
+    step: "03",
+    title: "Entre e comece sua aventura",
+    text: "Escolha um modo de jogo no saguão e faça sua primeira construção.",
+  },
+];
+
 
 export function HowToPlay() {
   return (
@@ -12,7 +29,7 @@ export function HowToPlay() {
         <WoodSign subtitle="Três passos para entrar no servidor.">Como jogar</WoodSign>
 
         <ol className="mt-10 grid gap-6 md:grid-cols-3">
-          {MOCK_STEPS.map((step) => (
+          {STEPS.map((step) => (
             <li key={step.step}>
               <StonePanel>
                 <span className="font-pixel pixel-border border-dirt-dark bg-wood grid h-11 w-11 place-items-center text-[10px] text-dirt-dark">

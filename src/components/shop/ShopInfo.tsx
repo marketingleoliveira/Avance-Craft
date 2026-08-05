@@ -1,5 +1,27 @@
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { SHOP_FAQ } from "@/data/shop";
+const SHOP_FAQ = [
+  {
+    q: "Em quanto tempo recebo minha compra?",
+    a: "Assim que o pagamento for confirmado, os itens são entregues automaticamente na conta do nick informado.",
+  },
+  {
+    q: "Preciso estar online para receber?",
+    a: "Não. As entregas ficam pendentes e são aplicadas no seu próximo login.",
+  },
+  {
+    q: "Errei meu nick, e agora?",
+    a: "Abra um chamado no suporte com o comprovante. Correções de nick são feitas manualmente pela equipe.",
+  },
+  {
+    q: "Java e Bedrock recebem os mesmos itens?",
+    a: "A maioria sim. Alguns cosméticos dependem de recursos exclusivos da edição Java e estão marcados no produto.",
+  },
+  {
+    q: "Posso pedir reembolso?",
+    a: "Sim, dentro de 7 dias da compra, conforme o Código de Defesa do Consumidor, desde que os benefícios não tenham sido consumidos.",
+  },
+];
+
 import {
   Accordion,
   AccordionContent,
