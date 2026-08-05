@@ -31,7 +31,7 @@ function NewsCard({ item }: { item: any }) {
         />
         <div className="min-w-0">
           <span className="font-pixel pixel-border border-grass-dark bg-grass px-2 py-1 text-[8px] uppercase text-primary-foreground">
-            {item.category}
+            {item.category?.name || "Geral"}
           </span>
           <h3 className="mt-3 text-lg font-extrabold leading-tight">{item.title}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -60,13 +60,21 @@ function SidebarRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+const DEFAULT_STATUS = {
+  online: true,
+  players_online: 0,
+  max_players: 100,
+  version: "1.21+",
+  ip: "jogar.habbletmine.com.br"
+};
+
 export function NewsSection() {
   const { data: news } = useSuspenseQuery({
     queryKey: ["published-news", 3],
     queryFn: () => listPublishedNews({ data: { limit: 3 } }),
   });
 
-  const { data: status } = useSuspenseQuery({
+  const { data: serverStatus } = useSuspenseQuery({
     queryKey: ["server-status"],
     queryFn: () => getServerStatus(),
   });
@@ -75,6 +83,9 @@ export function NewsSection() {
     queryKey: ["rankings", "ricos", "weekly", 3],
     queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 3 } }),
   });
+
+  const status = serverStatus ?? DEFAULT_STATUS;
+  const statusKey = status.online ? "online" : "offline";
 
   return (
     <section className="py-14">
@@ -98,10 +109,10 @@ export function NewsSection() {
           <aside className="grid content-start gap-6">
             <StonePanel title="Status do servidor">
               <ul className="grid">
-                <SidebarRow label="Servidor" value={statusLabel[status.status] || "Offline"} />
+                <SidebarRow label="Servidor" value={statusLabel[statusKey] || "Offline"} />
                 <SidebarRow
                   label="Jogadores"
-                  value={`${status.players_online}/${status.max_slots}`}
+                  value={`${status.players_online}/${status.max_players}`}
                 />
                 <SidebarRow label="Modo" value="Survival" />
                 <SidebarRow label="Versão" value={status.version} />

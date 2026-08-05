@@ -21,11 +21,22 @@ function StatusChip({ label, value }: { label: string; value: string }) {
   );
 }
 
+const DEFAULT_STATUS = {
+  online: true,
+  players_online: 0,
+  max_players: 100,
+  version: "1.21+",
+  ip: "jogar.habbletmine.com.br"
+};
+
 export function StatusBar() {
-  const { data: status } = useSuspenseQuery({
+  const { data: serverStatus } = useSuspenseQuery({
     queryKey: ["server-status"],
     queryFn: () => getServerStatus(),
   });
+
+  const status = serverStatus ?? DEFAULT_STATUS;
+  const statusKey = status.online ? "online" : "offline";
 
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -50,11 +61,9 @@ export function StatusBar() {
           <div className="flex shrink-0 items-center gap-2 whitespace-nowrap border-r-2 border-parchment/15 pr-4">
             <span
               className={`h-3 w-3 shrink-0 ${
-                status.status === "online"
+                status.online
                   ? "bg-emerald-block"
-                  : status.status === "manutencao"
-                    ? "bg-wood"
-                    : "bg-destructive"
+                  : "bg-destructive"
               }`}
               aria-hidden
             />
@@ -62,12 +71,12 @@ export function StatusBar() {
               Servidor
             </span>
             <span className="text-xs font-bold sm:text-sm">
-              {statusLabel[status.status] || "Offline"}
+              {statusLabel[statusKey] || "Offline"}
             </span>
           </div>
           <StatusChip
             label="Jogadores"
-            value={`${status.players_online}/${status.max_slots}`}
+            value={`${status.players_online}/${status.max_players}`}
           />
           <StatusChip label="Modo" value="Survival" />
           <StatusChip label="Versão" value={status.version} />

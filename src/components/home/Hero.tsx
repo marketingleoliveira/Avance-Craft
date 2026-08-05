@@ -48,12 +48,21 @@ function Character({ src, alt, className }: CharacterProps) {
   );
 }
 
+const DEFAULT_STATUS = {
+  online: true,
+  players_online: 0,
+  max_players: 100,
+  version: "1.21+",
+  ip: "jogar.habbletmine.com.br"
+};
+
 export function Hero() {
-  const { data: status } = useSuspenseQuery({
+  const { data: serverStatus } = useSuspenseQuery({
     queryKey: ["server-status"],
     queryFn: () => getServerStatus(),
   });
 
+  const status = serverStatus ?? DEFAULT_STATUS;
   const HERO_FACTS = ["Java e Bedrock", `Versão ${status.version}`, "Servidor brasileiro"];
 
   return (
