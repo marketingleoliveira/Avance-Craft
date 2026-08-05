@@ -4,6 +4,9 @@ import { getServerFlags } from "../config/flags";
 
 export const getSystemHealth = createServerFn({ method: "GET" })
   .handler(async () => {
+    const flags = await getServerFlags();
+    const isProd = process.env['NODE_ENV'] === 'production';
+
     // 1. Check Database
     const dbStart = Date.now();
     const { data: dbCheck, error: dbError } = await supabaseAdmin.from('site_settings').select('count').limit(1);
@@ -30,7 +33,7 @@ export const getSystemHealth = createServerFn({ method: "GET" })
       .eq('status', 'queued');
 
     // 4. Check Checkout Config
-    const hasMpKeys = !!(process.env['MP_ACCESS_TOKEN'] || process.env['VITE_MP_PUBLIC_KEY']);
+    const hasMpKeys = !!(process.env['MERCADOPAGO_ACCESS_TOKEN'] || process.env['MERCADOPAGO_WEBHOOK_SECRET']);
 
     return {
       status: dbError ? 'unhealthy' : 'healthy',
@@ -54,6 +57,11 @@ export const getSystemHealth = createServerFn({ method: "GET" })
           configured: hasMpKeys,
           mode: process.env['NODE_ENV'] === 'production' ? 'live' : 'sandbox'
         }
+      },
+      alerts: {
+        critical_failure: !isPluginActive || (stuckDeliveries ?? 0) > 5,
+        demo_data_in_prod: isProd && flags.DEMO_RANKINGS_ENABLED,
+        payments_mocked: isProd && !flags.REAL_PAYMENTS_ENABLED
       }
     };
   });

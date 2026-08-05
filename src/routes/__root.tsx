@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { checkSystemHealth } from "@/lib/config/health-check.functions";
 import {
   Outlet,
   Link,
@@ -133,6 +134,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    // Perform startup health and config validation
+    checkSystemHealth().then(health => {
+      if (health.status === 'unhealthy') {
+        console.error('System health check failed:', health.error);
+      }
+    });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
