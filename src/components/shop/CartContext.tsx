@@ -25,7 +25,7 @@ type CartContextValue = {
   confirmed: boolean;
   setConfirmed: (value: boolean) => void;
   lines: CartLine[];
-  detailed: { product: ShopProduct; quantity: number }[];
+  detailed: { product: any; quantity: number }[];
   add: (productId: string, quantity?: number, productData?: any) => void;
   setQuantity: (productId: string, quantity: number) => void;
   remove: (productId: string) => void;
