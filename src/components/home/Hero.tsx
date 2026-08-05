@@ -24,20 +24,20 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
       <Container className="relative z-20 pt-20">
         <div className="flex flex-col items-center text-center">
           {/* Main Logo / Title */}
-          <div className="space-y-4 mb-8">
-            <h1 className="text-8xl md:text-[12rem] font-black tracking-tighter text-white uppercase italic leading-[0.8] drop-shadow-2xl animate-in fade-in zoom-in-95 duration-1000">
+          <div className="space-y-6 mb-12">
+            <h1 className="text-9xl md:text-[14rem] font-[900] tracking-[-0.05em] text-white uppercase italic leading-[0.75] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in-95 duration-1000">
               Avance
             </h1>
-            <div className="h-1.5 w-32 bg-emerald-500 mx-auto rounded-full shadow-[0_0_20px_rgba(16,185,129,0.5)]" />
+            <div className="h-2 w-48 bg-emerald-500 mx-auto rounded-full shadow-[0_0_30px_rgba(16,185,129,0.6)]" />
           </div>
 
           {/* Headlines */}
-          <div className="max-w-3xl space-y-6 mb-12">
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
+          <div className="max-w-4xl space-y-8 mb-16">
+            <h2 className="text-4xl md:text-7xl font-[900] text-white tracking-[-0.03em] leading-[1.1] animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200 uppercase">
               O PRÓXIMO NÍVEL DO <span className="text-emerald-500">SURVIVAL</span>
             </h2>
-            <p className="text-lg md:text-xl text-stone-400 font-medium animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-              Uma experiência definitiva. Tecnologia de ponta, economia real e aventuras épicas.
+            <p className="text-xl md:text-2xl text-stone-400 font-medium max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
+              Uma experiência definitiva. Tecnologia de ponta, economia real e aventuras épicas em um mundo persistente.
             </p>
           </div>
 
