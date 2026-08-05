@@ -2,14 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getNewsBySlug } from "@/lib/services/content.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { Calendar, User, ChevronLeft, ArrowLeft, Newspaper } from "lucide-react";
+import { Calendar, User, ArrowLeft, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/noticias/$slug")({
+export const Route = createFileRoute("/noticias/$slug" as any)({
   head: ({ loaderData }) => {
     if (!loaderData) return {};
-    const title = `${loaderData.title} — Habblet Mine`;
-    const description = loaderData.seo_description || loaderData.summary || loaderData.title;
+    const title = `${(loaderData as any).title} — Habblet Mine`;
+    const description = (loaderData as any).excerpt || (loaderData as any).title;
     return {
       meta: [
         { title },
@@ -18,27 +18,31 @@ export const Route = createFileRoute("/noticias/$slug")({
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
-        ...(loaderData.image_url ? [{ property: "og:image", content: loaderData.image_url }] : []),
+        ...((loaderData as any).cover_url ? [{ property: "og:image", content: (loaderData as any).cover_url }] : []),
       ],
     };
   },
   loader: async ({ params, context }) => {
     return await context.queryClient.ensureQueryData({
-      queryKey: ["news", params.slug],
-      queryFn: () => getNewsBySlug({ data: { slug: params.slug } }),
+      queryKey: ["news", (params as any).slug],
+      queryFn: () => getNewsBySlug({ data: { slug: (params as any).slug } }),
     });
   },
   component: NewsArticlePage,
 });
 
 function NewsArticlePage() {
-  const { slug } = Route.useParams();
+  const { slug } = Route.useParams() as { slug: string };
   const { data: article } = useSuspenseQuery({
     queryKey: ["news", slug],
     queryFn: () => getNewsBySlug({ data: { slug } }),
   });
 
   if (!article) return null;
+
+  const coverUrl = (article as any).cover_url;
+  const excerpt = (article as any).excerpt;
+  const category = (article as any).category;
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
@@ -54,9 +58,9 @@ function NewsArticlePage() {
         <StonePanel className="p-0 overflow-hidden" bodyClassName="p-0">
           {/* Cover Image */}
           <div className="aspect-video relative w-full overflow-hidden bg-stone-dark/10">
-            {article.image_url ? (
+            {coverUrl ? (
               <img 
-                src={article.image_url} 
+                src={coverUrl} 
                 alt={article.title} 
                 className="w-full h-full object-cover"
               />
@@ -66,10 +70,10 @@ function NewsArticlePage() {
               </div>
             )}
             
-            {article.category && (
+            {category && (
               <div className="absolute top-6 left-6">
                 <span className="bg-emerald-block px-4 py-1.5 font-pixel text-[10px] uppercase text-white pixel-border border-grass-dark shadow-lg">
-                  {article.category.name}
+                  {category.name}
                 </span>
               </div>
             )}
@@ -96,9 +100,9 @@ function NewsArticlePage() {
               {article.title}
             </h1>
 
-            {article.summary && (
+            {excerpt && (
               <p className="text-lg text-muted-foreground mb-12 font-medium leading-relaxed italic border-l-4 border-emerald-block/30 pl-6">
-                {article.summary}
+                {excerpt}
               </p>
             )}
 
@@ -111,8 +115,6 @@ function NewsArticlePage() {
               prose-a:text-emerald-block prose-a:no-underline hover:prose-a:underline
               prose-li:text-muted-foreground
             ">
-              {/* Note: Content is markdown, but for now we render it as text/newlines 
-                  A real app would use a markdown component here */}
               <div className="whitespace-pre-wrap">
                 {article.content}
               </div>
@@ -121,7 +123,6 @@ function NewsArticlePage() {
             {/* Footer */}
             <div className="mt-16 pt-8 border-t-2 border-dirt-dark/5 flex justify-between items-center">
               <div className="flex gap-2">
-                {/* Social Share Placeholders */}
                 <div className="h-8 w-8 bg-stone-dark/5 pixel-border border-stone-dark/10"></div>
                 <div className="h-8 w-8 bg-stone-dark/5 pixel-border border-stone-dark/10"></div>
               </div>
