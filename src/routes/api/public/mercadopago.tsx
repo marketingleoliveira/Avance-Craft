@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { createHmac } from "crypto";
+import { logger } from "@/lib/config/logger.server";
 
 export const Route = createFileRoute("/api/public/mercadopago")({
   server: {
