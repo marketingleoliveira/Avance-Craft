@@ -4,19 +4,28 @@ import { Container } from "@/components/ui-kit/Container";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { listRankings } from "@/lib/services/content.functions";
 import { cn } from "@/lib/utils";
-import { MOCK_RANKING_TABS } from "@/data/mock";
+
+const RANKING_TABS = [
+  { id: "ricos", label: "Mais Ricos", metric: "Saldo" },
+  { id: "clãs", label: "Melhores Clãs", metric: "Nível" },
+  { id: "vips", label: "Top VIPs", metric: "Tempo" },
+];
 
 export function RankingSection() {
-  const [activeId, setActiveId] = useState(MOCK_RANKING_TABS[0]!.id);
-  const active = MOCK_RANKING_TABS.find((tab) => tab.id === activeId) ?? MOCK_RANKING_TABS[0]!;
+  const [activeTab, setActiveTab] = useState(RANKING_TABS[0]!);
+  
+  const { data: rankingData } = useSuspenseQuery({
+    queryKey: ["rankings", activeTab.id, "weekly", 5],
+    queryFn: () => listRankings({ data: { category: activeTab.id, period: "weekly", limit: 5 } }),
+  });
 
   return (
     <section className="py-14">
       <Container>
-        <WoodSign subtitle="Posições e números são apenas exemplos visuais.">
-          Ranking
-        </WoodSign>
+        <WoodSign subtitle="Os melhores jogadores do servidor.">Ranking Global</WoodSign>
 
         <div className="mt-10">
           <div
@@ -24,16 +33,16 @@ export function RankingSection() {
             aria-label="Categorias de ranking"
             className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:none]"
           >
-            {MOCK_RANKING_TABS.map((tab) => (
+            {RANKING_TABS.map((tab) => (
               <button
                 key={tab.id}
                 role="tab"
                 type="button"
-                aria-selected={tab.id === active.id}
-                onClick={() => setActiveId(tab.id)}
+                aria-selected={tab.id === activeTab.id}
+                onClick={() => setActiveTab(tab)}
                 className={cn(
                   "font-pixel pixel-border shrink-0 px-4 py-2 text-[9px] uppercase transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  tab.id === active.id
+                  tab.id === activeTab.id
                     ? "border-grass-dark bg-emerald-block text-accent-foreground pixel-shadow"
                     : "border-stone-dark bg-stone text-foreground hover:bg-stone/80",
                 )}
@@ -43,33 +52,35 @@ export function RankingSection() {
             ))}
           </div>
 
-          <StonePanel className="mt-4" title={active.label}>
+          <StonePanel className="mt-4" title={activeTab.label}>
             <table className="w-full text-left text-sm">
-              <caption className="sr-only">Ranking de {active.label}</caption>
+              <caption className="sr-only">Ranking de {activeTab.label}</caption>
               <thead>
                 <tr className="border-b-2 border-dirt-dark/30 text-xs uppercase text-muted-foreground">
                   <th scope="col" className="py-2">#</th>
                   <th scope="col" className="py-2">Jogador</th>
                   <th scope="col" className="py-2">Clã</th>
-                  <th scope="col" className="py-2 text-right">{active.metric}</th>
+                  <th scope="col" className="py-2 text-right">{activeTab.metric}</th>
                 </tr>
               </thead>
               <tbody>
-                {active.rows.map((row) => (
-                  <tr key={row.position} className="border-b border-dirt-dark/15">
+                {rankingData.map((row: any) => (
+                  <tr key={row.player_name} className="border-b border-dirt-dark/15">
                     <td className="py-2 font-black text-grass-dark">{row.position}</td>
-                    <td className="py-2 font-semibold">{row.player}</td>
-                    <td className="py-2 text-muted-foreground">{row.clan}</td>
-                    <td className="py-2 text-right font-semibold">{row.score}</td>
+                    <td className="py-2 font-semibold">{row.player_name}</td>
+                    <td className="py-2 text-muted-foreground">{row.clan_tag || "-"}</td>
+                    <td className="py-2 text-right font-semibold">{row.score_formatted}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <Link to="/ranking" className="mt-5 block">
-              <PixelButton variant="stone" className="w-full">
-                Ranking completo
-              </PixelButton>
-            </Link>
+            <div className="mt-5">
+              <Link to="/ranking">
+                <PixelButton variant="stone" className="w-full">
+                  Ranking completo
+                </PixelButton>
+              </Link>
+            </div>
           </StonePanel>
         </div>
       </Container>

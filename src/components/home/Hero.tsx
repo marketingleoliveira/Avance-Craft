@@ -1,17 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { MOCK_SERVER } from "@/data/mock";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getServerStatus } from "@/lib/services/content.functions";
 import landscape from "@/assets/voxel-landscape.jpg";
 import stoneTex from "@/assets/tex-stone.jpg";
-/** Placeholder original: personagem voxel com picareta. Substituir por arte final. */
 import charPickaxe from "@/assets/hero-char-pickaxe.png";
-/** Placeholder original: personagem voxel com espada e bloco. Substituir por arte final. */
 import charSword from "@/assets/hero-char-sword.png";
 
-const HERO_FACTS = ["Java e Bedrock", `Versão ${MOCK_SERVER.version.split(" ")[0]}`, "Servidor brasileiro"];
-
-/** Plataforma de pedra sob os personagens. */
 function StonePlatform({ className }: { className?: string }) {
   return (
     <div className={className}>
@@ -53,12 +49,18 @@ function Character({ src, alt, className }: CharacterProps) {
 }
 
 export function Hero() {
+  const { data: status } = useSuspenseQuery({
+    queryKey: ["server-status"],
+    queryFn: () => getServerStatus(),
+  });
+
+  const HERO_FACTS = ["Java e Bedrock", `Versão ${status.version}`, "Servidor brasileiro"];
+
   return (
     <section className="relative overflow-hidden border-b-4 border-dirt-dark">
-      {/* Paisagem voxel ao fundo (camadas para profundidade) */}
       <img
         src={landscape}
-        alt="Paisagem original em estilo voxel com colinas, árvores em blocos e um rio"
+        alt="Paisagem voxel"
         width={1920}
         height={1080}
         className="absolute inset-0 h-full w-full object-cover"
@@ -68,7 +70,6 @@ export function Hero() {
 
       <Container className="relative py-10 sm:py-14 lg:py-20">
         <div className="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1fr)]">
-          {/* Conteúdo central — primeiro no mobile */}
           <div className="order-1 text-center lg:order-2">
             <p className="font-pixel text-[9px] uppercase text-parchment text-outline sm:text-[10px]">
               Servidor brasileiro de blocos
@@ -81,14 +82,7 @@ export function Hero() {
             </h1>
 
             <p className="font-pixel mt-5 text-[9px] uppercase leading-[1.9] text-parchment text-outline sm:text-[11px]">
-              Construa histórias.
-              <br className="sm:hidden" /> Faça amigos.
-              <br className="sm:hidden" /> Viva novas aventuras.
-            </p>
-
-            <p className="mx-auto mt-5 max-w-lg text-sm font-semibold text-parchment drop-shadow-[0_2px_0_rgba(0,0,0,0.7)] sm:text-base">
-              Um servidor brasileiro de Survival com economia, missões, eventos e uma
-              comunidade pronta para receber você.
+              Construa histórias. Faça amigos. Viva novas aventuras.
             </p>
 
             <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -111,15 +105,14 @@ export function Hero() {
             </ul>
           </div>
 
-          {/* Personagens — menores e abaixo no mobile */}
           <Character
             src={charPickaxe}
-            alt="Personagem original em estilo voxel segurando uma picareta"
+            alt="Personagem voxel picareta"
             className="order-2 mx-auto w-40 max-w-full sm:w-52 lg:order-1 lg:w-full"
           />
           <Character
             src={charSword}
-            alt="Personagem original em estilo voxel com armadura esmeralda, espada e bloco"
+            alt="Personagem voxel espada"
             className="order-3 mx-auto w-40 max-w-full sm:w-52 lg:w-full"
           />
         </div>
