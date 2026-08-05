@@ -4,13 +4,8 @@ import { createCheckoutRequest } from '../checkout.server';
 // Mock do Supabase
 const mockSupabase = {
   rpc: vi.fn(),
-  from: vi.fn(() => ({
-    select: vi.fn(() => ({
-      eq: vi.fn(() => ({
-        single: vi.fn()
-      }))
-    }))
-  }))
+  from: vi.fn(),
+
 };
 
 // Mock de Configs
@@ -38,6 +33,14 @@ describe('Checkout Transactional Architecture', () => {
       data: { success: false, error: 'Cupom atingiu o limite' },
       error: null
     });
+
+    // Mock do .from para evitar erros de encadeamento no rpcError path se necessário
+    (mockSupabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null })
+    });
+
 
     await expect(createCheckoutRequest(
       { nickname: 'PlayerTest', edition: 'java', items: [] },
