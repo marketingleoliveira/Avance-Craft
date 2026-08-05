@@ -29,13 +29,14 @@ export const Route = createFileRoute("/api/public/mercadopago")({
 
           if (paymentStatus === "approved" && externalReference) {
             // 3. Atualizar pedido
-            const orderId: string = externalReference?.toString() || "";
+            const orderId = (externalReference?.toString() || "") as string;
             const { data: order } = await supabaseAdmin
               .from("orders")
               .update({ status: "paid", paid_at: new Date().toISOString() })
               .eq("id", orderId)
               .select("*, items:order_items(*)")
               .single();
+
 
 
 

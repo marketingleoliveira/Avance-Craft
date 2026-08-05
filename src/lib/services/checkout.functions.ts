@@ -3,13 +3,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { createCheckoutRequest } from "./checkout.server";
 
-type CheckoutInput = {
-  nickname: string;
-  edition: "java" | "bedrock";
-  items: { productId: string; quantity: number }[];
-  couponCode?: string;
-};
-
 export const createPaymentPreference = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
@@ -28,11 +21,14 @@ export const createPaymentPreference = createServerFn({ method: "POST" })
       .parse(data)
   )
   .handler(async ({ data, context }) => {
-    const input: CheckoutInput = {
-      nickname: data.nickname,
-      edition: data.edition,
-      items: data.items,
-      couponCode: data.couponCode || undefined,
-    };
-    return createCheckoutRequest(input, context.supabase, context.userId);
+    return createCheckoutRequest(
+      {
+        nickname: data.nickname,
+        edition: data.edition,
+        items: data.items,
+        couponCode: data.couponCode ?? undefined,
+      } as any,
+      context.supabase,
+      context.userId
+    );
   });
