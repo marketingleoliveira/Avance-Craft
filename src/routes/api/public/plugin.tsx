@@ -10,7 +10,7 @@ export const Route = createFileRoute("/api/public/plugin")({
         
         // 1. Autenticação Forte com Assinatura HMAC
         const auth = await validatePluginSignature(request, bodyText, supabaseAdmin);
-        if (!auth.valid) {
+        if (!auth.valid || !auth.serverId) {
           return new Response(auth.error || "Unauthorized", { status: 401 });
         }
 
@@ -37,14 +37,13 @@ export const Route = createFileRoute("/api/public/plugin")({
               .limit(50);
             
             if (queue?.length) {
-              // Reserva atômica: Claim com timestamp e expiração de lease (30s)
               const leaseExpiresAt = new Date(Date.now() + 30000).toISOString();
               await supabaseAdmin
                 .from("delivery_queue")
                 .update({ 
                   status: "claimed", 
                   claimed_at: new Date().toISOString(),
-                  lease_expires_at: leaseExpiresAt as any // Campo dinâmico para evitar corrida
+                  lease_expires_at: leaseExpiresAt as any 
                 } as any)
                 .in("id", queue.map(q => q.id));
             }
@@ -52,8 +51,8 @@ export const Route = createFileRoute("/api/public/plugin")({
 
           case "confirm_delivery":
             const { deliveryId, success, response } = body;
+            if (!deliveryId) return new Response("Missing deliveryId", { status: 400 });
             
-            // Validar posse da entrega
             const { data: delivery } = await supabaseAdmin
               .from("delivery_queue")
               .select("id, order_item_id")
@@ -72,7 +71,6 @@ export const Route = createFileRoute("/api/public/plugin")({
               })
               .eq("id", deliveryId);
             
-            // Registrar tentativa
             await supabaseAdmin.from("delivery_attempts").insert({
               delivery_queue_id: deliveryId,
               attempt_number: 1, 
@@ -80,24 +78,19 @@ export const Route = createFileRoute("/api/public/plugin")({
               response
             });
 
-            // Se for sucesso, verificar se o pedido completo foi entregue
-            if (success) {
-               // Lógica de fechamento de pedido pode ser disparada via Trigger no banco para maior segurança
-            }
-
             return Response.json({ ok: true });
 
           case "send_server_status":
             const { playersOnline, maxPlayers, version, ip } = body;
             await supabaseAdmin.from("server_status").upsert({
               server_id: serverId,
-              players_online: playersOnline,
-              max_players: maxPlayers,
-              version: version,
-              ip: ip,
+              players_online: Number(playersOnline) || 0,
+              max_players: Number(maxPlayers) || 0,
+              version: String(version || ""),
+              ip: String(ip || ""),
               online: true,
               updated_at: new Date().toISOString()
-            }, { onConflict: 'server_id' });
+            } as any, { onConflict: 'server_id' });
             return Response.json({ ok: true });
 
           default:
