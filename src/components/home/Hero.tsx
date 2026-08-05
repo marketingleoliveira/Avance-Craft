@@ -2,11 +2,22 @@ import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { Play, MessageSquare, Monitor, Smartphone, Users, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 import landscape from "@/assets/voxel-landscape.jpg";
 import charPickaxe from "@/assets/hero-char-pickaxe.png";
 
 export function Hero({ settings }: { settings?: Record<string, string> }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   return (
     <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden bg-stone-950">
       {/* Cinematic Background - The Map */}
