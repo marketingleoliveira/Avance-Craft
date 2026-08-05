@@ -65,7 +65,7 @@ type RoleChecker = {
 
 type AuthedSupabase = RoleChecker;
 
-async function assertAdmin(supabase: AuthedSupabase, userId: string): Promise<void> {
+export async function assertAdmin(supabase: AuthedSupabase, userId: string): Promise<void> {
   const { data, error } = await supabase.rpc("has_role", {
     _user_id: userId,
     _role: "admin",

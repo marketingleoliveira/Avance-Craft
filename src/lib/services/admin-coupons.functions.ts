@@ -1,12 +1,15 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertAdmin } from "./admin.functions";
 import { logAudit } from "./admin-content.functions";
 
 export const adminListCoupons = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
+    const { supabase, userId } = context!;
+    await assertAdmin(supabase, userId);
+    const { data, error } = await supabase
       .from("coupons")
       .select("*")
       .order("created_at", { ascending: false });
@@ -16,6 +19,7 @@ export const adminListCoupons = createServerFn({ method: "GET" })
   });
 
 export const adminCreateCoupon = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z
       .object({
@@ -31,9 +35,10 @@ export const adminCreateCoupon = createServerFn({ method: "POST" })
       .parse(data)
   )
   .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
+    const { supabase, userId } = context!;
+    await assertAdmin(supabase, userId);
     
-    const { data: coupon, error } = await context.supabase
+    const { data: coupon, error } = await supabase
       .from("coupons")
       .insert(data)
       .select()
@@ -41,42 +46,36 @@ export const adminCreateCoupon = createServerFn({ method: "POST" })
 
     if (error) throw error;
 
-    await logAudit(context.supabase, context.userId, {
-      action: "create",
-      entity: "coupon",
-      entity_id: coupon.id,
-      metadata: data
-    });
+    await logAudit(supabase, userId, "create", "coupon", coupon.id, data);
 
     return coupon;
   });
 
 export const adminToggleCoupon = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ id: z.string().uuid(), active: z.boolean() }).parse(data))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
+    const { supabase, userId } = context!;
+    await assertAdmin(supabase, userId);
     
-    const { error } = await context.supabase
+    const { error } = await supabase
       .from("coupons")
       .update({ active: data.active })
       .eq("id", data.id);
 
     if (error) throw error;
 
-    await logAudit(context.supabase, context.userId, {
-      action: data.active ? "activate" : "deactivate",
-      entity: "coupon",
-      entity_id: data.id
-    });
+    await logAudit(supabase, userId, data.active ? "activate" : "deactivate", "coupon", data.id);
 
     return { success: true };
   });
 
 export const validateCouponPublic = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ code: z.string(), subtotalCents: z.number() }).parse(data))
   .handler(async ({ data, context }) => {
-    if (!context.userId) throw new Error("Não autenticado");
+    const { supabase, userId } = context!;
     
     const { validateCouponServer } = await import("./coupon-validation.server");
-    return validateCouponServer(data.code, data.subtotalCents, context.userId, context.supabase);
+    return validateCouponServer(data.code, data.subtotalCents, userId, supabase);
   });

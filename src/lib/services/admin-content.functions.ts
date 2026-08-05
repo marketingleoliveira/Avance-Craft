@@ -25,7 +25,7 @@ async function assertAdmin(supabase: AuthedSupabase, userId: string): Promise<vo
   if (!data) throw new Error("Acesso restrito a administradores.");
 }
 
-async function logAudit(
+export async function logAudit(
   supabase: any, 
   userId: string, 
   action: string, 
