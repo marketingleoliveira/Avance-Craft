@@ -3,6 +3,7 @@ import { Container } from "@/components/ui-kit/Container";
 import { formatBRL } from "@/lib/utils/format";
 import { Card } from "@/components/ui/card";
 import { ShoppingBag, Star, ShieldCheck, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 
 import chests from "@/assets/vip-chests.png";
 
