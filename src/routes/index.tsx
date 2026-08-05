@@ -9,8 +9,8 @@ import { RankingSection } from "@/components/home/RankingSection";
 import { HowToPlay } from "@/components/home/HowToPlay";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
-import { PixelButton } from "@/components/ui/PixelButton";
-import { StonePanel } from "@/components/ui/StonePanel";
+import { PixelButton } from "@/components/ui-kit/PixelButton";
+import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { CheckCircle2, AlertCircle, Terminal, ClipboardCheck } from "lucide-react";
 
 const title = "Habblet Mine — Servidor Brasileiro de Minecraft (Java & Bedrock)";
