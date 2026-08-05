@@ -148,7 +148,8 @@ export const adminCreateNews = createServerFn({ method: "POST" })
         seo_description: data.seoDescription,
         featured: data.featured ?? false,
         position: data.position ?? 0,
-        author_id: context.userId
+        author_id: context.userId,
+        published: data.status === 'published' // Mapeamento para a coluna booleana do schema real
       } as any)
       .select("*")
       .single();
@@ -156,3 +157,54 @@ export const adminCreateNews = createServerFn({ method: "POST" })
     await logAudit(context.supabase, context.userId, "create", "news", row.id, row);
     return row;
   });
+
+export const adminUpdateNews = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => 
+    newsInput.partial().extend({ id: z.string().uuid() }).parse(input)
+  )
+  .handler(async ({ data, context }): Promise<News> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { id, ...fields } = data;
+    const { data: oldRow } = await context.supabase.from("news").select("*").eq("id", id).single();
+    
+    const patch: any = {
+      ...fields,
+      image_url: fields.imageUrl,
+      category_id: fields.categoryId,
+      seo_title: fields.seoTitle,
+      seo_description: fields.seoDescription,
+      published_at: fields.publishedAt,
+    };
+    
+    if (fields.status === 'published') {
+      patch.published = true;
+      if (!oldRow.published_at) patch.published_at = new Date().toISOString();
+    } else if (fields.status === 'draft' || fields.status === 'archived') {
+      patch.published = false;
+    }
+
+    const { data: row, error } = await context.supabase
+      .from("news")
+      .update(patch)
+      .eq("id", id)
+      .select("*")
+      .single();
+      
+    if (error) throw new Error(error.message);
+    await logAudit(context.supabase, context.userId, "update", "news", id, row, oldRow);
+    return row;
+  });
+
+export const adminDeleteNews = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: oldRow } = await context.supabase.from("news").select("*").eq("id", data.id).single();
+    const { error } = await context.supabase.from("news").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    await logAudit(context.supabase, context.userId, "delete", "news", data.id, null, oldRow);
+    return { success: true };
+  });
+
