@@ -7,7 +7,7 @@ import { Newspaper, Calendar, ArrowRight } from "lucide-react";
 const title = "Notícias — Habblet Mine";
 const description = "Atualizações, eventos e novidades do servidor Habblet Mine.";
 
-export const Route = createFileRoute("/noticias")({
+export const Route = createFileRoute("/noticias/")({
   head: () => ({
     meta: [
       { title },
