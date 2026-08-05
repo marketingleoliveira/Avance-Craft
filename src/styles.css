@@ -77,43 +77,41 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 1rem;
 
-  /* Avance palette */
-  --emerald-block: oklch(0.62 0.15 165);
-  --grass: oklch(0.72 0.18 140);
-  --grass-dark: oklch(0.52 0.14 145);
-  --dirt: oklch(0.52 0.08 62);
-  --dirt-dark: oklch(0.38 0.07 60);
-  --wood: oklch(0.79 0.09 72);
-  --wood-dark: oklch(0.55 0.09 60);
-  --stone: oklch(0.72 0.008 250);
-  --stone-dark: oklch(0.48 0.01 250);
-  --sky-block: oklch(0.75 0.13 236);
-  --parchment: oklch(0.97 0.015 90);
+  /* Avance Premium Palette - Emerald & Stone */
+  --emerald-block: oklch(0.65 0.22 155);
+  --emerald-glow: oklch(0.7 0.25 150 / 0.4);
+  --stone-base: oklch(0.12 0.02 260);
+  --stone-card: oklch(0.16 0.02 260);
+  --stone-border: oklch(1 0 0 / 10%);
 
-  /* pixel elevation tokens */
-  --shadow-pixel: 0 4px 0 0 var(--dirt-dark);
-  --shadow-pixel-lg: 0 6px 0 0 var(--dirt-dark), 0 10px 24px oklch(0 0 0 / 0.35);
-  --shadow-panel: inset 0 0 0 4px oklch(1 0 0 / 0.35), 0 6px 0 0 var(--stone-dark);
+  /* Global Shadows & Lighting */
+  --shadow-premium: 0 20px 50px -12px oklch(0 0 0 / 0.5);
+  --shadow-glow: 0 0 30px var(--emerald-glow);
+  --glass-bg: oklch(1 0 0 / 3%);
+  --glass-border: oklch(1 0 0 / 8%);
 
   --background: oklch(0.08 0.02 260);
   --foreground: oklch(0.98 0.01 240);
-  --card: oklch(0.12 0.03 260);
+  --card: var(--stone-card);
   --card-foreground: oklch(0.98 0.01 240);
-  --popover: oklch(0.12 0.03 260);
+  --popover: var(--stone-card);
   --popover-foreground: oklch(0.98 0.01 240);
-  --primary: oklch(0.65 0.2 150);
-  --primary-foreground: oklch(0.99 0.01 100);
-  --secondary: oklch(0.25 0.05 260);
+  --primary: oklch(0.65 0.22 155);
+  --primary-foreground: oklch(0.08 0.02 260);
+  --secondary: oklch(0.25 0.03 260);
   --secondary-foreground: oklch(0.95 0.02 240);
-  --muted: oklch(0.15 0.02 260);
+  --muted: oklch(0.18 0.02 260);
   --muted-foreground: oklch(0.65 0.03 240);
-  --accent: oklch(0.7 0.25 145);
-  --accent-foreground: oklch(0.05 0.05 145);
-  --border: oklch(1 0 0 / 10%);
+  --accent: oklch(0.7 0.25 150);
+  --accent-foreground: oklch(0.08 0.02 260);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.98 0.01 240);
+  --border: var(--stone-border);
   --input: oklch(1 0 0 / 5%);
-  --ring: oklch(0.65 0.2 150);
+  --ring: oklch(0.65 0.22 155);
+}
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
