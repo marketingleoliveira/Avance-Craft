@@ -146,8 +146,6 @@
 
 /* Premium Hover & Glow Utility */
 @utility hover-glow {
-  &:hover {
-    box-shadow: 0 0 25px var(--glow-color);
-    border-color: var(--primary);
-  }
+  box-shadow: 0 0 25px var(--glow-color);
+  border-color: var(--primary);
 }
