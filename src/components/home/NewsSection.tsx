@@ -112,7 +112,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
               Últimas <span className="text-emerald-500">Notícias</span>
             </h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
-              Fique por dentro das atualizações, eventos e anúncios do Avance.
+              Atualizações e eventos do Avance.
             </p>
           </div>
           <Button asChild variant="ghost" className="hidden md:flex text-emerald-500 hover:text-white hover:bg-emerald-500/10">
