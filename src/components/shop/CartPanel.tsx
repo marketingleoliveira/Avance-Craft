@@ -157,8 +157,9 @@ export function CartPanel() {
         {pending ? "Verificando..." : "Ir para pagamento"}
       </PixelButton>
       <p className="mt-2 text-xs text-muted-foreground">
-        Nesta versão demonstrativa, o pagamento redireciona para uma página de sucesso mockada.
+        Em ambiente de desenvolvimento, o checkout redireciona para uma confirmação simulada.
       </p>
+
     </StonePanel>
   );
 }
