@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getHomeData } from "@/lib/services/content.functions";
 import { Hero } from "@/components/home/Hero";
@@ -9,6 +9,7 @@ import { RankingSection } from "@/components/home/RankingSection";
 import { HowToPlay } from "@/components/home/HowToPlay";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 const title = "Avance — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
