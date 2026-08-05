@@ -6,7 +6,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { MOCK_COUPONS } from "@/data/shop";
+// Cupons reais devem vir do banco, mantendo local para demo por enquanto
+const COUPONS: Record<string, number> = {
+  HABBLET10: 0.1,
+  BEMVINDO5: 0.05,
+};
+
 import type { Platform } from "@/lib/payments/checkout-service";
 
 export type CartLine = { 
@@ -97,7 +102,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const applyCoupon = useCallback(() => {
     const code = coupon.trim().toUpperCase();
-    if (code in MOCK_COUPONS) {
+    if (code in COUPONS) {
       setAppliedCoupon(code);
       return true;
     }
@@ -116,7 +121,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [detailed],
   );
   const discountCents = appliedCoupon
-    ? Math.round(subtotalCents * (MOCK_COUPONS[appliedCoupon] ?? 0))
+    ? Math.round(subtotalCents * (COUPONS[appliedCoupon] ?? 0))
     : 0;
 
   const value: CartContextValue = {
