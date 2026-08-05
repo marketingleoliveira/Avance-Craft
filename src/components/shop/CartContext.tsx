@@ -8,9 +8,14 @@ import {
 } from "react";
 import { MOCK_COUPONS } from "@/data/shop";
 import type { Platform } from "@/lib/payments/checkout-service";
-import type { ShopProduct } from "@/data/shop";
 
-export type CartLine = { productId: string; quantity: number; product?: any };
+export type CartLine = { 
+  productId: string; 
+  quantity: number; 
+  /** @deprecated Dados para exibição local, servidor valida preços */
+  product?: any 
+};
+
 
 type CartContextValue = {
   nickname: string;
