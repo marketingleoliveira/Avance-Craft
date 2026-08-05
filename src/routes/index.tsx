@@ -153,7 +153,10 @@ function Index() {
                     "SSL & Webhook MP Configurados",
                     "Plugin Online & Fila Controlada",
                     "Páginas Institucionais & Aceite Ativo (Checkout)",
-                    "Termos, Privacidade e Regras Dinâmicos"
+                    "Termos, Privacidade e Regras Dinâmicos",
+                    "Dockerfile & Docker Compose Configurados",
+                    "Monitoramento & Backup Estruturados"
+
 
 
                   ].map((item) => (
