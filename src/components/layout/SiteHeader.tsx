@@ -95,7 +95,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             to="/perfil"
-            className="hidden sm:flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-colors border border-white/10"
+            className="hidden sm:flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-white/5 transition-colors border border-white/10 rounded-xl"
           >
             <User className="w-4 h-4" />
             Perfil
