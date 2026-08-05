@@ -22,7 +22,7 @@ export const Route = createFileRoute("/noticias/$slug" as any)({
       ],
     };
   },
-  loader: async ({ params, context }) => {
+  loader: async ({ params, context }: any) => {
     return await context.queryClient.ensureQueryData({
       queryKey: ["news", (params as any).slug],
       queryFn: () => getNewsBySlug({ data: { slug: (params as any).slug } }),
