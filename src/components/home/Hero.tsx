@@ -34,6 +34,11 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
         <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-transparent to-stone-950/80" />
       </motion.div>
 
+      {/* Ambient Lighting Layers */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
+      <div className="absolute inset-0 bg-gradient-to-b from-stone-950/0 via-stone-950/20 to-stone-950 z-10 pointer-events-none" />
+
       {/* Hero Content Layer */}
       <Container className="relative z-20 pt-20">
         <motion.div 
@@ -46,7 +51,7 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-9xl md:text-[14rem] font-[900] tracking-[-0.05em] text-white uppercase italic leading-[0.75] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              className="text-9xl md:text-[14rem] font-[900] tracking-[-0.05em] text-white uppercase italic leading-[0.75] drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]"
             >
               Avance
             </motion.h1>

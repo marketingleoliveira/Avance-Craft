@@ -57,49 +57,49 @@ function Index() {
         <Hero settings={settings} />
         
         {/* Section: Novidades */}
-        <div className="py-32 md:py-64 border-t border-white/5">
+        <div className="py-32 md:py-64 border-t border-white/5 section-lighting">
           <ScrollReveal>
             <NewsSection news={news} status={status} />
           </ScrollReveal>
         </div>
 
         {/* Section: Modalidades */}
-        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
+        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5 section-lighting">
           <ScrollReveal>
             <ModesSection modes={modes} />
           </ScrollReveal>
         </div>
 
         {/* Section: Por que jogar (HowToPlay) */}
-        <div className="py-32 md:py-64">
+        <div className="py-32 md:py-64 section-lighting">
           <ScrollReveal>
             <HowToPlay />
           </ScrollReveal>
         </div>
 
         {/* Section: Loja */}
-        <div className="py-32 md:py-64 bg-emerald-500/5 border-y border-emerald-500/10">
+        <div className="py-32 md:py-64 bg-emerald-500/5 border-y border-emerald-500/10 section-lighting">
           <ScrollReveal>
             <ShopHighlight products={featuredProducts} />
           </ScrollReveal>
         </div>
 
         {/* Section: Ranking */}
-        <div className="py-32 md:py-64">
+        <div className="py-32 md:py-64 section-lighting">
           <ScrollReveal>
             <RankingSection />
           </ScrollReveal>
         </div>
 
         {/* Section: Comunidade */}
-        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
+        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5 section-lighting">
           <ScrollReveal>
             <CommunitySection settings={settings} />
           </ScrollReveal>
         </div>
 
         {/* Section: CTA Final */}
-        <div className="py-32 md:py-64">
+        <div className="py-32 md:py-64 section-lighting">
           <ScrollReveal>
             <FinalCta />
           </ScrollReveal>

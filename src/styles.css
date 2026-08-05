@@ -144,8 +144,24 @@
     1px 1px 0 #000;
 }
 
-/* Premium Hover & Glow Utility */
+/* Premium Lighting System Utilities */
 @utility hover-glow {
   box-shadow: 0 0 25px var(--glow-color);
   border-color: var(--primary);
+}
+
+@utility ambient-glow {
+  background: radial-gradient(circle at center, var(--glow-color) 0%, transparent 70%);
+}
+
+@utility glass-reflection {
+  background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.05) 55%, transparent 60%);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+@utility section-lighting {
+  background: radial-gradient(circle at 50% -20%, oklch(0.65 0.22 155 / 0.08) 0%, transparent 60%);
 }
