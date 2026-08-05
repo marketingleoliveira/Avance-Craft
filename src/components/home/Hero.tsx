@@ -79,9 +79,16 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
               Servidor brasileiro de blocos
             </p>
 
-            <h1 className="font-pixel text-outline mt-4 text-3xl uppercase leading-[1.45] text-emerald-block sm:text-5xl lg:text-6xl">
-              Avance
-            </h1>
+            <div className="relative mb-6 mt-4 flex justify-center">
+              <span className="font-pixel text-outline relative z-10 text-4xl uppercase tracking-tighter text-emerald-block sm:text-6xl lg:text-7xl">
+                Avance
+              </span>
+              <div className="absolute inset-0 top-2 -z-10 translate-y-1 blur-[1px]">
+                <span className="font-pixel text-4xl uppercase tracking-tighter text-dirt-dark opacity-40 sm:text-6xl lg:text-7xl">
+                  Avance
+                </span>
+              </div>
+            </div>
 
             <p className="font-pixel mt-5 text-[9px] uppercase leading-[1.9] text-parchment text-outline sm:text-[11px]">
               Construa histórias. Faça amigos. Viva novas aventuras.
