@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ComoJogarRouteImport } from './routes/como-jogar'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as FalhaRouteImport } from './routes/falha'
@@ -27,6 +28,7 @@ import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin/auditoria'
+import { Route as AdminBetaConvitesRouteImport } from './routes/admin/beta-convites'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
@@ -66,6 +68,11 @@ const AdminRoute = AdminRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BetaRoute = BetaRouteImport.update({
+  id: '/beta',
+  path: '/beta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComoJogarRoute = ComoJogarRouteImport.update({
@@ -141,6 +148,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
   id: '/auditoria',
   path: '/auditoria',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBetaConvitesRoute = AdminBetaConvitesRouteImport.update({
+  id: '/beta-convites',
+  path: '/beta-convites',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
@@ -274,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/beta': typeof BetaRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -288,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/beta-convites': typeof AdminBetaConvitesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -318,6 +332,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/beta': typeof BetaRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -332,6 +347,7 @@ export interface FileRoutesByTo {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/beta-convites': typeof AdminBetaConvitesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -364,6 +380,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/beta': typeof BetaRoute
   '/como-jogar': typeof ComoJogarRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -378,6 +395,7 @@ export interface FileRoutesById {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/beta-convites': typeof AdminBetaConvitesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -411,6 +429,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/beta'
     | '/como-jogar'
     | '/equipe'
     | '/falha'
@@ -425,6 +444,7 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
+    | '/admin/beta-convites'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -455,6 +475,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/beta'
     | '/como-jogar'
     | '/equipe'
     | '/falha'
@@ -469,6 +490,7 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
+    | '/admin/beta-convites'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -500,6 +522,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/beta'
     | '/como-jogar'
     | '/equipe'
     | '/falha'
@@ -514,6 +537,7 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
+    | '/admin/beta-convites'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -546,6 +570,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  BetaRoute: typeof BetaRoute
   ComoJogarRoute: typeof ComoJogarRoute
   EquipeRoute: typeof EquipeRoute
   FalhaRoute: typeof FalhaRoute
@@ -586,6 +611,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beta': {
+      id: '/beta'
+      path: '/beta'
+      fullPath: '/beta'
+      preLoaderRoute: typeof BetaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/como-jogar': {
@@ -691,6 +723,13 @@ declare module '@tanstack/react-router' {
       path: '/auditoria'
       fullPath: '/admin/auditoria'
       preLoaderRoute: typeof AdminAuditoriaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/beta-convites': {
+      id: '/admin/beta-convites'
+      path: '/beta-convites'
+      fullPath: '/admin/beta-convites'
+      preLoaderRoute: typeof AdminBetaConvitesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/configuracoes': {
@@ -873,6 +912,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminBetaConvitesRoute: typeof AdminBetaConvitesRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
@@ -899,6 +939,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminBetaConvitesRoute: AdminBetaConvitesRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
@@ -929,6 +970,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  BetaRoute: BetaRoute,
   ComoJogarRoute: ComoJogarRoute,
   EquipeRoute: EquipeRoute,
   FalhaRoute: FalhaRoute,
