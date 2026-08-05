@@ -57,26 +57,12 @@ export async function createCheckoutRequest(
   let discount = 0;
   let couponId = null;
   if (data.couponCode) {
-    const { data: coupon } = await supabase
-      .from("coupons")
-      .select("*")
-      .eq("code", data.couponCode.toUpperCase())
-      .eq("active", true)
-      .maybeSingle();
-
-    if (coupon) {
-      // Verificar expiração e limites se necessário
-      const now = new Date();
-      const expiresAt = coupon.expires_at ? new Date(coupon.expires_at) : null;
-      
-      if (!expiresAt || expiresAt > now) {
-        couponId = coupon.id;
-        if (coupon.discount_percent) {
-          discount = subtotal * (Number(coupon.discount_percent) / 100);
-        } else if (coupon.discount_amount) {
-          discount = Math.min(subtotal, Number(coupon.discount_amount));
-        }
-      }
+    const { validateCouponServer } = await import("./coupon-validation.server");
+    const result = await validateCouponServer(data.couponCode, subtotal * 100, userId, supabase);
+    
+    if (result.valid) {
+      couponId = result.couponId;
+      discount = result.discountCents / 100;
     }
   }
 
@@ -110,6 +96,18 @@ export async function createCheckoutRequest(
     .single();
 
   if (orderError) throw new Error(`Falha ao criar pedido: ${orderError.message}`);
+
+  // Registrar uso do cupom se válido
+  if (couponId) {
+    await supabase.from("coupon_uses").insert({
+      coupon_id: couponId,
+      profile_id: profile?.id ?? null,
+      order_id: order.id
+    });
+    
+    // Incrementar contador de usos
+    await supabase.rpc('increment_coupon_uses', { coupon_id: couponId });
+  }
 
   // 4. Criar itens do pedido
   const { error: itemsError } = await supabase

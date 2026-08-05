@@ -99,6 +99,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCoupon("");
   }, []);
 
+  const detailed = useMemo(
+    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as any, quantity: l.quantity })),
+    [lines],
+  );
+
+
+  const subtotalCents = useMemo(
+    () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),
+    [detailed],
+  );
+
   const applyCoupon = useCallback(async () => {
     const code = coupon.trim().toUpperCase();
     if (!code) {
@@ -125,16 +136,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [coupon, subtotalCents, validateCoupon]);
 
-  const detailed = useMemo(
-    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as any, quantity: l.quantity })),
-    [lines],
-  );
-
-
-  const subtotalCents = useMemo(
-    () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),
-    [detailed],
-  );
   // Desconto agora vem do estado atualizado via applyCoupon
   // No caso de mudança no subtotal (ex: remover item), invalidamos o cupom por segurança
   // ou poderíamos revalidar automaticamente. Aqui limpamos para forçar nova aplicação.
