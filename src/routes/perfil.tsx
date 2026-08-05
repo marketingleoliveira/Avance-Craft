@@ -36,6 +36,9 @@ export const Route = createFileRoute("/perfil")({
     if (!session) {
       throw redirect({
         to: "/auth",
+        search: {
+          next: "/perfil"
+        }
       });
     }
   },

@@ -32,7 +32,8 @@ function AuthPage() {
         if (error) throw error;
         toast.success("Conta criada! Verifique seu e-mail.");
       }
-      window.location.href = "/perfil";
+      const next = new URLSearchParams(window.location.search).get("next") || "/perfil";
+      window.location.href = next;
     } catch (error: any) {
       toast.error(error.message || "Erro na autenticação.");
     } finally {
