@@ -85,9 +85,20 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link to="/privacidade" className="hover:text-emerald-block">
-                  Política de privacidade
+                  Privacidade
                 </Link>
               </li>
+              <li>
+                <Link to="/reembolso" className="hover:text-emerald-block">
+                  Reembolso
+                </Link>
+              </li>
+              <li>
+                <Link to="/contato" className="hover:text-emerald-block">
+                  Contato
+                </Link>
+              </li>
+
               <li>
                 <Link to="/suporte" className="hover:text-emerald-block">
                   Suporte
