@@ -81,8 +81,6 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
 
             <h1 className="font-pixel text-outline mt-4 text-3xl uppercase leading-[1.45] text-emerald-block sm:text-5xl lg:text-6xl">
               Avance
-              <br />
-              Mine
             </h1>
 
             <p className="font-pixel mt-5 text-[9px] uppercase leading-[1.9] text-parchment text-outline sm:text-[11px]">
