@@ -21,7 +21,8 @@ import {
   MessageSquare,
   Activity,
   Database,
-  Trash2
+  Trash2,
+  TestTube
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
@@ -264,6 +265,12 @@ function AdminFlagsPage() {
                 >
                   <Trash2 className="w-3 h-3" /> LIMPAR TRANSAÇÕES
                 </button>
+                <Link
+                  to="/admin/pagamentos-teste"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-pixel text-[10px] border-b-2 border-blue-800 transition-all mt-3"
+                >
+                  <TestTube className="w-3 h-3" /> TEST HARNESS (PAGAMENTOS)
+                </Link>
               </div>
             </StonePanel>
           )}

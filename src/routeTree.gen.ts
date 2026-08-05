@@ -32,6 +32,7 @@ import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
 import { Route as AdminJogadoresRouteImport } from './routes/admin/jogadores'
 import { Route as AdminPagamentosRouteImport } from './routes/admin/pagamentos'
+import { Route as AdminPagamentosTesteRouteImport } from './routes/admin/pagamentos-teste'
 import { Route as AdminPedidosRouteImport } from './routes/admin/pedidos'
 import { Route as AdminProdutosRouteImport } from './routes/admin/produtos'
 import { Route as AdminRankingRouteImport } from './routes/admin/ranking'
@@ -166,6 +167,11 @@ const AdminPagamentosRoute = AdminPagamentosRouteImport.update({
   path: '/pagamentos',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPagamentosTesteRoute = AdminPagamentosTesteRouteImport.update({
+  id: '/pagamentos-teste',
+  path: '/pagamentos-teste',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPedidosRoute = AdminPedidosRouteImport.update({
   id: '/pedidos',
   path: '/pedidos',
@@ -281,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
+  '/admin/pagamentos-teste': typeof AdminPagamentosTesteRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/ranking': typeof AdminRankingRoute
@@ -323,6 +330,7 @@ export interface FileRoutesByTo {
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
+  '/admin/pagamentos-teste': typeof AdminPagamentosTesteRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/ranking': typeof AdminRankingRoute
@@ -367,6 +375,7 @@ export interface FileRoutesById {
   '/admin/entregas': typeof AdminEntregasRoute
   '/admin/jogadores': typeof AdminJogadoresRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
+  '/admin/pagamentos-teste': typeof AdminPagamentosTesteRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/ranking': typeof AdminRankingRoute
@@ -412,6 +421,7 @@ export interface FileRouteTypes {
     | '/admin/entregas'
     | '/admin/jogadores'
     | '/admin/pagamentos'
+    | '/admin/pagamentos-teste'
     | '/admin/pedidos'
     | '/admin/produtos'
     | '/admin/ranking'
@@ -454,6 +464,7 @@ export interface FileRouteTypes {
     | '/admin/entregas'
     | '/admin/jogadores'
     | '/admin/pagamentos'
+    | '/admin/pagamentos-teste'
     | '/admin/pedidos'
     | '/admin/produtos'
     | '/admin/ranking'
@@ -497,6 +508,7 @@ export interface FileRouteTypes {
     | '/admin/entregas'
     | '/admin/jogadores'
     | '/admin/pagamentos'
+    | '/admin/pagamentos-teste'
     | '/admin/pedidos'
     | '/admin/produtos'
     | '/admin/ranking'
@@ -704,6 +716,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagamentosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/pagamentos-teste': {
+      id: '/admin/pagamentos-teste'
+      path: '/pagamentos-teste'
+      fullPath: '/admin/pagamentos-teste'
+      preLoaderRoute: typeof AdminPagamentosTesteRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pedidos': {
       id: '/admin/pedidos'
       path: '/pedidos'
@@ -840,6 +859,7 @@ interface AdminRouteChildren {
   AdminEntregasRoute: typeof AdminEntregasRoute
   AdminJogadoresRoute: typeof AdminJogadoresRoute
   AdminPagamentosRoute: typeof AdminPagamentosRoute
+  AdminPagamentosTesteRoute: typeof AdminPagamentosTesteRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminRankingRoute: typeof AdminRankingRoute
@@ -864,6 +884,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminEntregasRoute: AdminEntregasRoute,
   AdminJogadoresRoute: AdminJogadoresRoute,
   AdminPagamentosRoute: AdminPagamentosRoute,
+  AdminPagamentosTesteRoute: AdminPagamentosTesteRoute,
   AdminPedidosRoute: AdminPedidosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminRankingRoute: AdminRankingRoute,
