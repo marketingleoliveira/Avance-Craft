@@ -11,6 +11,8 @@ import { ShopFaq, ShopTerms } from "@/components/shop/ShopInfo";
 import { useCart } from "@/components/shop/CartContext";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 
 export const Route = createFileRoute("/loja")({
@@ -136,6 +138,10 @@ function ShopPage() {
           </aside>
         </div>
       </div>
+      
+      <ScrollReveal>
+        <SiteFooter />
+      </ScrollReveal>
     </div>
   );
 }

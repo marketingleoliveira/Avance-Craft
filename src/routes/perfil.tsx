@@ -22,6 +22,8 @@ import {
   ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 export const Route = createFileRoute("/perfil")({
   head: () => ({
@@ -197,6 +199,10 @@ function ProfilePage() {
           </section>
         </div>
       </Container>
+      
+      <ScrollReveal className="mt-20">
+        <SiteFooter />
+      </ScrollReveal>
     </main>
   );
 }

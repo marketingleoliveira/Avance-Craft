@@ -15,6 +15,8 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 const ticketSchema = z.object({
   category: z.string().min(1, "Escolha uma categoria"),
@@ -329,6 +331,9 @@ function SupportPage() {
           </div>
         </div>
       </div>
+      <ScrollReveal className="mt-20">
+        <SiteFooter />
+      </ScrollReveal>
     </div>
   );
 }
