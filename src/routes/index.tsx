@@ -62,8 +62,14 @@ function Index() {
                 <h2 className="text-3xl font-minecraft text-yellow-500 mb-2">Controle de Qualidade Staging</h2>
                 <p className="text-muted-foreground italic">Validação técnica completa da integração Mercado Pago & Pré-deploy.</p>
               </div>
-              <div className="flex gap-4">
-                <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-4">
+                <div className="grid grid-cols-2 gap-2 w-full md:w-auto">
+                  <Link to="/admin">
+                    <PixelButton className="px-6 w-full bg-slate-700 hover:bg-slate-600 border-slate-800">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </PixelButton>
+                  </Link>
                   <Link to="/admin/pagamentos-teste">
                     <PixelButton className="px-6 w-full bg-blue-600 hover:bg-blue-500 border-blue-700">
                       <CreditCard className="w-4 h-4 mr-2" />
@@ -88,16 +94,17 @@ function Index() {
                       Beta Feedback
                     </PixelButton>
                   </Link>
+                  <PixelButton 
+                    variant="stone"
+                    className="px-6"
+                    onClick={() => window.open('/admin/saude', '_self')}
+                  >
+                    <Activity className="w-4 h-4 mr-2" />
+                    Saúde
+                  </PixelButton>
                 </div>
-                <PixelButton 
-                  variant="stone"
-                  className="px-6 h-fit"
-                  onClick={() => window.open('/admin/saude', '_self')}
-                >
-                  <Activity className="w-4 h-4 mr-2" />
-                  Saúde do Sistema
-                </PixelButton>
               </div>
+
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
