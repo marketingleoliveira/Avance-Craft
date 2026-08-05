@@ -63,7 +63,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
 
         if (!isSignatureValid && process.env['NODE_ENV'] === 'production') {
           await logger.critical("mercadopago", "Invalid signature in production", { 
-            context: { xSignature, xRequestId, body: sanitizePayload(body) } 
+            context: { xSignature, xRequestId, body } 
           });
           return new Response("Invalid signature", { status: 401 });
         }

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { validatePluginSignature } from "@/lib/services/plugin-auth.server";
 import { handleDeliverySuccess, handleDeliveryFailure } from "@/lib/services/delivery-processor.server";
+import { logger } from "@/lib/config/logger.server";
 
 export const Route = createFileRoute("/api/public/plugin")({
   server: {
