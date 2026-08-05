@@ -40,15 +40,15 @@ function AdminRankingPage() {
   });
 
   const columns = [
-    { header: "Posição", accessorKey: "position" },
-    { header: "Nickname", accessorKey: "minecraft_nickname" },
-    { header: "Categoria", accessorKey: "category" },
-    { header: "Período", accessorKey: "period" },
-    { header: "Valor", accessorKey: "display_value" },
+    { header: "Posição", accessorKey: "position" as const },
+    { header: "Nickname", accessorKey: "minecraft_nickname" as const },
+    { header: "Categoria", accessorKey: "category" as const },
+    { header: "Período", accessorKey: "period" as const },
+    { header: "Valor", accessorKey: "display_value" as const },
     { 
       header: "Atualizado", 
-      accessorKey: "updated_at",
-      cell: (val: string) => new Date(val).toLocaleString('pt-BR')
+      accessorKey: "updated_at" as const,
+      cell: (row: any) => new Date(row.updated_at).toLocaleString('pt-BR')
     },
   ];
 

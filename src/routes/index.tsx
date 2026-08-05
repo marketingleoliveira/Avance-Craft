@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { 
   getHomeData,
-  listRankings, 
 } from "@/lib/services/content.functions";
 
 import { Hero } from "@/components/home/Hero";
@@ -30,16 +29,10 @@ export const Route = createFileRoute("/")({
     ],
   }),
   loader: async ({ context }) => {
-    await Promise.all([
-      context.queryClient.ensureQueryData({
-        queryKey: ["home-data"],
-        queryFn: () => getHomeData(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["rankings", "ricos", "weekly", 5],
-        queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 5 } }),
-      }),
-    ]);
+    await context.queryClient.ensureQueryData({
+      queryKey: ["home-data"],
+      queryFn: () => getHomeData(),
+    });
   },
 
   component: Index,
@@ -53,7 +46,6 @@ function Index() {
 
   const { news, status, modes, featuredProducts, settings } = homeData;
 
-
   return (
     <main>
       <Hero settings={settings} />
@@ -64,7 +56,7 @@ function Index() {
       <HowToPlay />
       <CommunitySection settings={settings} />
       <FinalCta />
-
     </main>
   );
 }
+
