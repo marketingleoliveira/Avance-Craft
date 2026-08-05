@@ -6,7 +6,7 @@ import landscape from "@/assets/voxel-landscape.jpg";
 
 export function FinalCta() {
   return (
-    <section className="relative py-32 overflow-hidden bg-stone-950">
+    <section className="relative overflow-hidden">
       {/* Background Image with Cinematic Effects */}
       <div className="absolute inset-0 z-0">
         <img

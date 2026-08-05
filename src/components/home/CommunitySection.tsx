@@ -20,7 +20,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
   ];
 
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="community">
+    <section className="relative overflow-hidden" id="community">
       <Container>
         <div className="grid gap-12 lg:grid-cols-2 items-center">
           {/* Left Content */}

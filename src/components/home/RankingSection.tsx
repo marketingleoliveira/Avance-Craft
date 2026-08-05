@@ -22,7 +22,7 @@ export function RankingSection() {
   });
 
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="ranking">
+    <section className="relative overflow-hidden" id="ranking">
       <Container>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div className="space-y-4">

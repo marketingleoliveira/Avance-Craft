@@ -50,33 +50,41 @@ function Index() {
   return (
     <main className="relative bg-stone-950 overflow-x-hidden">
       <div className="flex flex-col">
+        {/* Section: Hero */}
         <Hero settings={settings} />
         
-        <div className="py-24 md:py-48">
+        {/* Section: Novidades */}
+        <div className="py-32 md:py-64 border-t border-white/5">
           <NewsSection news={news} status={status} />
         </div>
 
-        <div className="py-24 md:py-48 bg-stone-900/10">
+        {/* Section: Modalidades */}
+        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
           <ModesSection modes={modes} />
         </div>
 
-        <div className="py-24 md:py-48">
+        {/* Section: Por que jogar (HowToPlay) */}
+        <div className="py-32 md:py-64">
           <HowToPlay />
         </div>
 
-        <div className="py-24 md:py-48 bg-stone-900/10">
+        {/* Section: Loja */}
+        <div className="py-32 md:py-64 bg-emerald-500/5 border-y border-emerald-500/10">
           <ShopHighlight products={featuredProducts} />
         </div>
 
-        <div className="py-24 md:py-48">
+        {/* Section: Ranking */}
+        <div className="py-32 md:py-64">
           <RankingSection />
         </div>
 
-        <div className="py-24 md:py-48 bg-stone-900/10">
+        {/* Section: Comunidade */}
+        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
           <CommunitySection settings={settings} />
         </div>
 
-        <div className="py-24 md:py-48">
+        {/* Section: CTA Final */}
+        <div className="py-32 md:py-64">
           <FinalCta />
         </div>
 
