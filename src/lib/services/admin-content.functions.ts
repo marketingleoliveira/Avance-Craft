@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import type { 
-  AuditLog,
   News,
   NewsCategory
 } from "@/lib/types/database";
@@ -36,12 +35,14 @@ async function logAudit(
   oldData: any = null
 ) {
   await supabase.from("audit_logs").insert({
-    user_id: userId,
+    actor_profile_id: userId,
     action,
-    entity_type: entityType,
+    entity: entityType,
     entity_id: entityId,
-    new_data: newData,
-    old_data: oldData
+    metadata: {
+      new_data: newData,
+      old_data: oldData
+    }
   });
 }
 
@@ -100,7 +101,6 @@ export const adminCreateNewsCategory = createServerFn({ method: "POST" })
       .insert({
         name: data.name,
         slug: data.slug,
-        active: data.active ?? true,
       } as any)
       .select("*")
       .single();
@@ -138,18 +138,13 @@ export const adminCreateNews = createServerFn({ method: "POST" })
       .insert({
         title: data.title,
         slug: data.slug,
-        summary: data.summary,
+        excerpt: data.summary,
         content: data.content,
-        image_url: data.imageUrl,
+        cover_url: data.imageUrl,
         category_id: data.categoryId,
-        status: data.status,
         published_at: data.publishedAt || (data.status === 'published' ? new Date().toISOString() : null),
-        seo_title: data.seoTitle,
-        seo_description: data.seoDescription,
-        featured: data.featured ?? false,
-        position: data.position ?? 0,
-        author_id: context.userId,
-        published: data.status === 'published' // Mapeamento para a coluna booleana do schema real
+        author_profile_id: context.userId,
+        published: data.status === 'published'
       } as any)
       .select("*")
       .single();
@@ -170,10 +165,9 @@ export const adminUpdateNews = createServerFn({ method: "POST" })
     
     const patch: any = {
       ...fields,
-      image_url: fields.imageUrl,
+      cover_url: fields.imageUrl,
+      excerpt: fields.summary,
       category_id: fields.categoryId,
-      seo_title: fields.seoTitle,
-      seo_description: fields.seoDescription,
       published_at: fields.publishedAt,
     };
     
@@ -183,6 +177,15 @@ export const adminUpdateNews = createServerFn({ method: "POST" })
     } else if (fields.status === 'draft' || fields.status === 'archived') {
       patch.published = false;
     }
+
+    // Remover campos que não existem no banco ou no patch mapping
+    delete patch.imageUrl;
+    delete patch.summary;
+    delete patch.status;
+    delete patch.seoTitle;
+    delete patch.seoDescription;
+    delete patch.featured;
+    delete patch.position;
 
     const { data: row, error } = await context.supabase
       .from("news")
@@ -207,4 +210,3 @@ export const adminDeleteNews = createServerFn({ method: "POST" })
     await logAudit(context.supabase, context.userId, "delete", "news", data.id, null, oldRow);
     return { success: true };
   });
-

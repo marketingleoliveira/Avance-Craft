@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { ChevronLeft, Save, Loader2, Eye, Layout } from "lucide-react";
+import { ChevronLeft, Save, Loader2, Eye } from "lucide-react";
 
 const newsSchema = z.object({
   title: z.string().trim().min(5, "O título deve ter pelo menos 5 caracteres.").max(120),
@@ -51,15 +51,11 @@ const newsSchema = z.object({
 type NewsFormValues = z.infer<typeof newsSchema>;
 
 export const Route = createFileRoute("/admin/noticias/$newsId/edit" as any)({
-  loader: async ({ params, context }) => {
-    // Para simplificar, listamos e buscamos o item no client ou usamos a lista pré-carregada
-    return { newsId: params.newsId };
-  },
   component: EditNewsPage,
 });
 
 function EditNewsPage() {
-  const { newsId } = Route.useParams();
+  const { newsId } = Route.useParams() as { newsId: string };
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -68,7 +64,6 @@ function EditNewsPage() {
     queryFn: () => adminListNewsCategories(),
   });
 
-  // Buscamos a notícia específica da lista
   const { data: newsData } = useSuspenseQuery({
     queryKey: ["admin-news"],
     queryFn: () => adminListNews({ data: { limit: 100 } }),
@@ -78,21 +73,39 @@ function EditNewsPage() {
 
   const form = useForm<NewsFormValues>({
     resolver: zodResolver(newsSchema),
-    values: newsItem ? {
+    defaultValues: {
+      title: "",
+      slug: "",
+      summary: "",
+      content: "",
+      imageUrl: "",
+      categoryId: undefined,
+      status: "draft",
+      publishedAt: "",
+      seoTitle: "",
+      seoDescription: "",
+      featured: false,
+      position: 0,
+    }
+  });
+
+  // Atualizar valores do form quando newsItem carregar
+  if (newsItem && !form.getValues("title")) {
+    form.reset({
       title: newsItem.title,
       slug: newsItem.slug,
-      summary: newsItem.summary || "",
-      content: newsItem.content,
-      imageUrl: newsItem.image_url || "",
-      categoryId: newsItem.category_id || undefined,
-      status: newsItem.status as any,
+      summary: (newsItem as any).excerpt || "",
+      content: (newsItem as any).content || "",
+      imageUrl: (newsItem as any).cover_url || "",
+      categoryId: (newsItem as any).category_id || undefined,
+      status: newsItem.published ? 'published' : 'draft',
       publishedAt: newsItem.published_at ? new Date(newsItem.published_at).toISOString().slice(0, 16) : "",
-      seoTitle: newsItem.seo_title || "",
-      seoDescription: newsItem.seo_description || "",
-      featured: newsItem.featured || false,
-      position: newsItem.position || 0,
-    } : undefined,
-  });
+      seoTitle: "",
+      seoDescription: "",
+      featured: false,
+      position: 0,
+    });
+  }
 
   const mutation = useMutation({
     mutationFn: (values: NewsFormValues) => adminUpdateNews({ data: { ...values, id: newsId } }),
@@ -110,7 +123,7 @@ function EditNewsPage() {
     mutation.mutate(values);
   };
 
-  if (!newsItem) return <div>Notícia não encontrada.</div>;
+  if (!newsItem) return <div className="p-8 text-center font-pixel uppercase">Notícia não encontrada.</div>;
 
   return (
     <div className="grid gap-6 max-w-5xl mx-auto">
