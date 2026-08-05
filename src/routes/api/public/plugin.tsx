@@ -63,21 +63,11 @@ export const Route = createFileRoute("/api/public/plugin")({
 
             if (!delivery) return new Response("Delivery not found or not owned", { status: 403 });
 
-            await supabaseAdmin
-              .from("delivery_queue")
-              .update({ 
-                status: (success ? "delivered" : "failed") as any, 
-                delivered_at: success ? new Date().toISOString() : null,
-                last_error: success ? null : response 
-              })
-              .eq("id", deliveryId);
-            
-            await supabaseAdmin.from("delivery_attempts").insert({
-              delivery_queue_id: deliveryId,
-              attempt_number: 1, 
-              success,
-              response
-            });
+            if (success) {
+              await handleDeliverySuccess(deliveryId, response || "Success", supabaseAdmin);
+            } else {
+              await handleDeliveryFailure(deliveryId, response || "Failed", supabaseAdmin);
+            }
 
             return Response.json({ ok: true });
 
