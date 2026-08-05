@@ -4,7 +4,8 @@ import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { listPublishedNews, getServerStatus, listRankings } from "@/lib/services/content.functions";
+import { listRankings } from "@/lib/services/content.functions";
+
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
 import news3 from "@/assets/news-3.jpg";
@@ -68,16 +69,8 @@ const DEFAULT_STATUS = {
   ip: "jogar.habbletmine.com.br"
 };
 
-export function NewsSection() {
-  const { data: news } = useSuspenseQuery({
-    queryKey: ["published-news", 3],
-    queryFn: () => listPublishedNews({ data: { limit: 3 } }),
-  });
+export function NewsSection({ news, status }: { news: any[]; status: any }) {
 
-  const { data: serverStatus } = useSuspenseQuery({
-    queryKey: ["server-status"],
-    queryFn: () => getServerStatus(),
-  });
 
   const { data: rankings } = useSuspenseQuery({
     queryKey: ["rankings", "ricos", "weekly", 3],

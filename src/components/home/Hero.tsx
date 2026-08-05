@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getServerStatus } from "@/lib/services/content.functions";
+
 import landscape from "@/assets/voxel-landscape.jpg";
 import stoneTex from "@/assets/tex-stone.jpg";
 import charPickaxe from "@/assets/hero-char-pickaxe.png";
@@ -56,14 +56,9 @@ const DEFAULT_STATUS = {
   ip: "jogar.habbletmine.com.br"
 };
 
-export function Hero() {
-  const { data: serverStatus } = useSuspenseQuery({
-    queryKey: ["server-status"],
-    queryFn: () => getServerStatus(),
-  });
+export function Hero({ settings }: { settings?: Record<string, string> }) {
+  const HERO_FACTS = ["Java e Bedrock", `Versão ${settings?.server_version || "1.21+"}`, "Servidor brasileiro"];
 
-  const status = serverStatus ?? DEFAULT_STATUS;
-  const HERO_FACTS = ["Java e Bedrock", `Versão ${status.version}`, "Servidor brasileiro"];
 
   return (
     <section className="relative overflow-hidden border-b-4 border-dirt-dark">

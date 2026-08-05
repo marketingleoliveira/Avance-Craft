@@ -2,9 +2,17 @@ import { Container } from "@/components/ui-kit/Container";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { MOCK_SERVER, SOCIAL_LINKS } from "@/data/mock";
 
-export function CommunitySection() {
+
+export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
+  const discordUrl = settings?.discord_url || "https://discord.gg/habbletmine";
+  const socialLinks = [
+    { label: "Instagram", href: settings?.instagram_url || "#" },
+    { label: "TikTok", href: settings?.tiktok_url || "#" },
+    { label: "YouTube", href: settings?.youtube_url || "#" },
+  ].filter(l => l.href !== "#");
+
+
   return (
     <section className="py-14">
       <Container>
@@ -31,7 +39,7 @@ export function CommunitySection() {
                 ),
               )}
             </ul>
-            <a href={MOCK_SERVER.discord} className="mt-5 block">
+            <a href={discordUrl} className="mt-5 block">
               <PixelButton variant="emerald" className="w-full">
                 Entrar no Discord
               </PixelButton>
@@ -40,7 +48,7 @@ export function CommunitySection() {
 
           <StonePanel title="Redes sociais">
             <ul className="grid gap-3">
-              {SOCIAL_LINKS.map((social) => (
+              {socialLinks.map((social) => (
                 <li key={social.label}>
                   <a href={social.href} className="block">
                     <PixelButton variant="stone" className="w-full justify-between">

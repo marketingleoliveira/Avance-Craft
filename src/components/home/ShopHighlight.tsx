@@ -4,8 +4,8 @@ import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { listProducts } from "@/lib/services/catalog.functions";
-import { formatBRL } from "@/data/shop";
+import { formatBRL } from "@/lib/utils/format";
+
 import chests from "@/assets/vip-chests.png";
 
 function ChestImage({ index, name }: { index: number; name: string }) {
@@ -24,11 +24,8 @@ function ChestImage({ index, name }: { index: number; name: string }) {
   );
 }
 
-export function ShopHighlight() {
-  const { data: products } = useSuspenseQuery({
-    queryKey: ["featured-products", true, 3],
-    queryFn: () => listProducts({ data: { featuredOnly: true, limit: 3 } }),
-  });
+export function ShopHighlight({ products }: { products: any[] }) {
+
 
   return (
     <section className="bg-dirt/15 border-b-4 border-dirt-dark py-14">
