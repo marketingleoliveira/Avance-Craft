@@ -27,16 +27,21 @@ export const Route = createFileRoute("/loja")({
     ],
   }),
   loader: async ({ context }) => {
-    await Promise.all([
-      context.queryClient.ensureQueryData({
-        queryKey: ["categories"],
-        queryFn: () => listCategories(),
-      }),
-      context.queryClient.ensureQueryData({
-        queryKey: ["products", ""],
-        queryFn: () => listProducts({ data: { categorySlug: "" } }),
-      }),
-    ]);
+    try {
+      await Promise.all([
+        context.queryClient.ensureQueryData({
+          queryKey: ["categories"],
+          queryFn: () => listCategories(),
+        }),
+        context.queryClient.ensureQueryData({
+          queryKey: ["products", ""],
+          queryFn: () => listProducts({ data: { categorySlug: "" } }),
+        }),
+      ]);
+    } catch (error) {
+      console.error("[loja] Erro no loader:", error);
+      // Não lançamos erro aqui para permitir que o ErrorComponent ou o estado de erro do componente lidem com isso
+    }
   },
   component: ShopPage,
 });

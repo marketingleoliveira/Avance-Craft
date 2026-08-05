@@ -8,7 +8,8 @@ import type { Category, ProductWithDetails } from "@/lib/types/database";
 export const listCategories = createServerFn({ method: "GET" }).handler(
   async (): Promise<Category[]> => {
     const { getPublicServerClient } = await import("@/lib/supabase/public-client.server");
-    const { data, error } = await getPublicServerClient()
+    const client = getPublicServerClient();
+    const { data, error } = await client
       .from("categories")
       .select("*")
       .eq("active", true)
@@ -34,7 +35,8 @@ export const listProducts = createServerFn({ method: "GET" })
   )
   .handler(async ({ data }): Promise<ProductWithDetails[]> => {
     const { getPublicServerClient } = await import("@/lib/supabase/public-client.server");
-    let query = getPublicServerClient()
+    const client = getPublicServerClient();
+    let query = client
       .from("products")
       .select(`
         *,
