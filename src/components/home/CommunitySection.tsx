@@ -15,7 +15,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
 
 
   return (
-    <section className="py-14">
+    <section className="py-14" id="community">
       <Container>
         <WoodSign subtitle="Converse, participe de eventos e acompanhe as novidades.">
           Comunidade

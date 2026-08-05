@@ -82,7 +82,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
 
 
   return (
-    <section className="py-14">
+    <section className="py-14" id="news">
       <Container>
         <WoodSign subtitle="Fique por dentro das novidades.">
           Novidades
