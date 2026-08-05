@@ -118,7 +118,7 @@ function AdminFeedbackPage() {
             </label>
             <select 
               value={filters.status || ''}
-              onChange={(e) => setFilters({...filters, status: e.target.value || undefined})}
+              onChange={(e) => setFilters(prev => ({...prev, status: e.target.value || undefined}))}
               className="w-full bg-black/40 border border-white/10 p-2 text-white font-minecraft outline-none"
             >
               <option value="">Todos</option>
@@ -136,7 +136,7 @@ function AdminFeedbackPage() {
             </label>
             <select 
               value={filters.type || ''}
-              onChange={(e) => setFilters({...filters, type: e.target.value || undefined})}
+              onChange={(e) => setFilters(prev => ({...prev, type: e.target.value || undefined}))}
               className="w-full bg-black/40 border border-white/10 p-2 text-white font-minecraft outline-none"
             >
               <option value="">Todos</option>
@@ -152,7 +152,7 @@ function AdminFeedbackPage() {
             </label>
             <select 
               value={filters.severity || ''}
-              onChange={(e) => setFilters({...filters, severity: e.target.value || undefined})}
+              onChange={(e) => setFilters(prev => ({...prev, severity: e.target.value || undefined}))}
               className="w-full bg-black/40 border border-white/10 p-2 text-white font-minecraft outline-none"
             >
               <option value="">Todas</option>
