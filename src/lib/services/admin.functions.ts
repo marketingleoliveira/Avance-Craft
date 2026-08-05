@@ -29,11 +29,16 @@ const productInput = z.object({
   featured: z.boolean().optional(),
 });
 
-type AuthedSupabase = Parameters<
-  Parameters<ReturnType<typeof createServerFn>["handler"]>[0]
->[0] extends never
-  ? never
-  : { rpc: (fn: "has_role", args: { _user_id: string; _role: "admin" }) => Promise<{ data: boolean | null; error: { message: string } | null }> };
+/** Contrato mínimo necessário para checar o papel do chamador via RLS. */
+type RoleChecker = {
+  rpc: (
+    fn: "has_role",
+    args: { _user_id: string; _role: "admin" },
+  ) => PromiseLike<{ data: boolean | null; error: { message: string } | null }>;
+};
+
+type AuthedSupabase = RoleChecker;
+
 
 async function assertAdmin(supabase: AuthedSupabase, userId: string): Promise<void> {
   const { data, error } = await supabase.rpc("has_role", {
