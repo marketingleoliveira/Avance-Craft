@@ -88,13 +88,13 @@ function ShopPage() {
           <div className="flex-1">
             <CategoryNav
               categories={categories.map((c) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
-              activeId={selectedCategory || (categories.length > 0 ? categories[0].slug : undefined)}
+              activeId={selectedCategory || (categories && categories.length > 0 ? categories[0].slug : undefined)}
               onSelect={setSelectedCategory}
             />
 
             <div className="mt-8">
               <WoodSign className="mb-6">
-                {categories.find((c) => c.slug === (selectedCategory || (categories.length > 0 ? categories[0].slug : "")))?.name || "Produtos"}
+                {categories?.find((c) => c.slug === (selectedCategory || (categories && categories.length > 0 ? categories[0].slug : "")))?.name || "Produtos"}
               </WoodSign>
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
