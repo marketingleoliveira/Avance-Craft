@@ -2,10 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { Database } from "@/integrations/supabase/types";
 
-export type FeedbackType = 'bug' | 'suggestion' | 'economy' | 'performance' | 'bedrock' | 'java' | 'interface' | 'shop' | 'delivery' | 'other';
-export type FeedbackStatus = 'new' | 'triaged' | 'confirmed' | 'in_progress' | 'resolved' | 'rejected' | 'duplicate';
-export type FeedbackSeverity = 'low' | 'medium' | 'high' | 'critical';
+export type FeedbackType = Database['public']['Enums']['feedback_type'];
+export type FeedbackStatus = Database['public']['Enums']['feedback_status'];
+export type FeedbackSeverity = Database['public']['Enums']['feedback_severity'];
 
 const feedbackSchema = z.object({
   type: z.enum(['bug', 'suggestion', 'economy', 'performance', 'bedrock', 'java', 'interface', 'shop', 'delivery', 'other']),
@@ -33,7 +34,20 @@ export const submitFeedback = createServerFn({ method: "POST" })
     const { error } = await supabase
       .from('beta_feedback')
       .insert({
-        ...data,
+        type: data.type,
+        severity: data.severity,
+        title: data.title,
+        description: data.description,
+        steps_to_reproduce: data.steps_to_reproduce ?? null,
+        expected_result: data.expected_result ?? null,
+        actual_result: data.actual_result ?? null,
+        minecraft_nickname: data.minecraft_nickname,
+        edition: data.edition ?? null,
+        version: data.version ?? null,
+        device_info: data.device_info ?? null,
+        server_id: data.server_id ?? null,
+        attachments: data.attachments ?? null,
+        contact_consent: data.contact_consent,
         profile_id: session.user.id,
         status: 'new'
       });
@@ -71,13 +85,12 @@ export const getFeedbackDetails = createServerFn({ method: "GET" })
 
     if (error) throw error;
     
-    // Security check: only owner or admin can see
     const isAdmin = session.user.app_metadata?.['role'] === 'admin';
     if (data.profile_id !== session.user.id && !isAdmin) {
       throw new Error("Forbidden");
     }
 
-    return data;
+    return data as any;
   });
 
 export const getAdminFeedbacks = createServerFn({ method: "GET" })
@@ -95,13 +108,13 @@ export const getAdminFeedbacks = createServerFn({ method: "GET" })
       .select('*, profiles(username)')
       .order('created_at', { ascending: false });
 
-    if (filters?.status) query = query.eq('status', filters.status);
-    if (filters?.type) query = query.eq('type', filters.type);
-    if (filters?.severity) query = query.eq('severity', filters.severity);
+    if (filters?.status) query = query.eq('status', filters.status as any);
+    if (filters?.type) query = query.eq('type', filters.type as any);
+    if (filters?.severity) query = query.eq('severity', filters.severity as any);
 
     const { data, error } = await query;
     if (error) throw error;
-    return data;
+    return data as any[];
   });
 
 export const updateFeedbackStatus = createServerFn({ method: "POST" })
@@ -119,8 +132,8 @@ export const updateFeedbackStatus = createServerFn({ method: "POST" })
       .from('beta_feedback')
       .update({
         status: data.status,
-        internal_notes: data.internal_notes,
-        assigned_to: data.assigned_to,
+        internal_notes: data.internal_notes ?? null,
+        assigned_to: data.assigned_to ?? null,
         updated_at: new Date().toISOString()
       })
       .eq('id', data.id);
