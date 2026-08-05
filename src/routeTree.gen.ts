@@ -28,6 +28,7 @@ import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin/auditoria'
+import { Route as AdminBetaConvitesRouteImport } from './routes/admin/beta-convites'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin/configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin/cupons'
 import { Route as AdminEntregasRouteImport } from './routes/admin/entregas'
@@ -147,6 +148,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
   id: '/auditoria',
   path: '/auditoria',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBetaConvitesRoute = AdminBetaConvitesRouteImport.update({
+  id: '/beta-convites',
+  path: '/beta-convites',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
@@ -295,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/beta-convites': typeof AdminBetaConvitesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -340,6 +347,7 @@ export interface FileRoutesByTo {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/beta-convites': typeof AdminBetaConvitesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -387,6 +395,7 @@ export interface FileRoutesById {
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/beta-convites': typeof AdminBetaConvitesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/entregas': typeof AdminEntregasRoute
@@ -435,6 +444,7 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
+    | '/admin/beta-convites'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
+    | '/admin/beta-convites'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -526,6 +537,7 @@ export interface FileRouteTypes {
     | '/suporte'
     | '/termos'
     | '/admin/auditoria'
+    | '/admin/beta-convites'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/entregas'
@@ -713,6 +725,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuditoriaRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/beta-convites': {
+      id: '/admin/beta-convites'
+      path: '/beta-convites'
+      fullPath: '/admin/beta-convites'
+      preLoaderRoute: typeof AdminBetaConvitesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/configuracoes': {
       id: '/admin/configuracoes'
       path: '/configuracoes'
@@ -893,6 +912,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminBetaConvitesRoute: typeof AdminBetaConvitesRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEntregasRoute: typeof AdminEntregasRoute
@@ -919,6 +939,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminBetaConvitesRoute: AdminBetaConvitesRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEntregasRoute: AdminEntregasRoute,
