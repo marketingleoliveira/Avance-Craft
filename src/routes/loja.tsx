@@ -10,6 +10,8 @@ import { CartPanel } from "@/components/shop/CartPanel";
 import { ShopFaq, ShopTerms } from "@/components/shop/ShopInfo";
 import { useCart } from "@/components/shop/CartContext";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
+import { StonePanel } from "@/components/ui-kit/StonePanel";
+
 
 export const Route = createFileRoute("/loja")({
   loader: async ({ context }) => {
