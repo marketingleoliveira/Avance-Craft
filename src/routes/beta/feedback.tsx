@@ -75,7 +75,7 @@ function BetaFeedbackPage() {
     <div className="min-h-screen bg-[#1a1a1a] py-12 px-4">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="flex flex-col items-center text-center space-y-4">
-          <WoodSign variant="dark" className="px-12 py-4">
+          <WoodSign className="px-12 py-4">
             <h1 className="text-3xl font-minecraft text-white">Feedback do Beta</h1>
           </WoodSign>
           <p className="text-gray-400 max-w-xl">
