@@ -156,7 +156,9 @@ function Index() {
                     "Termos, Privacidade e Regras Dinâmicos",
                     "Dockerfile & Docker Compose Configurados",
                     "Monitoramento & Backup Estruturados",
-                    "Healthcheck de Produção (/api/health)"
+                    "Healthcheck de Produção (/api/health)",
+                    "Configuração Nginx & SSL Preparada"
+
 
 
 
