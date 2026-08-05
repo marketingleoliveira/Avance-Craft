@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ComoJogarRouteImport } from './routes/como-jogar'
+import { Route as ComprasRouteImport } from './routes/compras'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as FalhaRouteImport } from './routes/falha'
@@ -24,6 +25,7 @@ import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as ReembolsoRouteImport } from './routes/reembolso'
 import { Route as RegrasRouteImport } from './routes/regras'
+import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as StatusRouteImport } from './routes/status'
 import { Route as SucessoRouteImport } from './routes/sucesso'
 import { Route as SuporteRouteImport } from './routes/suporte'
@@ -84,6 +86,11 @@ const ComoJogarRoute = ComoJogarRouteImport.update({
   path: '/como-jogar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComprasRoute = ComprasRouteImport.update({
+  id: '/compras',
+  path: '/compras',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
@@ -132,6 +139,11 @@ const ReembolsoRoute = ReembolsoRouteImport.update({
 const RegrasRoute = RegrasRouteImport.update({
   id: '/regras',
   path: '/regras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SegurancaRoute = SegurancaRouteImport.update({
+  id: '/seguranca',
+  path: '/seguranca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StatusRoute = StatusRouteImport.update({
@@ -312,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
+  '/compras': typeof ComprasRoute
   '/contato': typeof ContatoRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -322,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/ranking': typeof RankingRoute
   '/reembolso': typeof ReembolsoRoute
   '/regras': typeof RegrasRoute
+  '/seguranca': typeof SegurancaRoute
   '/status': typeof StatusRoute
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
@@ -362,6 +376,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
+  '/compras': typeof ComprasRoute
   '/contato': typeof ContatoRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -372,6 +387,7 @@ export interface FileRoutesByTo {
   '/ranking': typeof RankingRoute
   '/reembolso': typeof ReembolsoRoute
   '/regras': typeof RegrasRoute
+  '/seguranca': typeof SegurancaRoute
   '/status': typeof StatusRoute
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
@@ -414,6 +430,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/beta': typeof BetaRouteWithChildren
   '/como-jogar': typeof ComoJogarRoute
+  '/compras': typeof ComprasRoute
   '/contato': typeof ContatoRoute
   '/equipe': typeof EquipeRoute
   '/falha': typeof FalhaRoute
@@ -424,6 +441,7 @@ export interface FileRoutesById {
   '/ranking': typeof RankingRoute
   '/reembolso': typeof ReembolsoRoute
   '/regras': typeof RegrasRoute
+  '/seguranca': typeof SegurancaRoute
   '/status': typeof StatusRoute
   '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
@@ -467,6 +485,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beta'
     | '/como-jogar'
+    | '/compras'
     | '/contato'
     | '/equipe'
     | '/falha'
@@ -477,6 +496,7 @@ export interface FileRouteTypes {
     | '/ranking'
     | '/reembolso'
     | '/regras'
+    | '/seguranca'
     | '/status'
     | '/sucesso'
     | '/suporte'
@@ -517,6 +537,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beta'
     | '/como-jogar'
+    | '/compras'
     | '/contato'
     | '/equipe'
     | '/falha'
@@ -527,6 +548,7 @@ export interface FileRouteTypes {
     | '/ranking'
     | '/reembolso'
     | '/regras'
+    | '/seguranca'
     | '/status'
     | '/sucesso'
     | '/suporte'
@@ -568,6 +590,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beta'
     | '/como-jogar'
+    | '/compras'
     | '/contato'
     | '/equipe'
     | '/falha'
@@ -578,6 +601,7 @@ export interface FileRouteTypes {
     | '/ranking'
     | '/reembolso'
     | '/regras'
+    | '/seguranca'
     | '/status'
     | '/sucesso'
     | '/suporte'
@@ -620,6 +644,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BetaRoute: typeof BetaRouteWithChildren
   ComoJogarRoute: typeof ComoJogarRoute
+  ComprasRoute: typeof ComprasRoute
   ContatoRoute: typeof ContatoRoute
   EquipeRoute: typeof EquipeRoute
   FalhaRoute: typeof FalhaRoute
@@ -630,6 +655,7 @@ export interface RootRouteChildren {
   RankingRoute: typeof RankingRoute
   ReembolsoRoute: typeof ReembolsoRoute
   RegrasRoute: typeof RegrasRoute
+  SegurancaRoute: typeof SegurancaRoute
   StatusRoute: typeof StatusRoute
   SucessoRoute: typeof SucessoRoute
   SuporteRoute: typeof SuporteRoute
@@ -675,6 +701,13 @@ declare module '@tanstack/react-router' {
       path: '/como-jogar'
       fullPath: '/como-jogar'
       preLoaderRoute: typeof ComoJogarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compras': {
+      id: '/compras'
+      path: '/compras'
+      fullPath: '/compras'
+      preLoaderRoute: typeof ComprasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -745,6 +778,13 @@ declare module '@tanstack/react-router' {
       path: '/regras'
       fullPath: '/regras'
       preLoaderRoute: typeof RegrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seguranca': {
+      id: '/seguranca'
+      path: '/seguranca'
+      fullPath: '/seguranca'
+      preLoaderRoute: typeof SegurancaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/status': {
@@ -1062,6 +1102,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BetaRoute: BetaRouteWithChildren,
   ComoJogarRoute: ComoJogarRoute,
+  ComprasRoute: ComprasRoute,
   ContatoRoute: ContatoRoute,
   EquipeRoute: EquipeRoute,
   FalhaRoute: FalhaRoute,
@@ -1072,6 +1113,7 @@ const rootRouteChildren: RootRouteChildren = {
   RankingRoute: RankingRoute,
   ReembolsoRoute: ReembolsoRoute,
   RegrasRoute: RegrasRoute,
+  SegurancaRoute: SegurancaRoute,
   StatusRoute: StatusRoute,
   SucessoRoute: SucessoRoute,
   SuporteRoute: SuporteRoute,
