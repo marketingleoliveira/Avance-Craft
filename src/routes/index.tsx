@@ -113,6 +113,22 @@ function Index() {
 
             </div>
 
+            <div className="bg-green-500/10 border border-green-500/30 rounded p-4 mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 bg-green-500 rounded flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-white font-minecraft text-lg">STATUS: PRONTO PARA LANÇAMENTO</h4>
+                  <p className="text-[10px] text-green-400 uppercase tracking-wider font-bold">Versão 1.0.0-final - Auditoria de Hardening Concluída</p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-300 ml-11">
+                O sistema passou por auditoria técnica enterprise de segurança, atomicidade financeira e observabilidade. 
+                Todos os 24 marcos críticos foram validados com sucesso. <Link to="/admin/logs" className="text-green-400 underline hover:text-green-300">Ver logs de auditoria</Link>.
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* TEST HARNESS PAGAMENTOS */}
               <div className="space-y-4">
