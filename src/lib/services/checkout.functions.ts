@@ -16,7 +16,7 @@ export const createPaymentPreference = createServerFn({ method: "POST" })
             quantity: z.number().int().min(1).max(99),
           })
         ),
-        couponCode: z.string().nullish(),
+        couponCode: z.string().optional().nullable(),
       })
       .parse(data)
   )
@@ -26,7 +26,7 @@ export const createPaymentPreference = createServerFn({ method: "POST" })
         nickname: data.nickname,
         edition: data.edition,
         items: data.items,
-        couponCode: (data.couponCode as string) || undefined,
+        couponCode: data.couponCode ?? undefined,
       },
       context.supabase,
       context.userId
