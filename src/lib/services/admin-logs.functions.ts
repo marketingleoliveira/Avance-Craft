@@ -1,22 +1,23 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { requireAdmin } from "@/lib/utils/security";
+import { requireOwnership } from "@/lib/utils/security";
 
 /**
  * Funções administrativas para gerenciamento e visualização de logs.
  */
 
 export const getErrorLogs = createServerFn({ method: "GET" })
-  .input(z.object({
+  .validator((data: unknown) => z.object({
     severity: z.string().optional(),
     service: z.string().optional(),
     search: z.string().optional(),
     page: z.number().default(1),
     pageSize: z.number().default(50)
-  }))
+  }).parse(data))
   .handler(async ({ data }) => {
-    await requireAdmin();
+    // No Habblet Mine, requireOwnership sem resourceId valida apenas se é admin
+    await requireOwnership('admin-logs');
 
     let query = supabaseAdmin
       .from('error_logs')
@@ -46,9 +47,9 @@ export const getErrorLogs = createServerFn({ method: "GET" })
   });
 
 export const pruneLogs = createServerFn({ method: "POST" })
-  .input(z.object({ days: z.number().default(30) }))
+  .validator((data: unknown) => z.object({ days: z.number().default(30) }).parse(data))
   .handler(async ({ data }) => {
-    await requireAdmin();
+    await requireOwnership('admin-logs');
 
     const { error } = await supabaseAdmin.rpc('prune_old_logs', {
       retention_days: data.days
