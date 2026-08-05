@@ -5,10 +5,10 @@
  * habilitado, a implementação real deve apenas chamar um server function que
  * cria a preferência de pagamento no backend e devolve a URL de checkout.
  *
- * Contrato pensado para o Mercado Pago Checkout Pro:
- *   POST (server) -> preference { items, payer, external_reference }
- *   resposta      -> { init_point: string }
+ * Contrato real via server function:
+ *   createPaymentPreference({ nickname, edition, items, couponCode })
  */
+
 
 export type Platform = "java" | "bedrock";
 
@@ -32,22 +32,42 @@ export type CheckoutResult =
   | { status: "redirect"; url: string };
 
 /**
- * Implementação mockada: NÃO processa pagamento e NÃO chama API externa.
- * Trocar pelo server function de criação de preferência quando o backend existir.
+ * Nota: createCheckout agora é um wrapper para a server function createPaymentPreference.
  */
+import { createPaymentPreference } from "@/lib/services/checkout.functions";
+
 export async function createCheckout(request: CheckoutRequest): Promise<CheckoutResult> {
-  if (!request.nickname.trim()) {
-    return { status: "unavailable", message: "Informe seu nick antes de continuar." };
-  }
+  const error = validateNickname(request.nickname, request.platform);
+  if (error) return { status: "unavailable", message: error };
+  
   if (request.items.length === 0) {
     return { status: "unavailable", message: "Seu carrinho está vazio." };
   }
-  return {
-    status: "unavailable",
-    message:
-      "Pagamentos ainda não estão habilitados. Esta loja é demonstrativa e nenhuma cobrança é feita.",
-  };
+
+  try {
+    const result = await createPaymentPreference({
+      data: {
+        nickname: request.nickname,
+        edition: request.platform,
+        items: request.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
+        couponCode: request.coupon || null
+      }
+    });
+
+
+
+    return {
+      status: "redirect",
+      url: result.checkoutUrl
+    };
+  } catch (err: any) {
+    return { 
+      status: "unavailable", 
+      message: err.message || "Erro ao processar checkout. Tente novamente." 
+    };
+  }
 }
+
 
 /** Regras de validação de nick por plataforma. */
 export function validateNickname(nickname: string, platform: Platform): string | null {

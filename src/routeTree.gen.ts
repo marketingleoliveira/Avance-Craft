@@ -19,8 +19,11 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as RankingRouteImport } from './routes/ranking'
 import { Route as RegrasRouteImport } from './routes/regras'
+import { Route as SucessoRouteImport } from './routes/sucesso'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as TermosRouteImport } from './routes/termos'
+import { Route as ApiPublicMercadopagoRouteImport } from './routes/api/public/mercadopago'
+import { Route as ApiPublicPluginRouteImport } from './routes/api/public/plugin'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -72,6 +75,11 @@ const RegrasRoute = RegrasRouteImport.update({
   path: '/regras',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SucessoRoute = SucessoRouteImport.update({
+  id: '/sucesso',
+  path: '/sucesso',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuporteRoute = SuporteRouteImport.update({
   id: '/suporte',
   path: '/suporte',
@@ -80,6 +88,16 @@ const SuporteRoute = SuporteRouteImport.update({
 const TermosRoute = TermosRouteImport.update({
   id: '/termos',
   path: '/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMercadopagoRoute = ApiPublicMercadopagoRouteImport.update({
+  id: '/api/public/mercadopago',
+  path: '/api/public/mercadopago',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPluginRoute = ApiPublicPluginRouteImport.update({
+  id: '/api/public/plugin',
+  path: '/api/public/plugin',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -94,8 +112,11 @@ export interface FileRoutesByFullPath {
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
   '/regras': typeof RegrasRoute
+  '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
+  '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
+  '/api/public/plugin': typeof ApiPublicPluginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -108,8 +129,11 @@ export interface FileRoutesByTo {
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
   '/regras': typeof RegrasRoute
+  '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
+  '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
+  '/api/public/plugin': typeof ApiPublicPluginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -123,8 +147,11 @@ export interface FileRoutesById {
   '/privacidade': typeof PrivacidadeRoute
   '/ranking': typeof RankingRoute
   '/regras': typeof RegrasRoute
+  '/sucesso': typeof SucessoRoute
   '/suporte': typeof SuporteRoute
   '/termos': typeof TermosRoute
+  '/api/public/mercadopago': typeof ApiPublicMercadopagoRoute
+  '/api/public/plugin': typeof ApiPublicPluginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -139,8 +166,11 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/ranking'
     | '/regras'
+    | '/sucesso'
     | '/suporte'
     | '/termos'
+    | '/api/public/mercadopago'
+    | '/api/public/plugin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,8 +183,11 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/ranking'
     | '/regras'
+    | '/sucesso'
     | '/suporte'
     | '/termos'
+    | '/api/public/mercadopago'
+    | '/api/public/plugin'
   id:
     | '__root__'
     | '/'
@@ -167,8 +200,11 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/ranking'
     | '/regras'
+    | '/sucesso'
     | '/suporte'
     | '/termos'
+    | '/api/public/mercadopago'
+    | '/api/public/plugin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,8 +218,11 @@ export interface RootRouteChildren {
   PrivacidadeRoute: typeof PrivacidadeRoute
   RankingRoute: typeof RankingRoute
   RegrasRoute: typeof RegrasRoute
+  SucessoRoute: typeof SucessoRoute
   SuporteRoute: typeof SuporteRoute
   TermosRoute: typeof TermosRoute
+  ApiPublicMercadopagoRoute: typeof ApiPublicMercadopagoRoute
+  ApiPublicPluginRoute: typeof ApiPublicPluginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -258,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegrasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sucesso': {
+      id: '/sucesso'
+      path: '/sucesso'
+      fullPath: '/sucesso'
+      preLoaderRoute: typeof SucessoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/suporte': {
       id: '/suporte'
       path: '/suporte'
@@ -270,6 +316,20 @@ declare module '@tanstack/react-router' {
       path: '/termos'
       fullPath: '/termos'
       preLoaderRoute: typeof TermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/mercadopago': {
+      id: '/api/public/mercadopago'
+      path: '/api/public/mercadopago'
+      fullPath: '/api/public/mercadopago'
+      preLoaderRoute: typeof ApiPublicMercadopagoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/plugin': {
+      id: '/api/public/plugin'
+      path: '/api/public/plugin'
+      fullPath: '/api/public/plugin'
+      preLoaderRoute: typeof ApiPublicPluginRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -286,19 +346,12 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacidadeRoute: PrivacidadeRoute,
   RankingRoute: RankingRoute,
   RegrasRoute: RegrasRoute,
+  SucessoRoute: SucessoRoute,
   SuporteRoute: SuporteRoute,
   TermosRoute: TermosRoute,
+  ApiPublicMercadopagoRoute: ApiPublicMercadopagoRoute,
+  ApiPublicPluginRoute: ApiPublicPluginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
