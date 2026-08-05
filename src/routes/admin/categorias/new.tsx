@@ -31,8 +31,8 @@ const categorySchema = z.object({
     .regex(/^[a-z0-9-]+$/, "Slug deve conter apenas letras minúsculas, números e hífen."),
   description: z.string().trim().max(500).nullable().optional(),
   icon: z.string().trim().nullable().optional(),
-  active: z.boolean().default(true),
-  position: z.coerce.number().int().default(0),
+  active: z.boolean(),
+  position: z.coerce.number().int(),
 });
 
 type CategoryFormValues = z.infer<typeof categorySchema>;
