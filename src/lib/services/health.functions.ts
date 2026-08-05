@@ -41,7 +41,7 @@ export const getSystemHealth = createServerFn({ method: "GET" })
     const { count: pendingCount } = await supabase
       .from("delivery_queue")
       .select("*", { count: 'exact', head: true })
-      .eq("status", "pending");
+      .eq("status", "queued");
 
     const { count: stuckCount } = await supabase
       .from("delivery_queue")
