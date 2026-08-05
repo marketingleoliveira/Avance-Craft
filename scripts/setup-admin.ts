@@ -10,14 +10,13 @@ async function createInitialAdmin() {
   const { data: userData, error: userError } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
-    email_confirm: true // Confirmar manualmente o e-mail do admin inicial
+    email_confirm: true 
   });
 
   if (userError) {
     if (userError.message.includes('already exists')) {
-      console.log('Usuário já existe. Prosseguindo para atribuição de cargo.');
-      // Buscar o ID do usuário existente
-      const { data: listData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+      console.log('Usuário já existe. Buscando ID...');
+      const { data: listData } = await supabaseAdmin.auth.admin.listUsers();
       const existingUser = listData?.users.find(u => u.email === email);
       if (existingUser) {
         await assignAdminRole(existingUser.id);
@@ -33,8 +32,6 @@ async function createInitialAdmin() {
 
 async function assignAdminRole(userId: string) {
   console.log(`Atribuindo cargo de admin ao usuário: ${userId}`);
-  
-  // 2. Inserir na tabela user_roles
   const { error: roleError } = await supabaseAdmin
     .from('user_roles')
     .upsert({ user_id: userId, role: 'admin' }, { onConflict: 'user_id,role' });
