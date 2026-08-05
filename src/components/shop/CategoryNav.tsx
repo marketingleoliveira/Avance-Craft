@@ -2,8 +2,8 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   categories: { id: string; label: string; description?: string }[];
-  activeId?: string;
-  onSelect: (id: string) => void;
+  activeId: string | undefined;
+  onSelect: (id: string | undefined) => void;
 };
 
 /** Navegação de categorias da loja (rolagem horizontal no mobile). */
