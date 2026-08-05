@@ -106,9 +106,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [coupon]);
 
   const detailed = useMemo(
-    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as ShopProduct, quantity: l.quantity })),
+    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as any, quantity: l.quantity })),
     [lines],
   );
+
 
   const subtotalCents = useMemo(
     () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),
