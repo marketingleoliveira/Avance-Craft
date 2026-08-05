@@ -49,15 +49,38 @@ function Index() {
 
   return (
     <main className="relative bg-stone-950 overflow-x-hidden">
-      <Hero settings={settings} />
-      <div className="relative space-y-0">
-        <NewsSection news={news} status={status} />
-        <ModesSection modes={modes} />
-        <ShopHighlight products={featuredProducts} />
-        <RankingSection />
-        <HowToPlay />
-        <CommunitySection settings={settings} />
-        <FinalCta />
+      <div className="flex flex-col">
+        <Hero settings={settings} />
+        
+        <div className="py-24 md:py-48">
+          <NewsSection news={news} status={status} />
+        </div>
+
+        <div className="py-24 md:py-48 bg-stone-900/10">
+          <ModesSection modes={modes} />
+        </div>
+
+        <div className="py-24 md:py-48">
+          <HowToPlay />
+        </div>
+
+        <div className="py-24 md:py-48 bg-stone-900/10">
+          <ShopHighlight products={featuredProducts} />
+        </div>
+
+        <div className="py-24 md:py-48">
+          <RankingSection />
+        </div>
+
+        <div className="py-24 md:py-48 bg-stone-900/10">
+          <CommunitySection settings={settings} />
+        </div>
+
+        <div className="py-24 md:py-48">
+          <FinalCta />
+        </div>
+
+        <SiteFooter />
       </div>
     </main>
   );
