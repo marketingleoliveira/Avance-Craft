@@ -10,6 +10,7 @@ import { HowToPlay } from "@/components/home/HowToPlay";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 const title = "Avance — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
