@@ -16,7 +16,10 @@ import type {
   Profile,
 } from "@/lib/types/database";
 
+import { requireOwnership } from "@/lib/utils/security";
+
 export const getMyProfile = createServerFn({ method: "GET" })
+
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<Profile | null> => {
     const { data, error } = await context.supabase
@@ -35,9 +38,11 @@ export const listMyPlayerAccounts = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("player_accounts")
       .select("*")
+      .eq("profile_id", context.userId)
       .order("created_at", { ascending: true });
 
     if (error) throw new Error(`Falha ao carregar as contas: ${error.message}`);
+
     return data ?? [];
   });
 
@@ -85,10 +90,12 @@ export const listMyOrders = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("orders")
       .select("*, items:order_items(*)")
+      .eq("profile_id", context.userId)
       .order("created_at", { ascending: false })
       .limit(50);
 
     if (error) throw new Error(`Falha ao carregar os pedidos: ${error.message}`);
+
     return (data ?? []) as unknown as OrderWithItems[];
   });
 
@@ -97,6 +104,9 @@ export const getMyOrder = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => z.object({ orderId: z.string().uuid() }).parse(input))
   .handler(
     async ({ data, context }): Promise<(OrderWithItems & { payments: Payment[] }) | null> => {
+      // Proteção IDOR via requireOwnership
+      await requireOwnership(context.supabase, "orders", data.orderId, context.userId);
+
       const { data: row, error } = await context.supabase
         .from("orders")
         .select("*, items:order_items(*), payments:payments(*)")
@@ -107,5 +117,6 @@ export const getMyOrder = createServerFn({ method: "GET" })
       return (row as unknown as OrderWithItems & { payments: Payment[] }) ?? null;
     },
   );
+
 
 export type { Order };
