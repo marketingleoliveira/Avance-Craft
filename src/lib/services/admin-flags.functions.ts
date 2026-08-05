@@ -31,15 +31,17 @@ export const adminUpdateFeatureFlag = createServerFn({ method: "POST" })
     const { flag, value, reason } = data;
 
     // Em produção, não permitir desativar segurança básica ou ativar pagamentos reais sem confirmação extra
-    // Aqui poderíamos ter validações específicas baseadas na flag
     
     await context.supabase.from("audit_logs").insert({
-      user_id: context.userId,
+      actor_profile_id: context.userId,
       action: `update_flag_${value ? 'enabled' : 'disabled'}`,
-      entity_type: "feature_flag",
+      entity: "feature_flag",
       entity_id: flag,
-      new_data: { value, reason },
-      old_data: { value: isFeatureEnabled(flag as FeatureFlag) }
+      metadata: { 
+        value, 
+        reason,
+        old_value: isFeatureEnabled(flag as FeatureFlag)
+      }
     });
 
     return { success: true };
