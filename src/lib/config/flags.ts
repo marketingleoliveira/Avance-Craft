@@ -34,13 +34,14 @@ const CACHE_TTL = 30000; // 30 segundos
 /**
  * Busca as flags do banco com estratégia de cache.
  */
-export async function getPublicFeatureFlags(): Promise<Partial<Record<FeatureFlag, boolean>>> {
+export async function getPublicFeatureFlags(forceRefresh = false): Promise<Partial<Record<FeatureFlag, boolean>>> {
   const now = Date.now();
   
   // Se tiver cache válido, retorna imediatamente
-  if (flagCache.data && (now - flagCache.lastFetch < CACHE_TTL)) {
+  if (!forceRefresh && flagCache.data && (now - flagCache.lastFetch < CACHE_TTL)) {
     return flagCache.data;
   }
+
 
   try {
     const env = getEnv();

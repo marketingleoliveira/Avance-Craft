@@ -18,9 +18,10 @@ vi.mock('../env.server', () => ({
 }));
 
 describe('Persistent Feature Flags System', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
   });
+
 
   it('deve carregar flags do banco e fazer merge com defaults', async () => {
     // Importar o mock localmente para configurar o comportamento por teste
@@ -36,7 +37,8 @@ describe('Persistent Feature Flags System', () => {
       eq: vi.fn().mockResolvedValue({ data: mockData, error: null })
     });
 
-    const flags = await getPublicFeatureFlags();
+    const flags = await getPublicFeatureFlags(true);
+
 
     expect(flags.STORE_ENABLED).toBe(false);
     expect(flags.MAINTENANCE_MODE).toBe(true);
@@ -55,8 +57,9 @@ describe('Persistent Feature Flags System', () => {
       eq: eqMock
     });
 
-    // Primeira chamada - vai ao banco
-    await getPublicFeatureFlags();
+    // Primeira chamada - vai ao banco (forçamos o refresh para ignorar resíduo de outros testes)
+    await getPublicFeatureFlags(true);
+
     expect(selectMock).toHaveBeenCalledTimes(1);
 
     // Segunda chamada - deve usar o cache (TTL é 30s)
@@ -74,7 +77,7 @@ describe('Persistent Feature Flags System', () => {
       eq: vi.fn().mockResolvedValue({ data: null, error: { message: 'DB Down' } })
     });
 
-    const flags = await getPublicFeatureFlags();
+    const flags = await getPublicFeatureFlags(true);
     expect(flags.STORE_ENABLED).toBe(DEFAULT_FLAGS.STORE_ENABLED);
   });
 });
