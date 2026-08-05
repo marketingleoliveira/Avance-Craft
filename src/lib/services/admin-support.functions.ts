@@ -114,7 +114,7 @@ export const adminReplyTicket = createServerFn({ method: "POST" })
     
     const update: any = { updated_at: new Date().toISOString() };
     if (data.newStatus) update.status = data.newStatus;
-    else update.status = "pending"; 
+    else update.status = "pending" as any; 
     
     await context.supabase.from("support_tickets").update(update).eq("id", data.ticketId);
     

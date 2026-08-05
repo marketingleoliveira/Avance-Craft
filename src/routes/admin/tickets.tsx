@@ -16,7 +16,7 @@ export const Route = createFileRoute("/admin/tickets")({
     const filters = { status: "", category: "", search: "" };
     await context.queryClient.ensureQueryData({
       queryKey: ["admin-tickets", filters],
-      queryFn: () => adminListTickets({ data: filters }),
+      queryFn: () => adminListTickets({ data: filters } as any),
     });
   },
   component: AdminTicketsPage,
@@ -31,7 +31,7 @@ function AdminTicketsPage() {
 
   const { data } = useSuspenseQuery({
     queryKey: ["admin-tickets", filters],
-    queryFn: () => adminListTickets({ data: filters }),
+    queryFn: () => adminListTickets({ data: filters } as any),
   });
 
   const getStatusBadge = (status: string) => {
