@@ -28,7 +28,7 @@ function AdminHealthPage() {
     refetchInterval: 30000, // Auto refresh every 30s
   });
 
-  if (isLoading) return <Container className="py-12"><div className="text-center text-white">Carregando status do sistema...</div></Container>;
+  if (isLoading) return <Container className="py-12"><div className="text-center text-foreground">Carregando status do sistema...</div></Container>;
 
   const services = health?.services;
 
@@ -58,7 +58,7 @@ function AdminHealthPage() {
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Latência:</span>
-              <span className="text-white font-mono">{services?.database.latency}</span>
+              <span className="text-foreground font-mono">{services?.database.latency}</span>
             </div>
           </div>
         </StonePanel>
@@ -75,11 +75,11 @@ function AdminHealthPage() {
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Jogadores:</span>
-              <span className="text-white">{services?.plugin.players}</span>
+              <span className="text-foreground">{services?.plugin.players}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Heartbeat:</span>
-              <span className="text-white text-[10px]">
+              <span className="text-foreground text-[10px]">
                 {services?.plugin.last_heartbeat ? new Date(services.plugin.last_heartbeat).toLocaleTimeString() : 'N/A'}
               </span>
             </div>
@@ -98,7 +98,7 @@ function AdminHealthPage() {
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Pendentes:</span>
-              <span className="text-white">{services?.delivery_queue.pending}</span>
+              <span className="text-foreground">{services?.delivery_queue.pending}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Falhas:</span>
@@ -121,7 +121,7 @@ function AdminHealthPage() {
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Modo:</span>
-              <span className="text-white uppercase">{services?.checkout.mode}</span>
+              <span className="text-foreground uppercase">{services?.checkout.mode}</span>
             </div>
           </div>
         </StonePanel>
@@ -139,7 +139,7 @@ function AdminHealthPage() {
               <XCircle className="text-red-500 mt-1 shrink-0" />
               <div>
                 <h4 className="font-bold text-red-500">Fila de Entregas Acumulada</h4>
-                <p className="text-sm text-red-200/80">Existem mais de 10 entregas falhas que requerem atenção manual.</p>
+                <p className="text-sm text-red-800">Existem mais de 10 entregas falhas que requerem atenção manual.</p>
               </div>
             </div>
           )}
@@ -149,7 +149,7 @@ function AdminHealthPage() {
               <AlertTriangle className="text-amber-500 mt-1 shrink-0" />
               <div>
                 <h4 className="font-bold text-amber-500">Plugin Offline</h4>
-                <p className="text-sm text-amber-200/80">O servidor de Minecraft não está enviando heartbeats há mais de 1 minuto.</p>
+                <p className="text-sm text-amber-800">O servidor de Minecraft não está enviando heartbeats há mais de 1 minuto.</p>
               </div>
             </div>
           )}
@@ -159,7 +159,7 @@ function AdminHealthPage() {
               <XCircle className="text-red-500 mt-1 shrink-0" />
               <div>
                 <h4 className="font-bold text-red-500">Checkout Indisponível</h4>
-                <p className="text-sm text-red-200/80">As credenciais do Mercado Pago não foram configuradas. Vendas estão bloqueadas.</p>
+                <p className="text-sm text-red-800">As credenciais do Mercado Pago não foram configuradas. Vendas estão bloqueadas.</p>
               </div>
             </div>
           )}
@@ -169,7 +169,7 @@ function AdminHealthPage() {
               <CheckCircle2 className="text-emerald-500 mt-1 shrink-0" />
               <div>
                 <h4 className="font-bold text-emerald-500">Operação Normal</h4>
-                <p className="text-sm text-emerald-200/80">Todos os sistemas críticos estão operando dentro dos parâmetros esperados.</p>
+                <p className="text-sm text-emerald-800">Todos os sistemas críticos estão operando dentro dos parâmetros esperados.</p>
               </div>
             </div>
           )}
@@ -179,7 +179,7 @@ function AdminHealthPage() {
       <div className="mt-8 flex justify-end">
         <button 
           onClick={() => refetch()}
-          className="text-xs text-muted-foreground hover:text-white flex items-center gap-1 transition-colors"
+          className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
         >
           <Clock className="w-3 h-3" />
           Última atualização: {new Date(health?.timestamp || '').toLocaleTimeString()} (Clique para atualizar)
