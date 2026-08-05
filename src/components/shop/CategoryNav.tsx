@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 type Props = {
-  categories: { id: string; label: string; description: string }[];
+  categories: { id: string; label: string; description?: string }[];
   activeId?: string;
   onSelect: (id: string) => void;
 };

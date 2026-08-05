@@ -88,7 +88,7 @@ function ShopPage() {
           <div className="flex-1">
             <CategoryNav
               categories={categories.map((c) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
-              activeId={selectedCategory || categories[0]?.slug || ""}
+              activeId={selectedCategory || categories[0]?.slug}
               onSelect={setSelectedCategory}
             />
 
