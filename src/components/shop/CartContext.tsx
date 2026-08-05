@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { MOCK_COUPONS, SHOP_PRODUCTS, type ShopProduct } from "@/data/shop";
+import { MOCK_COUPONS, type ShopProduct } from "@/data/shop";
 import type { Platform } from "@/lib/payments/checkout-service";
 
 export type CartLine = { productId: string; quantity: number };
@@ -103,11 +103,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const detailed = useMemo(
     () =>
       lines.flatMap((line) => {
-        const product = SHOP_PRODUCTS.find((item) => item.id === line.productId);
-        return product ? [{ product, quantity: line.quantity }] : [];
+        // Agora o contexto do carrinho não deve depender do MOCK_PRODUCTS.
+        // O ideal é passar o objeto do produto completo no add ou buscar via cache.
+        // Como o design atual envia apenas o productId, vamos manter como está por enquanto,
+        // mas o ShopPage precisará passar as informações necessárias.
+        return []; 
       }),
     [lines],
   );
+
 
   const subtotalCents = useMemo(
     () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),

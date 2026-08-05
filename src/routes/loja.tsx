@@ -7,8 +7,9 @@ import { PlayerIdentity } from "@/components/shop/PlayerIdentity";
 import { CategoryNav } from "@/components/shop/CategoryNav";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { CartPanel } from "@/components/shop/CartPanel";
-import { FAQSection } from "@/components/shop/FAQSection";
-import { useCart } from "@/hooks/use-cart";
+import { ShopInfo } from "@/components/shop/ShopInfo";
+import { useCart } from "@/components/shop/CartContext";
+
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 
 export const Route = createFileRoute("/loja")({
@@ -19,9 +20,10 @@ export const Route = createFileRoute("/loja")({
         queryFn: () => listCategories(),
       }),
       context.queryClient.ensureQueryData({
-        queryKey: ["products", { categorySlug: undefined }],
+        queryKey: ["products", { categorySlug: "" }],
         queryFn: () => listProducts({}),
       }),
+
     ]);
   },
   component: ShopPage,
