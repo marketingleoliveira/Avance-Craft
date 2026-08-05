@@ -52,7 +52,7 @@ export const createTicket = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z
       .object({
-        category: z.enum(["Compra", "Entrega", "Conta", "Servidor", "Denúncia", "Bug", "Outro"]),
+        category: z.string().min(1),
         subject: z.string().trim().min(4).max(120),
         message: z.string().trim().min(10).max(4000),
         orderId: z.string().uuid().optional(),
@@ -127,12 +127,12 @@ export const replyToTicket = createServerFn({ method: "POST" })
 
     if (error) throw new Error(`Falha ao responder: ${error.message}`);
 
-    // Update ticket status to awaiting_support if it was awaiting_player
+    // Update ticket status to open if it was closed
     await context.supabase
       .from("support_tickets")
-      .update({ status: "awaiting_support", updated_at: new Date().toISOString() })
+      .update({ status: "open", updated_at: new Date().toISOString() })
       .eq("id", data.ticketId)
-      .eq("status", "awaiting_player");
+      .eq("status", "closed");
 
     return row;
   });
@@ -154,19 +154,6 @@ export const reopenTicket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
-    // Check if it can be reopened (e.g. within 7 days of closing)
-    const { data: ticket, error: fetchError } = await context.supabase
-      .from("support_tickets")
-      .select("status, updated_at")
-      .eq("id", data.id)
-      .single();
-
-    if (fetchError || !ticket) throw new Error("Chamado não encontrado.");
-    
-    if (ticket.status !== "closed" && ticket.status !== "resolved") {
-      throw new Error("Este chamado não está fechado.");
-    }
-
     const { error } = await context.supabase
       .from("support_tickets")
       .update({ status: "open", updated_at: new Date().toISOString() })
