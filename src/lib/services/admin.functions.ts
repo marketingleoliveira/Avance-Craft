@@ -49,6 +49,8 @@ const productInput = z.object({
   active: z.boolean().optional(),
   featured: z.boolean().optional(),
   position: z.number().int().optional(),
+  compatibility: z.enum(['java', 'bedrock', 'both']).optional(),
+  maxQuantity: z.number().int().positive().nullable().optional(),
 });
 
 /** Contrato mínimo necessário para checar o papel do chamador via RLS. */
@@ -288,7 +290,6 @@ export const adminUpdateProduct = createServerFn({ method: "POST" })
     if (fields.active !== undefined) patch.active = fields.active;
     if (fields.featured !== undefined) patch.featured = fields.featured;
     if (fields.position !== undefined) patch.position = fields.position;
-    if (fields.compatibility !== undefined) patch.compatibility = fields.compatibility;
     if (fields.maxQuantity !== undefined) patch.max_quantity = fields.maxQuantity;
 
     const { data: row, error } = await context.supabase
@@ -377,7 +378,9 @@ export const adminSaveProductCommands = createServerFn({ method: "POST" })
       const { error: insError } = await context.supabase
         .from("product_commands")
         .insert(data.commands.map(cmd => ({
-          ...cmd,
+          command: cmd.template,
+          server_id: cmd.server_id,
+          run_on: cmd.run_on,
           product_id: data.productId
         })));
         
@@ -405,7 +408,7 @@ export const adminSaveProductBenefits = createServerFn({ method: "POST" })
     if (data.benefits.length > 0) {
       await context.supabase.from("product_benefits").insert(data.benefits.map(benefit => ({
         product_id: data.productId,
-        benefit
+        label: benefit
       })));
     }
 
