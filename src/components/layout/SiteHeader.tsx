@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X, User, Play, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui-kit/Container";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Início", to: "/" },
