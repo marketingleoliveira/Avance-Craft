@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Container } from "@/components/ui-kit/Container";
-import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { WoodSign } from "@/components/ui-kit/WoodSign";
+import { Card } from "@/components/ui-kit/Card";
+import { <h2 class="text-3xl font-[900] uppercase italic tracking-tighter text-white"> } from "@/components/ui-kit/<h2 class="text-3xl font-[900] uppercase italic tracking-tighter text-white">";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { getMyProfile, listMyOrders, listMyPlayerAccounts } from "@/lib/services/orders.functions";
 import { useServerFn } from "@tanstack/react-start";
@@ -99,7 +99,7 @@ function ProfilePage() {
       <Container className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
         {/* Sidebar */}
         <aside className="space-y-6 lg:sticky lg:top-24">
-          <StonePanel className="p-6 text-center">
+          <Card className="p-6 text-center">
             <div className="relative mx-auto mb-4 w-24 h-24 pixel-border border-dirt-dark bg-stone overflow-hidden">
                {/* Avatar Placeholder - Voxel Head */}
                <div className="absolute inset-0 flex flex-col">
@@ -126,7 +126,7 @@ function ProfilePage() {
                 <p className="font-pixel text-[10px] text-emerald-block">Nenhum</p>
               </div>
             </div>
-          </StonePanel>
+          </Card>
 
           <nav className="flex flex-col gap-2">
             <ProfileNavItem icon={User} label="Visão Geral" active />
@@ -145,9 +145,9 @@ function ProfilePage() {
         {/* Content */}
         <div className="space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <WoodSign subtitle="Bem-vindo à sua área exclusiva">
+            <<h2 class="text-3xl font-[900] uppercase italic tracking-tighter text-white"> subtitle="Bem-vindo à sua área exclusiva">
               Seu Perfil
-            </WoodSign>
+            </<h2 class="text-3xl font-[900] uppercase italic tracking-tighter text-white">>
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-pixel uppercase text-muted-foreground">ID: #{profile.id.slice(0, 8)}</span>
             </div>
@@ -182,13 +182,13 @@ function ProfilePage() {
             </div>
 
             {orders?.length === 0 ? (
-              <StonePanel className="p-12 text-center opacity-70">
+              <Card className="p-12 text-center opacity-70">
                 <ShoppingBag className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                 <p className="font-pixel text-[10px] text-muted-foreground uppercase">Você ainda não realizou compras.</p>
                 <Link to="/loja">
                   <PixelButton variant="wood" className="mt-4">Visitar Loja</PixelButton>
                 </Link>
-              </StonePanel>
+              </Card>
             ) : (
               <div className="space-y-4">
                 {orders?.map((order) => (
@@ -220,14 +220,14 @@ function ProfileNavItem({ icon: Icon, label, active }: { icon: any; label: strin
 
 function StatCard({ label, value, subtitle, icon: Icon }: { label: string; value: string; subtitle: string; icon: any }) {
   return (
-    <StonePanel className="p-5">
+    <Card className="p-5">
       <div className="flex items-start justify-between mb-2">
         <p className="text-[9px] font-pixel text-muted-foreground uppercase">{label}</p>
         <Icon className="w-4 h-4 text-grass-dark" />
       </div>
       <p className="font-pixel text-sm text-dirt-dark truncate">{value}</p>
       <p className="text-[9px] text-muted-foreground mt-1">{subtitle}</p>
-    </StonePanel>
+    </Card>
   );
 }
 
@@ -244,7 +244,7 @@ function OrderCard({ order }: { order: any }) {
   const StatusIcon = status.icon;
 
   return (
-    <StonePanel className="p-0 overflow-hidden group">
+    <Card className="p-0 overflow-hidden group">
       <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-[auto_1fr_auto] gap-6 items-center">
         <div className="h-12 w-12 bg-dirt-dark/10 grid place-items-center rounded-sm">
           <ShoppingBag className="w-6 h-6 text-dirt-dark" />
@@ -280,7 +280,7 @@ function OrderCard({ order }: { order: any }) {
            <TimelineStep active={order.status === 'delivered'} label="Entregue" />
         </div>
       </div>
-    </StonePanel>
+    </Card>
   );
 }
 
