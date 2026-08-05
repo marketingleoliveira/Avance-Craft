@@ -45,7 +45,10 @@ export const adminListDeliveryQueue = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .range(data.offset, data.offset + data.limit - 1);
 
-    if (error) throw error;
+    if (error) {
+       console.error("[Audit] Error listing delivery queue", error);
+       throw new Error("Internal server error");
+    }
     return { items: rows ?? [], count: count ?? 0 };
   });
 
@@ -80,7 +83,10 @@ export const adminRetryDelivery = createServerFn({ method: "POST" })
       } as any)
       .eq("id", data.id);
 
-    if (updateError) throw updateError;
+    if (updateError) {
+      console.error("[Audit] Error retrying delivery", updateError);
+      throw new Error("Failed to update delivery status");
+    }
 
     await logAudit(supabase, userId, "retry_delivery", "delivery", data.id);
 
@@ -92,7 +98,7 @@ export const adminRetryDelivery = createServerFn({ method: "POST" })
  */
 export const adminCancelDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid(), reason: z.string().min(5) }).parse(data))
+  .inputValidator((data) => z.object({ id: z.string().uuid(), reason: z.string().min(5).max(255) }).parse(data))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context!;
     await assertAdmin(supabase, userId);
@@ -105,7 +111,10 @@ export const adminCancelDelivery = createServerFn({ method: "POST" })
       } as any)
       .eq("id", data.id);
 
-    if (error) throw error;
+    if (error) {
+      console.error("[Audit] Error cancelling delivery", error);
+      throw new Error("Failed to cancel delivery");
+    }
 
     await logAudit(supabase, userId, "cancel_delivery", "delivery", data.id, { reason: data.reason });
 
@@ -128,6 +137,9 @@ export const adminGetDeliveryAttempts = createServerFn({ method: "GET" })
       .eq("delivery_queue_id", data.deliveryId)
       .order("created_at", { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      console.error("[Audit] Error getting delivery attempts", error);
+      throw new Error("Internal server error");
+    }
     return attempts ?? [];
   });
