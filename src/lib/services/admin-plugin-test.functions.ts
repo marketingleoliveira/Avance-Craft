@@ -24,8 +24,8 @@ export const adminGetPluginIntegrationStatus = createServerFn({ method: "GET" })
     // 1. Status do Servidor (Heartbeat)
     const { data: serverStatus } = await supabaseAdmin
       .from('server_status' as any)
-      .select('*')
-      .single();
+      .select('updated_at, players_online, online')
+      .maybeSingle();
 
     // 2. Estatísticas da Fila de Entrega
     const { data: queueStats } = await supabaseAdmin
