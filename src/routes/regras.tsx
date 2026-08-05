@@ -4,6 +4,8 @@ import { getPageBySlug } from "@/lib/services/pages.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { Container } from "@/components/ui-kit/Container";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollReveal } from "@/components/ui-kit/Motion";
 
 export const Route = createFileRoute("/regras")({
   head: () => ({
@@ -58,5 +60,10 @@ function RegrasPage() {
         </StonePanel>
       </div>
     </Container>
+    
+    <ScrollReveal>
+      <SiteFooter />
+    </ScrollReveal>
+  </main>
   );
 }
