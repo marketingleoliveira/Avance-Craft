@@ -24,18 +24,18 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
       className="relative min-h-[95vh] flex items-center justify-center overflow-hidden bg-stone-950"
     >
       {/* Cinematic Background - The Map */}
-      <motion.div style={{ y: y1 }} className="absolute inset-0 z-0">
+      <motion.div style={{ y: y1 }} className="absolute inset-0 z-0 will-change-transform">
         <img
           src={landscape}
           alt="Avance World Map"
-          className="h-full w-full object-cover opacity-30 scale-110 blur-[1px]"
+          className="h-full w-full object-cover opacity-30 scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-stone-950/80 via-transparent to-stone-950/80" />
       </motion.div>
 
       {/* Ambient Lighting Layers */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen animate-pulse" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
       <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
       <div className="absolute inset-0 bg-gradient-to-b from-stone-950/0 via-stone-950/20 to-stone-950 z-10 pointer-events-none" />
 
@@ -128,13 +128,13 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
       {/* Large Single Character - Behind Text Layer */}
       <motion.div 
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, 150]) }}
-        className="absolute bottom-0 right-[-10%] z-10 opacity-60 pointer-events-none hidden lg:block"
+        className="absolute bottom-0 right-[-10%] z-10 opacity-60 pointer-events-none hidden lg:block will-change-transform"
       >
         <img
           src={charPickaxe}
           alt="Hero Character"
           className="h-[100vh] w-auto object-contain translate-y-20 filter brightness-75 contrast-125"
-          style={{ imageRendering: "pixelated" }}
+          loading="lazy"
         />
       </motion.div>
     </section>
