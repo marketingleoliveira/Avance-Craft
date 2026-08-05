@@ -145,29 +145,26 @@ function Index() {
                 </h3>
                 <div className="grid grid-cols-1 gap-2">
                   {[
-                    "Typecheck, Build & Testes Unitários",
-                    "Vazamento de Mocks/Fixtures (Audit)",
-                    "Segredos Hardcoded (rg scan)",
-                    "Proteção de Rotas & RLS Ativo",
-                    "Backup & Restauração Testada",
-                    "SSL & Webhook MP Configurados",
-                    "Plugin Online & Fila Controlada",
-                    "Páginas Institucionais & Aceite Ativo (Checkout)",
-                    "Termos, Privacidade e Regras Dinâmicos",
-                    "Dockerfile & Docker Compose Configurados",
-                    "Monitoramento & Backup Estruturados",
-                    "Healthcheck de Produção (/api/health)",
-                    "Configuração Nginx & SSL Preparada",
-                    "Política de Backup & Restore Definida",
-                    "PITR & Snapshots Externos Agendados",
-                    "Plano de Rollback & Runbook de Emergência",
-                    "Estratégia de Reconciliação de Pedidos",
-                    "Simulação de Lançamento Concluída (Staging)",
-                    "Plano de Ativação Gradual (Phased Rollout)",
-                    "Feature Flags de Governança Configuradas",
-                    "Compra Real de Validação Preparada",
-                    "Produto Oculto & Comando Seguro Configurados",
-                    "🚀 PRONTO PARA LANÇAMENTO V1.0.0"
+                    "1. Release Candidate (v1.0.0-rc.1)",
+                    "2. Ambientes (Dev, Staging, Prod)",
+                    "3. Feature Flags & Governança",
+                    "4. Infraestrutura de Staging Isolada",
+                    "5. Pipeline de Pré-deploy Automatizado",
+                    "6. Mercado Pago Test Harness",
+                    "7. Plugin Integration Test Harness",
+                    "8. Sistema de Closed Beta & Convites",
+                    "9. Feedback & Bug Report de Usuários",
+                    "10. Dashboard Operacional de Lançamento",
+                    "11. Termos, Políticas & Aceite Legal",
+                    "12. Deploy Hostinger (Docker/Nginx)",
+                    "13. Plano de Backup & PITR (Supabase)",
+                    "14. Runbook de Rollback de Emergência",
+                    "15. Simulação de Lançamento em Staging",
+                    "16. Ativação Gradual (Phased Rollout)",
+                    "17. Compra Real Controlada (Validation)",
+                    "18. Quality Gate de Produção Concluído",
+                    "🚀 LANÇAMENTO HABBLET MINE V1.0.0"
+
 
 
 
