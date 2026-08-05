@@ -36,11 +36,13 @@ export const adminGetPluginIntegrationStatus = createServerFn({ method: "GET" })
   .handler(async (): Promise<PluginIntegrationStatus> => {
     ensureStaging();
 
-    // 1. Status do Servidor (Heartbeat)
-    const { data: serverStatus } = await supabaseAdmin
+    // 1. Status do Servidor (Heartbeat) - Usando Raw Query para evitar erros de tipo do SDK com tabelas customizadas
+    const { data: serverStatusData, error } = await supabaseAdmin
       .from('server_status' as any)
       .select('updated_at, players_online, online')
       .maybeSingle();
+
+    const serverStatus = serverStatusData as any;
 
     const heartbeat = serverStatus ? {
       updated_at: serverStatus.updated_at as string,
