@@ -285,6 +285,12 @@ function AdminFlagsPage() {
                 >
                   <Ticket className="w-3 h-3" /> GERIR CONVITES BETA
                 </Link>
+                <Link
+                  to="/admin/beta-feedback"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-pixel text-[10px] border-b-2 border-green-800 transition-all"
+                >
+                  <ShieldCheck className="w-3 h-3" /> GESTÃO DE FEEDBACK
+                </Link>
               </div>
             </StonePanel>
           )}
