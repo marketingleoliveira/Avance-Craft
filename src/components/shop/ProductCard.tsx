@@ -1,15 +1,15 @@
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { formatBRL, type ShopProduct } from "@/data/shop";
+import { formatBRL } from "@/data/shop";
 import { ProductArt } from "./ProductArt";
 
 type Props = {
-  product: ShopProduct;
-  onAdd: (product: ShopProduct) => void;
-  onDetails: (product: ShopProduct) => void;
+  product: any; // Temporário enquanto ajustamos tipos
+  onBuy: (product: any) => void;
 };
 
-export function ProductCard({ product, onAdd, onDetails }: Props) {
+export function ProductCard({ product, onBuy }: Props) {
+
   return (
     <StonePanel title={product.badge ?? "Produto"} className="h-full">
       <div className="flex h-full flex-col">
@@ -41,12 +41,10 @@ export function ProductCard({ product, onAdd, onDetails }: Props) {
           <p className="text-2xl font-black">{formatBRL(product.priceCents)}</p>
 
           <div className="mt-4 grid gap-2">
-            <PixelButton variant="grass" onClick={() => onAdd(product)}>
+            <PixelButton variant="grass" onClick={() => onBuy(product)}>
               Adicionar ao carrinho
             </PixelButton>
-            <PixelButton variant="stone" onClick={() => onDetails(product)}>
-              Ver detalhes
-            </PixelButton>
+
           </div>
         </div>
       </div>

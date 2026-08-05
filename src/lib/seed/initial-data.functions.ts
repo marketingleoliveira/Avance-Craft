@@ -11,7 +11,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     // 1. Verificar se é admin
     const { data: isAdmin, error: roleError } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
-      _role: "admin",
+      _role: "admin" as any,
     });
 
     if (roleError || !isAdmin) {
@@ -83,6 +83,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
         slug: "cash-1000",
         name: "1.000 Cash",
         short_description: "Moeda da loja para trocar por qualquer item.",
+        full_description: "",
         price: 9.90,
         active: true,
         position: 4
@@ -92,6 +93,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
         slug: "cash-5000",
         name: "5.000 Cash",
         short_description: "Pacote maior com bônus de crédito.",
+        full_description: "",
         price: 39.90,
         active: true,
         position: 5
@@ -101,6 +103,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
         slug: "chave-lendaria",
         name: "Chave Lendária",
         short_description: "Chances maiores de itens raros.",
+        full_description: "",
         price: 7.90,
         active: true,
         position: 6
@@ -110,6 +113,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
         slug: "combo-chaves-lendarias",
         name: "Pacote com 5 Chaves Lendárias",
         short_description: "Leve 5 e pague menos.",
+        full_description: "",
         price: 29.90,
         active: true,
         position: 7
@@ -117,7 +121,7 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
     ];
 
     for (const prod of productList) {
-      await supabase.from("products").upsert(prod, { onConflict: "slug" });
+      await supabase.from("products").upsert(prod as any, { onConflict: "slug" });
     }
     results["products"] = productList.length;
 
@@ -198,7 +202,6 @@ export const runDatabaseSeed = createServerFn({ method: "POST" })
       { category: "ricos", minecraft_nickname: "Demo_Player2", value: 500000, position: 2, period: "weekly" },
       { category: "abates", minecraft_nickname: "Demo_Warrior", value: 150, position: 1, period: "weekly" },
     ];
-    // Limpar rankings demo antes de inserir (opcional, ou upsert se tivesse UK)
     await supabase.from("rankings").delete().eq("period", "weekly");
     await supabase.from("rankings").insert(rankings);
     results["rankings"] = rankings.length;
