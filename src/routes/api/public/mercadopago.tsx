@@ -9,7 +9,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
         const MP_ACCESS_TOKEN = process.env['MERCADOPAGO_ACCESS_TOKEN'];
         const WEBHOOK_SECRET = process.env['MERCADOPAGO_WEBHOOK_SECRET'];
 
-        // 1. Validar Assinatura (Headers oficiais)
+        // 1. Receber Notificação e Headers
         const xSignature = request.headers.get("x-signature");
         const xRequestId = request.headers.get("x-request-id");
         const bodyText = await request.text();
@@ -17,26 +17,24 @@ export const Route = createFileRoute("/api/public/mercadopago")({
 
         let isSignatureValid = false;
 
+        // 2. Validar Assinatura (Headers oficiais)
         if (WEBHOOK_SECRET && xSignature) {
           try {
-            // Documentação MP: O x-signature contém t=timestamp,v1=signature
             const parts = xSignature.split(",");
             const tsPart = parts.find(p => p.startsWith("t="));
             const hashPart = parts.find(p => p.startsWith("v1="));
 
             if (tsPart && hashPart) {
-              const timestamp = tsPart.split("=")[1];
+              const timestampStr = tsPart.split("=")[1];
               const signature = hashPart.split("=")[1];
               
-              // Validar timestamp (evitar replay attacks - 5 min)
               const now = Math.floor(Date.now() / 1000);
-              const tsValue = parseInt(timestamp);
+              const tsValue = parseInt(timestampStr || "0");
+              
               if (!isNaN(tsValue) && Math.abs(now - tsValue) < 300) {
-                const manifest = `id:${body.data?.id || body.id};request-id:${xRequestId ?? ""};ts:${timestamp};`;
-                const hmac = createHmac("sha256", WEBHOOK_SECRET!);
-
-
-
+                const resourceId = body.data?.id || body.id;
+                const manifest = `id:${resourceId};request-id:${xRequestId ?? ""};ts:${timestampStr};`;
+                const hmac = createHmac("sha256", WEBHOOK_SECRET);
                 hmac.update(manifest);
                 const expectedSignature = hmac.digest("hex");
                 
@@ -49,15 +47,14 @@ export const Route = createFileRoute("/api/public/mercadopago")({
             console.error("Signature validation error:", err);
           }
         } else if (!process.env['NODE_ENV'] || process.env['NODE_ENV'] === 'development') {
-          // Em dev sem secret, permitimos para testes
           isSignatureValid = true;
         }
 
-        // 2. Registrar evento bruto sanitizado
+        // 3. Registrar evento bruto sanitizado
         const { data: eventRow } = await supabaseAdmin.from("payment_events").insert({
           provider: "mercadopago",
           event_type: body.type || body.action || "unknown",
-          external_event_id: body.data?.id?.toString() || body.id?.toString() || xRequestId,
+          external_event_id: (body.data?.id || body.id || xRequestId || "unknown").toString(),
           payload: body,
           signature_valid: isSignatureValid,
         }).select().single();
@@ -66,13 +63,13 @@ export const Route = createFileRoute("/api/public/mercadopago")({
           return new Response("Invalid signature", { status: 401 });
         }
 
-        // 3. Processar apenas eventos de pagamento
+        // 4. Processar apenas eventos de pagamento
         const isPaymentEvent = body.type === "payment" || body.action === "payment.created" || body.action === "payment.updated";
         const resourceId = body.data?.id || body.id;
 
         if (isPaymentEvent && resourceId && MP_ACCESS_TOKEN) {
           try {
-            // 4. Consultar pagamento diretamente na API do MP (Não confiar no body)
+            // 5. Consultar pagamento na API do MP
             const mpResponse = await fetch(`https://api.mercadopago.com/v1/payments/${resourceId}`, {
               headers: { 'Authorization': `Bearer ${MP_ACCESS_TOKEN}` }
             });
@@ -83,7 +80,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
             const orderId = payment.external_reference;
             if (!orderId) return new Response("No external_reference", { status: 200 });
 
-            // 5. Garantir Idempotência e buscar pedido
+            // 6. Idempotência e busca de pedido
             const { data: order, error: orderError } = await supabaseAdmin
               .from("orders")
               .select("*, items:order_items(*)")
@@ -92,7 +89,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
 
             if (orderError || !order) return new Response("Order not found", { status: 200 });
 
-            // 6. Atualizar ou Criar Registro de Pagamento
+            // 7. Upsert Registro de Pagamento
             const { data: paymentRecord } = await supabaseAdmin
               .from("payments")
               .upsert({
@@ -101,7 +98,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
                 provider_payment_id: payment.id.toString(),
                 amount: payment.transaction_amount,
                 currency: payment.currency_id,
-                status: payment.status as any, // Mapeado via Enums
+                status: payment.status as any,
                 raw_payload: payment,
                 method: payment.payment_method_id,
               }, { onConflict: 'provider_payment_id' })
@@ -112,21 +109,18 @@ export const Route = createFileRoute("/api/public/mercadopago")({
               await supabaseAdmin.from("payment_events").update({ payment_id: paymentRecord.id }).eq("id", eventRow.id);
             }
 
-            // 7. Se aprovado, processar entrega
+            // 8. Se aprovado, processar entrega
             if (payment.status === "approved" && order.status !== "paid") {
-              // Validar valor para evitar fraudes
               if (Math.abs(payment.transaction_amount - order.total) > 0.01) {
-                console.error(`Amount mismatch for order ${order.id}: expected ${order.total}, got ${payment.transaction_amount}`);
+                console.error(`Amount mismatch for order ${order.id}`);
                 return new Response("Amount mismatch", { status: 200 });
               }
 
-              // Marcar pedido como pago
               await supabaseAdmin.from("orders").update({ 
                 status: "paid", 
                 paid_at: new Date().toISOString() 
               }).eq("id", order.id);
 
-              // Gerar Fila de Entrega (idempotente)
               for (const item of order.items) {
                 const { data: commands } = await supabaseAdmin
                   .from("product_commands")
@@ -143,21 +137,17 @@ export const Route = createFileRoute("/api/public/mercadopago")({
                     status: "queued" as const,
                     idempotency_key: `${order.id}-${item.id}-${cmd.id}`
                   }));
-
-                  // Upsert para garantir que não duplicamos comandos se o webhook disparar 2x
                   await supabaseAdmin.from("delivery_queue").upsert(deliveryItems, { onConflict: 'idempotency_key' });
                 }
               }
             } else if (["rejected", "cancelled", "refunded"].includes(payment.status)) {
               await supabaseAdmin.from("orders").update({ status: payment.status as any }).eq("id", order.id);
             }
-
           } catch (err) {
             console.error("Webhook processing error:", err);
             return new Response("Internal Error", { status: 500 });
           }
         }
-
         return new Response("ok", { status: 200 });
       },
     },
