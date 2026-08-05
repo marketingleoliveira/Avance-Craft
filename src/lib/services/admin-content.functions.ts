@@ -1,3 +1,49 @@
+import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { z } from "zod";
+import type { 
+  AuditLog,
+  News,
+  NewsCategory
+} from "@/lib/types/database";
+
+/** Contrato mínimo necessário para checar o papel do chamador via RLS. */
+type RoleChecker = {
+  rpc: (
+    fn: "has_role",
+    args: { _user_id: string; _role: "admin" },
+  ) => PromiseLike<{ data: boolean | null; error: { message: string } | null }>;
+};
+
+type AuthedSupabase = RoleChecker;
+
+async function assertAdmin(supabase: AuthedSupabase, userId: string): Promise<void> {
+  const { data, error } = await supabase.rpc("has_role", {
+    _user_id: userId,
+    _role: "admin",
+  });
+  if (error) throw new Error(`Falha ao validar permissões: ${error.message}`);
+  if (!data) throw new Error("Acesso restrito a administradores.");
+}
+
+async function logAudit(
+  supabase: any, 
+  userId: string, 
+  action: string, 
+  entityType: string, 
+  entityId: string, 
+  newData: any = null, 
+  oldData: any = null
+) {
+  await supabase.from("audit_logs").insert({
+    user_id: userId,
+    action,
+    entity_type: entityType,
+    entity_id: entityId,
+    new_data: newData,
+    old_data: oldData
+  });
+}
 
 // --- Notícias ---
 
