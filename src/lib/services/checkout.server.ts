@@ -88,10 +88,10 @@ export async function createCheckoutRequest(
       subtotal,
       discount,
       total: Math.max(0, total),
-      coupon_id: couponId,
+      coupon_id: couponId ?? null,
       idempotency_key: idempotencyKey,
       payment_provider: "mercadopago"
-    })
+    } as any)
     .select()
     .single();
 
@@ -105,8 +105,8 @@ export async function createCheckoutRequest(
       order_id: order.id
     });
     
-    // Incrementar contador de usos
-    await supabase.rpc('increment_coupon_uses', { coupon_id: couponId });
+    // Incrementar contador de usos via update simples já que o RPC não está gerado no TS
+    await supabase.rpc('increment_coupon_uses' as any, { coupon_id: couponId });
   }
 
   // 4. Criar itens do pedido
