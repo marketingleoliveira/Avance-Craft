@@ -16,7 +16,7 @@ export interface LogOptions {
   orderId?: string;
   paymentId?: string;
   pluginId?: string;
-  stack?: string;
+  stack?: string | undefined; // Explicitamente permitindo undefined para compatibilidade com exactOptionalPropertyTypes
 }
 
 // Lista negra de campos sensíveis que nunca devem ser logados
