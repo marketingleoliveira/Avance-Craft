@@ -2,9 +2,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listMyTickets, createTicket } from "@/lib/services/support.functions";
 import { listMyOrders } from "@/lib/services/orders.functions";
-import { StonePanel } from "@/components/ui/StonePanel";
-import { WoodSign } from "@/components/ui/WoodSign";
-import { PixelButton } from "@/components/ui/PixelButton";
+import { StonePanel } from "@/components/ui-kit/StonePanel";
+import { WoodSign } from "@/components/ui-kit/WoodSign";
+import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { Ticket, Plus, MessageSquare, History, ShoppingBag, AlertTriangle, Bug, HelpCircle, User, ShieldAlert } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -57,7 +57,6 @@ export const Route = createFileRoute("/suporte")({
 function SupportPage() {
   const [isCreating, setIsCreating] = useState(false);
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const { data: tickets } = useSuspenseQuery({
     queryKey: ["my-tickets"],
@@ -86,16 +85,16 @@ function SupportPage() {
 
   const createMutation = useMutation({
     mutationFn: (data: TicketForm) => createTicket({
-      ...data,
+      category: data.category,
+      subject: data.subject,
+      message: data.message,
       orderId: data.orderId || undefined,
-    }),
-    onSuccess: (newTicket) => {
+    } as any),
+    onSuccess: () => {
       toast.success("Chamado aberto com sucesso!");
       queryClient.invalidateQueries({ queryKey: ["my-tickets"] });
       setIsCreating(false);
       reset();
-      // Optionally navigate to the ticket detail page if it existed
-      // navigate({ to: `/suporte/${newTicket.id}` });
     },
     onError: (error: any) => {
       toast.error(error.message || "Erro ao abrir chamado.");
@@ -114,9 +113,9 @@ function SupportPage() {
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      open: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-      pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-      closed: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30",
+      open: "bg-emerald-500/20 text-emerald-600 border-emerald-500/30",
+      pending: "bg-amber-500/20 text-amber-600 border-amber-500/30",
+      closed: "bg-zinc-500/20 text-zinc-600 border-zinc-500/30",
     };
 
     const labels: Record<string, string> = {
@@ -126,7 +125,7 @@ function SupportPage() {
     };
 
     return (
-      <span className={cn("px-2 py-0.5 rounded text-xs font-medium border capitalize", styles[status] || styles.open)}>
+      <span className={cn("px-2 py-0.5 rounded text-[10px] uppercase font-bold border", styles[status] || styles["open"])}>
         {labels[status] || status}
       </span>
     );
@@ -135,18 +134,12 @@ function SupportPage() {
   return (
     <div className="container max-w-[1180px] mx-auto py-12 px-4 space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <WoodSign className="max-w-md">
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Ticket className="w-8 h-8 text-amber-400" />
-            Suporte ao Jogador
-          </h1>
-          <p className="text-amber-100/80 mt-1">
-            Precisa de ajuda? Abra um chamado e nossa equipe responderá em breve.
-          </p>
+        <WoodSign subtitle="Precisa de ajuda? Abra um chamado e nossa equipe responderá em breve.">
+          Suporte
         </WoodSign>
 
         {!isCreating && (
-          <PixelButton onClick={() => setIsCreating(true)} variant="primary" className="h-fit">
+          <PixelButton onClick={() => setIsCreating(true)} variant="emerald" className="h-fit">
             <Plus className="w-5 h-5 mr-2" />
             Novo Chamado
           </PixelButton>
@@ -154,37 +147,36 @@ function SupportPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Lado Esquerdo: Formulário ou Lista */}
         <div className="lg:col-span-8 space-y-6">
           {isCreating ? (
             <StonePanel title="Abrir Novo Chamado">
-              <form onSubmit={handleSubmit((data) => createMutation.mutate(data))} className="p-6 space-y-6">
+              <form onSubmit={handleSubmit((data) => createMutation.mutate(data))} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-zinc-300">Categoria</label>
+                    <label className="text-xs font-bold uppercase text-zinc-600">Categoria</label>
                     <select
                       {...register("category")}
-                      className="w-full bg-black/40 border-2 border-zinc-800 rounded px-4 py-2.5 text-zinc-100 focus:border-amber-500 outline-none transition-colors"
+                      className="w-full bg-white border-2 border-zinc-300 rounded px-4 py-2.5 text-zinc-900 focus:border-emerald-500 outline-none transition-colors"
                     >
                       <option value="" disabled>Selecione uma categoria</option>
                       {categories.map((cat) => (
-                        <option key={cat.value} value={cat.value} className="bg-zinc-900">
+                        <option key={cat.value} value={cat.value}>
                           {cat.label}
                         </option>
                       ))}
                     </select>
-                    {errors.category && <p className="text-red-400 text-xs">{errors.category.message}</p>}
+                    {errors.category && <p className="text-red-500 text-[10px] font-bold uppercase">{errors.category.message}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-zinc-300">Pedido Vinculado (Opcional)</label>
+                    <label className="text-xs font-bold uppercase text-zinc-600">Pedido Vinculado (Opcional)</label>
                     <select
                       {...register("orderId")}
-                      className="w-full bg-black/40 border-2 border-zinc-800 rounded px-4 py-2.5 text-zinc-100 focus:border-amber-500 outline-none transition-colors"
+                      className="w-full bg-white border-2 border-zinc-300 rounded px-4 py-2.5 text-zinc-900 focus:border-emerald-500 outline-none transition-colors"
                     >
                       <option value="">Nenhum pedido</option>
                       {orders.map((order) => (
-                        <option key={order.id} value={order.id} className="bg-zinc-900">
+                        <option key={order.id} value={order.id}>
                           #{order.id.slice(0, 8)} - {format(new Date(order.created_at), "dd/MM/yy")}
                         </option>
                       ))}
@@ -193,30 +185,30 @@ function SupportPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300">Assunto</label>
+                  <label className="text-xs font-bold uppercase text-zinc-600">Assunto</label>
                   <input
                     {...register("subject")}
                     placeholder="Ex: Não recebi meu VIP após a compra"
-                    className="w-full bg-black/40 border-2 border-zinc-800 rounded px-4 py-2.5 text-zinc-100 focus:border-amber-500 outline-none transition-colors"
+                    className="w-full bg-white border-2 border-zinc-300 rounded px-4 py-2.5 text-zinc-900 focus:border-emerald-500 outline-none transition-colors"
                   />
-                  {errors.subject && <p className="text-red-400 text-xs">{errors.subject.message}</p>}
+                  {errors.subject && <p className="text-red-500 text-[10px] font-bold uppercase">{errors.subject.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-zinc-300">Descrição do Problema</label>
+                  <label className="text-xs font-bold uppercase text-zinc-600">Descrição do Problema</label>
                   <textarea
                     {...register("message")}
                     rows={6}
                     placeholder="Descreva detalhadamente o que aconteceu..."
-                    className="w-full bg-black/40 border-2 border-zinc-800 rounded px-4 py-2.5 text-zinc-100 focus:border-amber-500 outline-none transition-colors resize-none"
+                    className="w-full bg-white border-2 border-zinc-300 rounded px-4 py-2.5 text-zinc-900 focus:border-emerald-500 outline-none transition-colors resize-none"
                   />
-                  {errors.message && <p className="text-red-400 text-xs">{errors.message.message}</p>}
+                  {errors.message && <p className="text-red-500 text-[10px] font-bold uppercase">{errors.message.message}</p>}
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-zinc-800">
+                <div className="flex gap-4 pt-4 border-t border-zinc-200">
                   <PixelButton
                     type="submit"
-                    variant="primary"
+                    variant="emerald"
                     className="flex-1"
                     disabled={isSubmitting}
                   >
@@ -224,7 +216,7 @@ function SupportPage() {
                   </PixelButton>
                   <PixelButton
                     type="button"
-                    variant="secondary"
+                    variant="stone"
                     onClick={() => {
                       setIsCreating(false);
                       reset();
@@ -233,15 +225,15 @@ function SupportPage() {
                     Cancelar
                   </PixelButton>
                 </div>
-              </form> stonePanel
+              </form>
             </StonePanel>
           ) : (
             <div className="space-y-4">
               {tickets.length === 0 ? (
                 <StonePanel className="p-12 text-center">
                   <div className="max-w-xs mx-auto space-y-4">
-                    <MessageSquare className="w-16 h-16 text-zinc-600 mx-auto" />
-                    <h3 className="text-xl font-bold text-zinc-300">Nenhum chamado aberto</h3>
+                    <MessageSquare className="w-16 h-16 text-zinc-400 mx-auto" />
+                    <h3 className="text-xl font-pixel uppercase text-zinc-600">Nenhum chamado aberto</h3>
                     <p className="text-zinc-500 text-sm">
                       Você ainda não abriu nenhum ticket de suporte. Clique em "Novo Chamado" para começar.
                     </p>
@@ -249,19 +241,19 @@ function SupportPage() {
                 </StonePanel>
               ) : (
                 tickets.map((ticket) => (
-                  <StonePanel key={ticket.id} className="group hover:border-amber-500/50 transition-colors">
-                    <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <StonePanel key={ticket.id} className="group transition-colors">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-mono text-zinc-500">#{ticket.id.slice(0, 8)}</span>
+                          <span className="text-[10px] font-mono text-zinc-400">#{ticket.id.slice(0, 8)}</span>
                           {getStatusBadge(ticket.status)}
-                          <span className="text-xs text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">{ticket.category}</span>
+                          <span className="text-[10px] font-bold uppercase text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200">{ticket.category}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-zinc-100">{ticket.subject}</h3>
-                        <div className="flex items-center gap-4 text-xs text-zinc-500">
+                        <h3 className="text-lg font-bold text-zinc-800">{ticket.subject}</h3>
+                        <div className="flex items-center gap-4 text-[10px] uppercase font-bold text-zinc-400">
                           <span className="flex items-center gap-1">
                             <History className="w-3 h-3" />
-                            Atualizado em {format(new Date(ticket.updated_at), "dd 'de' MMM, HH:mm", { locale: ptBR })}
+                            Atualizado em {format(new Date(ticket.updated_at), "dd/MM, HH:mm", { locale: ptBR })}
                           </span>
                           <span className="flex items-center gap-1">
                             <MessageSquare className="w-3 h-3" />
@@ -272,9 +264,8 @@ function SupportPage() {
                       <Link
                         to="/suporte"
                         search={{ ticket: ticket.id }}
-                        className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
                       >
-                        <PixelButton variant="secondary" className="w-full md:w-auto">
+                        <PixelButton variant="stone" className="w-full md:w-auto">
                           Ver Detalhes
                         </PixelButton>
                       </Link>
@@ -286,54 +277,53 @@ function SupportPage() {
           )}
         </div>
 
-        {/* Lado Direito: Info & Sidebar */}
         <div className="lg:col-span-4 space-y-6">
           <StonePanel title="Canais Oficiais">
-            <div className="p-6 space-y-6">
-              <div className="flex gap-4 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-lg group hover:bg-indigo-500/20 transition-colors">
-                <div className="w-12 h-12 bg-indigo-500 rounded flex items-center justify-center shrink-0">
-                  <MessageSquare className="text-white" />
+            <div className="space-y-6">
+              <div className="flex gap-4 p-4 bg-indigo-50 border-2 border-indigo-100 rounded group hover:border-indigo-200 transition-colors">
+                <div className="w-10 h-10 bg-indigo-500 rounded flex items-center justify-center shrink-0">
+                  <MessageSquare className="text-white w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-indigo-400">Discord</h4>
-                  <p className="text-xs text-zinc-400">Atendimento comunitário e denúncias rápidas.</p>
-                  <a href="#" className="text-xs text-indigo-400 font-bold hover:underline mt-1 inline-block">discord.gg/habbletmine</a>
+                  <h4 className="font-bold text-indigo-600 text-sm uppercase font-pixel">Discord</h4>
+                  <p className="text-[10px] text-zinc-500 font-bold uppercase">Atendimento comunitário e denúncias.</p>
+                  <a href="#" className="text-[11px] text-indigo-500 font-bold hover:underline mt-1 inline-block uppercase font-pixel">discord.gg/habblet</a>
                 </div>
               </div>
 
-              <div className="flex gap-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg group hover:bg-emerald-500/20 transition-colors">
-                <div className="w-12 h-12 bg-emerald-500 rounded flex items-center justify-center shrink-0">
-                  <User className="text-white" />
+              <div className="flex gap-4 p-4 bg-emerald-50 border-2 border-emerald-100 rounded group hover:border-emerald-200 transition-colors">
+                <div className="w-10 h-10 bg-emerald-500 rounded flex items-center justify-center shrink-0">
+                  <User className="text-white w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-emerald-400">Área do VIP</h4>
-                  <p className="text-xs text-zinc-400">Jogadores VIP possuem prioridade no atendimento.</p>
+                  <h4 className="font-bold text-emerald-600 text-sm uppercase font-pixel">Área do VIP</h4>
+                  <p className="text-[10px] text-zinc-500 font-bold uppercase">Prioridade máxima no atendimento.</p>
                 </div>
               </div>
             </div>
           </StonePanel>
 
-          <div className="bg-black/40 border-2 border-zinc-800 rounded p-6">
-            <h4 className="font-bold text-zinc-300 mb-4 flex items-center gap-2">
+          <div className="bg-parchment/50 border-2 border-zinc-300 rounded p-6">
+            <h4 className="font-bold text-zinc-600 mb-4 flex items-center gap-2 text-xs uppercase font-pixel">
               <ShieldAlert className="w-4 h-4 text-amber-500" />
-              Dicas de Segurança
+              Segurança
             </h4>
-            <ul className="text-xs text-zinc-500 space-y-3">
+            <ul className="text-[10px] font-bold uppercase text-zinc-500 space-y-3">
               <li className="flex gap-2">
                 <span className="text-amber-500">•</span>
-                Nunca compartilhe sua senha do servidor ou do portal.
+                Nunca compartilhe sua senha do servidor.
               </li>
               <li className="flex gap-2">
                 <span className="text-amber-500">•</span>
-                A staff do Habblet Mine nunca pedirá seus itens ou senha.
+                A staff nunca pedirá seus itens.
               </li>
               <li className="flex gap-2">
                 <span className="text-amber-500">•</span>
-                Para bugs críticos, anexe screenshots ou vídeos (via link).
+                Anexe links de imagens para bugs.
               </li>
               <li className="flex gap-2">
                 <span className="text-amber-500">•</span>
-                Respeite o tempo de resposta; o flood de tickets pode resultar em banimento do suporte.
+                Respeite o tempo de resposta.
               </li>
             </ul>
           </div>
