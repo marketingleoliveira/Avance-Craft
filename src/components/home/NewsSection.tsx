@@ -4,6 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { listRankings } from "@/lib/services/content.functions";
 import { Newspaper, ChevronRight, Activity, Trophy, Users, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 import news1 from "@/assets/news-1.jpg";
@@ -18,10 +19,11 @@ const statusLabel: Record<string, string> = {
   offline: "Offline",
 };
 
+
 function NewsCard({ item }: { item: any }) {
   return (
     <Link to="/noticias" className="group block">
-      <article className="bg-white/[0.02] border border-white/5 p-6 rounded-3xl transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1">
+      <Card className="p-6">
         <div className="flex flex-col gap-8 sm:flex-row items-center">
           <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-2xl sm:h-40 sm:w-40 border border-white/5">
             <img
@@ -63,7 +65,7 @@ function NewsCard({ item }: { item: any }) {
             </div>
           </div>
         </div>
-      </article>
+      </Card>
     </Link>
   );
 }
@@ -136,7 +138,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
           {/* Technical Sidebar */}
           <aside className="space-y-8">
             {/* Server Status Widget */}
-            <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
+            <Card className="p-8 !rounded-[2.5rem]">
               <h3 className="text-xl font-[900] uppercase italic tracking-wider text-white mb-6 flex items-center gap-3">
                 <Activity className="w-5 h-5 text-emerald-500" />
                 Live Status
@@ -152,10 +154,10 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                   {currentStatus.ip}
                 </span>
               </div>
-            </div>
+            </Card>
 
             {/* Top Players Widget */}
-            <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
+            <Card className="p-8 !rounded-[2.5rem]">
               <h3 className="text-xl font-[900] uppercase italic tracking-wider text-white mb-6 flex items-center gap-3">
                 <Trophy className="w-5 h-5 text-emerald-500" />
                 Top Fortune
@@ -180,7 +182,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                   </li>
                 ))}
               </ol>
-            </div>
+            </Card>
           </aside>
         </div>
       </Container>

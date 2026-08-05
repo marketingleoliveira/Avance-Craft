@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -6,6 +5,7 @@ import { listRankings } from "@/lib/services/content.functions";
 import { cn } from "@/lib/utils";
 import { Trophy, Medal, Crown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 const RANKING_TABS = [
   { id: "ricos", label: "Mais Ricos", metric: "Saldo", icon: Trophy },
@@ -66,8 +66,8 @@ export function RankingSection() {
             })}
           </div>
 
-          {/* Ranking Table */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] overflow-hidden p-8 backdrop-blur-xl">
+          {/* Ranking Table wrapped in UI Card */}
+          <Card className="p-8">
             <table className="w-full text-left">
               <thead>
                 <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 border-b border-white/5">
@@ -78,7 +78,7 @@ export function RankingSection() {
               </thead>
               <tbody className="divide-y divide-white/[0.03]">
                 {rankingData.map((row: any, i: number) => (
-                  <tr key={row.minecraft_nickname} className="group hover:bg-white/[0.02] transition-colors">
+                  <tr key={row.minecraft_nickname} className="group/row hover:bg-white/[0.02] transition-colors">
                     <td className="py-6 pr-4">
                       <div className={cn(
                         "w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm",
@@ -94,9 +94,9 @@ export function RankingSection() {
                         <img 
                           src={`https://mc-heads.net/avatar/${row.minecraft_nickname}/32`}
                           alt={row.minecraft_nickname}
-                          className="w-8 h-8 rounded-lg shadow-lg group-hover:scale-110 transition-transform"
+                          className="w-8 h-8 rounded-lg shadow-lg group-hover/row:scale-110 transition-transform"
                         />
-                        <span className="font-[800] text-stone-100 group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
+                        <span className="font-[800] text-stone-100 group-hover/row:text-emerald-400 transition-colors uppercase tracking-tight">
                           {row.minecraft_nickname}
                         </span>
                       </div>
@@ -116,9 +116,11 @@ export function RankingSection() {
                 <Link to="/ranking">Ver Ranking Completo</Link>
               </Button>
             </div>
-          </div>
+          </Card>
         </div>
       </Container>
     </section>
   );
 }
+
+import { useState } from "react";

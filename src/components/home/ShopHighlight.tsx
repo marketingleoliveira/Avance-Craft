@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { formatBRL } from "@/lib/utils/format";
+import { Card } from "@/components/ui/card";
 import { ShoppingBag, Star, ShieldCheck, Zap } from "lucide-react";
 
 import chests from "@/assets/vip-chests.png";
@@ -49,7 +50,7 @@ export function ShopHighlight({ products }: { products: any[] }) {
 
         <div className="grid gap-8 md:grid-cols-3">
           {products.map((product: any, index: number) => (
-            <div key={product.id} className="group relative bg-white/[0.02] border border-white/5 p-6 rounded-3xl transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-2 flex flex-col">
+            <Card key={product.id} className="p-6 flex flex-col">
               <div className="absolute top-4 right-4 z-20">
                 <span className="px-3 py-1 bg-emerald-500 text-stone-950 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-emerald-500/20">
                   {product.category?.name || "VIP"}
@@ -88,7 +89,7 @@ export function ShopHighlight({ products }: { products: any[] }) {
                   Comprar
                 </Link>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
         
