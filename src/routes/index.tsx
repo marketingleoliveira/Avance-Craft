@@ -63,15 +63,23 @@ function Index() {
                 <p className="text-muted-foreground italic">Validação técnica completa da integração Mercado Pago & Pré-deploy.</p>
               </div>
               <div className="flex gap-4">
-                <Link to="/admin/pagamentos-teste">
-                  <PixelButton className="px-6 bg-blue-600 hover:bg-blue-500 border-blue-700">
-                    <TestTube className="w-4 h-4 mr-2" />
-                    Test Harness
-                  </PixelButton>
-                </Link>
+                <div className="flex flex-col gap-2">
+                  <Link to="/admin/pagamentos-teste">
+                    <PixelButton className="px-6 w-full bg-blue-600 hover:bg-blue-500 border-blue-700">
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Pagamentos
+                    </PixelButton>
+                  </Link>
+                  <Link to="/admin/plugin-teste">
+                    <PixelButton className="px-6 w-full bg-indigo-600 hover:bg-indigo-500 border-indigo-700">
+                      <Terminal className="w-4 h-4 mr-2" />
+                      Plugin/Minecraft
+                    </PixelButton>
+                  </Link>
+                </div>
                 <PixelButton 
                   variant="stone"
-                  className="px-6"
+                  className="px-6 h-fit"
                   onClick={() => window.open('/admin/saude', '_self')}
                 >
                   <Activity className="w-4 h-4 mr-2" />
