@@ -1,0 +1,112 @@
+
+// --- Notícias ---
+
+const newsCategoryInput = z.object({
+  name: z.string().trim().min(2).max(120),
+  slug: z
+    .string()
+    .trim()
+    .min(2)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "Slug deve conter apenas letras minúsculas, números e hífen."),
+  active: z.boolean().optional(),
+});
+
+const newsInput = z.object({
+  title: z.string().trim().min(5).max(120),
+  slug: z
+    .string()
+    .trim()
+    .min(5)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/),
+  summary: z.string().trim().max(300).nullable().optional(),
+  content: z.string().trim().min(10),
+  imageUrl: z.string().url().nullable().optional(),
+  categoryId: z.string().uuid().nullable().optional(),
+  status: z.enum(['draft', 'scheduled', 'published', 'archived']).default('draft'),
+  publishedAt: z.string().nullable().optional(),
+  seoTitle: z.string().max(70).nullable().optional(),
+  seoDescription: z.string().max(160).nullable().optional(),
+  featured: z.boolean().optional(),
+  position: z.number().int().optional(),
+});
+
+export const adminListNewsCategories = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<NewsCategory[]> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data, error } = await context.supabase
+      .from("news_categories")
+      .select("*")
+      .order("name", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const adminCreateNewsCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => newsCategoryInput.parse(input))
+  .handler(async ({ data, context }): Promise<NewsCategory> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: row, error } = await context.supabase
+      .from("news_categories")
+      .insert({
+        name: data.name,
+        slug: data.slug,
+        active: data.active ?? true,
+      } as any)
+      .select("*")
+      .single();
+    if (error) throw new Error(error.message);
+    await logAudit(context.supabase, context.userId, "create", "news_category", row.id, row);
+    return row;
+  });
+
+export const adminListNews = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({
+    limit: z.number().int().optional(),
+    offset: z.number().int().optional()
+  }).parse(input ?? {}))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const limit = data.limit ?? 50;
+    const offset = data.offset ?? 0;
+    const { data: rows, count, error } = await context.supabase
+      .from("news")
+      .select("*, category:news_categories(name)", { count: 'exact' })
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+    if (error) throw new Error(error.message);
+    return { news: rows ?? [], count: count ?? 0 };
+  });
+
+export const adminCreateNews = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => newsInput.parse(input))
+  .handler(async ({ data, context }): Promise<News> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: row, error } = await context.supabase
+      .from("news")
+      .insert({
+        title: data.title,
+        slug: data.slug,
+        summary: data.summary,
+        content: data.content,
+        image_url: data.imageUrl,
+        category_id: data.categoryId,
+        status: data.status,
+        published_at: data.publishedAt || (data.status === 'published' ? new Date().toISOString() : null),
+        seo_title: data.seoTitle,
+        seo_description: data.seoDescription,
+        featured: data.featured ?? false,
+        position: data.position ?? 0,
+        author_id: context.userId
+      } as any)
+      .select("*")
+      .single();
+    if (error) throw new Error(error.message);
+    await logAudit(context.supabase, context.userId, "create", "news", row.id, row);
+    return row;
+  });

@@ -14,7 +14,9 @@ import type {
   ProductUpdate, 
   Category, 
   ProductCommand,
-  ProductBenefit
+  ProductBenefit,
+  News,
+  NewsCategory
 } from "@/lib/types/database";
 
 const categoryInput = z.object({
