@@ -3,20 +3,21 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { Database } from "@/integrations/supabase/types";
 
-type MinecraftAccount = Database["public"]["Tables"]["minecraft_accounts"]["Row"];
+type MinecraftEdition = Database["public"]["Enums"]["minecraft_edition"];
 
 /**
  * Lista as contas Minecraft do usuário logado.
+ * No schema atual, a tabela é 'player_accounts'.
  */
 export const getMyMinecraftAccounts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context!;
     const { data, error } = await supabase
-      .from("minecraft_accounts")
+      .from("player_accounts")
       .select("*")
       .eq("profile_id", userId)
-      .order("is_primary", { ascending: false });
+      .order("verified_at", { ascending: false });
 
     if (error) throw error;
     return data ?? [];
@@ -24,13 +25,15 @@ export const getMyMinecraftAccounts = createServerFn({ method: "GET" })
 
 /**
  * Gera um código de verificação para vincular uma conta Minecraft.
+ * Como não temos colunas de código na player_accounts ainda, usaremos audit_logs ou metadata temporário
+ * se necessário, mas aqui simularemos a intenção de fluxo seguro.
  */
 export const generateVerificationCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z.object({ 
       nickname: z.string().min(3).max(16),
-      platform: z.enum(["java", "bedrock"])
+      edition: z.enum(["java", "bedrock"])
     }).parse(data)
   )
   .handler(async ({ data, context }) => {
@@ -38,62 +41,33 @@ export const generateVerificationCode = createServerFn({ method: "POST" })
 
     // 1. Verificar se o nick já está vinculado e verificado por outro usuário
     const { data: existing } = await supabase
-      .from("minecraft_accounts")
-      .select("id, profile_id, verified")
-      .eq("nickname", data.nickname)
-      .eq("platform", data.platform)
+      .from("player_accounts")
+      .select("id, profile_id, verified_at")
+      .eq("minecraft_nickname", data.nickname)
+      .eq("edition", data.edition as MinecraftEdition)
       .single();
 
-    if (existing?.verified && existing.profile_id !== userId) {
+    if (existing?.verified_at && existing.profile_id !== userId) {
       throw new Error("Este nickname já está vinculado e verificado em outra conta.");
     }
 
     // 2. Gerar código único de 6 caracteres
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutos
+    
+    // 3. Registrar intenção no log de auditoria (usado como store temporário para o plugin validar)
+    await supabase.from("audit_logs").insert({
+      actor_profile_id: userId,
+      action: "verification_request",
+      entity: "player_account",
+      metadata: { 
+        nickname: data.nickname, 
+        edition: data.edition, 
+        code, 
+        expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString() 
+      }
+    });
 
-    // 3. Upsert na tabela de contas com o código (usando status 'pending')
-    const { error } = await supabase
-      .from("minecraft_accounts")
-      .upsert({
-        profile_id: userId,
-        nickname: data.nickname,
-        platform: data.platform,
-        verification_code: code,
-        verification_expires_at: expiresAt,
-        verified: false,
-        updated_at: new Date().toISOString()
-      } as any, { onConflict: 'profile_id,nickname,platform' });
-
-    if (error) throw error;
-
-    return { code, expiresAt };
-  });
-
-/**
- * Define uma conta como principal.
- */
-export const setPrimaryAccount = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ accountId: z.string().uuid() }).parse(data))
-  .handler(async ({ data, context }) => {
-    const { supabase, userId } = context!;
-
-    // Transação manual: remove primary de todas e seta na escolhida
-    await supabase
-      .from("minecraft_accounts")
-      .update({ is_primary: false } as any)
-      .eq("profile_id", userId);
-
-    const { error } = await supabase
-      .from("minecraft_accounts")
-      .update({ is_primary: true } as any)
-      .eq("id", data.accountId)
-      .eq("profile_id", userId)
-      .eq("verified", true); // Só pode ser principal se verificada
-
-    if (error) throw error;
-    return { success: true };
+    return { code };
   });
 
 /**
@@ -106,7 +80,7 @@ export const removeMinecraftAccount = createServerFn({ method: "POST" })
     const { supabase, userId } = context!;
 
     const { error } = await supabase
-      .from("minecraft_accounts")
+      .from("player_accounts")
       .delete()
       .eq("id", data.accountId)
       .eq("profile_id", userId);
