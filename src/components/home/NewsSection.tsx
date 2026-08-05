@@ -100,7 +100,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
   const statusKey = currentStatus.online ? "online" : "offline";
 
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="news">
+    <section className="relative overflow-hidden" id="news">
       <Container>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div className="space-y-4">
