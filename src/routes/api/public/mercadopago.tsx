@@ -51,7 +51,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
                 const { data: commands } = await supabaseAdmin
                   .from("product_commands")
                   .select("*")
-                  .eq("product_id", item.product_id);
+                  .eq("product_id", item.product_id as string);
 
                 if (commands) {
                   const deliveryItems = commands.map(cmd => ({
