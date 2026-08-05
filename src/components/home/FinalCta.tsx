@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Container } from "@/components/ui-kit/Container";
 import { Button } from "@/components/ui/button";
 import { Rocket, ShoppingCart, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 import landscape from "@/assets/voxel-landscape.jpg";
 
 export function FinalCta() {
@@ -20,7 +21,13 @@ export function FinalCta() {
       </div>
 
       <Container className="relative z-10 text-center">
-        <div className="max-w-4xl mx-auto space-y-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-4xl mx-auto space-y-12"
+        >
           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-black uppercase tracking-[0.3em] animate-pulse">
             <Rocket className="w-4 h-4" />
             Pronto para o Desafio?
@@ -35,17 +42,26 @@ export function FinalCta() {
             Sua jornada épica começa agora.
           </p>
 
-          <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-xl inline-block group cursor-pointer hover:border-emerald-500/30 transition-all">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-xl inline-block group cursor-pointer hover:border-emerald-500/30 transition-all"
+          >
             <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 mb-2">Endereço de Conexão</span>
             <span className="text-2xl md:text-4xl font-[900] text-white uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
               jogar.avance.com.br
             </span>
-          </div>
+          </motion.div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button size="lg" className="h-20 px-12 rounded-2xl text-lg group w-full sm:w-auto">
-              Jogar Agora
-              <ChevronRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <Button size="lg" className="h-20 px-12 rounded-2xl text-lg group w-full sm:w-auto overflow-hidden relative">
+              <motion.div 
+                className="absolute inset-0 bg-white/20 -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+              />
+              <span className="relative z-10 flex items-center gap-2">
+                Jogar Agora
+                <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </span>
             </Button>
             <Button size="lg" variant="outline" asChild className="h-20 px-12 rounded-2xl text-lg w-full sm:w-auto border-white/10 hover:bg-white/5">
               <Link to="/loja" className="flex items-center gap-3">
@@ -54,7 +70,7 @@ export function FinalCta() {
               </Link>
             </Button>
           </div>
-        </div>
+        </motion.div>
       </Container>
     </section>
   );
