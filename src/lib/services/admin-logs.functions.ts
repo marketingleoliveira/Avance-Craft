@@ -1,11 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { LogSeverity } from "@/lib/config/logger.server";
 
 /**
  * Funções administrativas para gerenciamento e visualização de logs.
- * Nota: Como requireOwnership em security.ts espera parâmetros específicos para tabelas com dono,
- * implementamos a validação de admin diretamente aqui para simplificar o log de sistema.
  */
 
 async function validateAdmin(userId: string) {
@@ -27,7 +26,6 @@ export const getErrorLogs = createServerFn({ method: "GET" })
     pageSize: z.number().default(50)
   }).parse(data))
   .handler(async ({ data, context }) => {
-    // Validar se o usuário autenticado é admin
     const session = await (context as any).supabase.auth.getSession();
     const userId = session.data.session?.user.id;
     if (!userId) throw new Error("Não autenticado");
@@ -39,7 +37,8 @@ export const getErrorLogs = createServerFn({ method: "GET" })
       .order('created_at', { ascending: false });
 
     if (data.severity) {
-      query = query.eq('severity', data.severity);
+      // Cast para o tipo esperado pelo Supabase
+      query = query.eq('severity', data.severity as any);
     }
 
     if (data.service) {

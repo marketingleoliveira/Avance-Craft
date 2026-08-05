@@ -80,11 +80,11 @@ function AdminLogsPage() {
           <p className="text-gray-400">Monitoramento centralizado de erros e auditoria do sistema.</p>
         </div>
         <div className="flex items-center gap-2">
-          <PixelButton variant="secondary" onClick={exportLogs}>
+          <PixelButton variant="stone" onClick={exportLogs} className="bg-slate-700 border-slate-800">
             <Download className="w-4 h-4 mr-2" />
             Exportar CSV
           </PixelButton>
-          <PixelButton variant="danger" onClick={handlePrune}>
+          <PixelButton variant="stone" onClick={handlePrune} className="bg-red-700 border-red-900">
             <Trash2 className="w-4 h-4 mr-2" />
             Limpar Antigos
           </PixelButton>
