@@ -46,11 +46,14 @@ export async function createCheckout(request: CheckoutRequest): Promise<Checkout
 
   try {
     const result = await createPaymentPreference({
-      nickname: request.nickname,
-      edition: request.platform,
-      items: request.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
-      couponCode: request.coupon || null
+      data: {
+        nickname: request.nickname,
+        edition: request.platform,
+        items: request.items.map(i => ({ productId: i.productId, quantity: i.quantity })),
+        couponCode: request.coupon || null
+      }
     });
+
 
 
     return {

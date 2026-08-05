@@ -39,6 +39,7 @@ export const Route = createFileRoute("/api/public/mercadopago")({
 
 
 
+
             if (order) {
               // 4. Gerar fila de entrega (comandos Minecraft)
               for (const item of order.items) {
