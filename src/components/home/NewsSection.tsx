@@ -157,7 +157,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
             </Card>
 
             {/* Top Players Widget */}
-            <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] backdrop-blur-xl">
+            <Card className="p-8 !rounded-[2.5rem]">
               <h3 className="text-xl font-[900] uppercase italic tracking-wider text-white mb-6 flex items-center gap-3">
                 <Trophy className="w-5 h-5 text-emerald-500" />
                 Top Fortune
@@ -182,7 +182,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                   </li>
                 ))}
               </ol>
-            </div>
+            </Card>
           </aside>
         </div>
       </Container>
