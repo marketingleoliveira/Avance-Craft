@@ -57,7 +57,7 @@ const DEFAULT_STATUS = {
 };
 
 export function Hero({ settings }: { settings?: Record<string, string> }) {
-  const HERO_FACTS = ["Java e Bedrock", `Versão ${settings?.server_version || "1.21+"}`, "Servidor brasileiro"];
+  const HERO_FACTS = ["Java e Bedrock", `Versão ${settings?.["server_version"] || "1.21+"}`, "Servidor brasileiro"];
 
 
   return (

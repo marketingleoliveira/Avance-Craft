@@ -5,12 +5,13 @@ import { PixelButton } from "@/components/ui-kit/PixelButton";
 
 
 export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
-  const discordUrl = settings?.discord_url || "https://discord.gg/habbletmine";
+  const discordUrl = settings?.["discord_url"] || "https://discord.gg/habbletmine";
   const socialLinks = [
-    { label: "Instagram", href: settings?.instagram_url || "#" },
-    { label: "TikTok", href: settings?.tiktok_url || "#" },
-    { label: "YouTube", href: settings?.youtube_url || "#" },
+    { label: "Instagram", href: settings?.["instagram_url"] || "#" },
+    { label: "TikTok", href: settings?.["tiktok_url"] || "#" },
+    { label: "YouTube", href: settings?.["youtube_url"] || "#" },
   ].filter(l => l.href !== "#");
+
 
 
   return (

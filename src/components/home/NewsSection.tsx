@@ -77,8 +77,9 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
     queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 3 } }),
   });
 
-  const status = serverStatus ?? DEFAULT_STATUS;
-  const statusKey = status.online ? "online" : "offline";
+  const currentStatus = status ?? DEFAULT_STATUS;
+  const statusKey = currentStatus.online ? "online" : "offline";
+
 
   return (
     <section className="py-14">
@@ -105,13 +106,14 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
                 <SidebarRow label="Servidor" value={statusLabel[statusKey] || "Offline"} />
                 <SidebarRow
                   label="Jogadores"
-                  value={`${status.players_online}/${status.max_players}`}
+                  value={`${currentStatus.players_online}/${currentStatus.max_players}`}
                 />
                 <SidebarRow label="Modo" value="Survival" />
-                <SidebarRow label="Versão" value={status.version} />
+                <SidebarRow label="Versão" value={currentStatus.version} />
+
               </ul>
               <p className="mt-3 break-all bg-dirt-dark/10 p-2 text-sm font-bold">
-                {status.ip}
+                {currentStatus.ip}
               </p>
             </StonePanel>
 
