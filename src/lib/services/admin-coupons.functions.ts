@@ -24,7 +24,7 @@ export const adminCreateCoupon = createServerFn({ method: "POST" })
     z
       .object({
         code: z.string().min(3).max(20).transform(s => s.toUpperCase()),
-        description: z.string().optional(),
+        description: z.string().optional().nullable(),
         discount_percent: z.number().min(0).max(100).optional().nullable(),
         discount_amount: z.number().min(0).optional().nullable(),
         max_uses: z.number().int().min(1).optional().nullable(),
@@ -40,7 +40,16 @@ export const adminCreateCoupon = createServerFn({ method: "POST" })
     
     const { data: coupon, error } = await supabase
       .from("coupons")
-      .insert(data)
+      .insert({
+        code: data.code,
+        description: data.description ?? null,
+        discount_percent: data.discount_percent ?? null,
+        discount_amount: data.discount_amount ?? null,
+        max_uses: data.max_uses ?? null,
+        starts_at: data.starts_at ?? null,
+        expires_at: data.expires_at ?? null,
+        active: data.active,
+      } as any)
       .select()
       .single();
 
