@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminListFeatureFlags, adminUpdateFeatureFlag } from '@/lib/services/admin-flags.functions';
+import { runStagingSeed, clearStagingData } from '@/lib/services/staging.functions';
 import { StonePanel } from '@/components/ui-kit/StonePanel';
 import { WoodSign } from '@/components/ui-kit/WoodSign';
 import { Container } from '@/components/ui-kit/Container';
@@ -18,12 +19,15 @@ import {
   Globe,
   RefreshCw,
   MessageSquare,
-  Activity
+  Activity,
+  Database,
+  Trash2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { FeatureFlag } from '@/lib/config/flags';
 import { useServerFn } from '@tanstack/react-start';
+import { isStaging, isDev } from '@/lib/config/env.server';
 
 export const Route = createFileRoute('/admin/configuracoes')({
   component: AdminFlagsPage,
