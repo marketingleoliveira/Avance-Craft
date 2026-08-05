@@ -13,7 +13,7 @@ import {
 import { toast } from "sonner";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 
-export const Route = createFileRoute("/admin/categorias")({
+export const Route = createFileRoute("/admin/categorias/")({
   component: AdminCategories,
 });
 

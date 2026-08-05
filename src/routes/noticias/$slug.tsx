@@ -5,7 +5,7 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { Calendar, User, ArrowLeft, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/noticias/$slug" as any)({
+export const Route = createFileRoute("/noticias/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) return {};
     const title = `${(loaderData as any).title} — Habblet Mine`;
