@@ -103,7 +103,7 @@ export function SiteHeader() {
 
           <Link
             to="/como-jogar"
-            className="relative group flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-stone-950 text-[11px] font-black uppercase tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95"
+            className="relative group flex items-center gap-2 px-6 py-2.5 bg-emerald-500 text-stone-950 text-[11px] font-black uppercase tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 rounded-xl shadow-lg shadow-emerald-500/20"
           >
             <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
             <Play className="w-3.5 h-3.5 fill-current" />
