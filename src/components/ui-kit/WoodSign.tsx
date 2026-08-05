@@ -1,36 +1,37 @@
-import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import wood from "@/assets/tex-wood.jpg";
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
 
-type Props = {
+interface WoodSignProps {
   children: ReactNode;
   subtitle?: string;
   className?: string;
-};
+}
 
-/** Placa de madeira usada como título de seção. */
-export function WoodSign({ children, subtitle, className }: Props) {
+/** 
+ * REBRANDING: Substituído estilo madeira por tipografia AAA.
+ * Mantido o nome para compatibilidade durante a migração.
+ */
+export function WoodSign({ children, subtitle, className }: WoodSignProps) {
   return (
-    <div className={cn("relative flex flex-col items-center", className)}>
-      <div className="flex gap-16">
-        <span className="h-5 w-3 bg-wood-dark" />
-        <span className="h-5 w-3 bg-wood-dark" />
-      </div>
-      <div
-        className="pixel-border pixel-shadow border-wood-dark relative px-6 py-4 text-center sm:px-10"
-        style={{
-          backgroundImage: `url(${wood})`,
-          backgroundSize: "220px",
-          imageRendering: "pixelated",
-        }}
+    <div className={cn("space-y-2", className)}>
+      <motion.span 
+        initial={{ opacity: 0, x: -10 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px]"
       >
-        <h2 className="font-pixel text-[13px] uppercase text-dirt-dark sm:text-base">
-          {children}
-        </h2>
-        {subtitle ? (
-          <p className="mt-2 max-w-xl text-sm font-medium text-dirt-dark/80">{subtitle}</p>
-        ) : null}
-      </div>
+        {subtitle || "Avance Experience"}
+      </motion.span>
+      <motion.h2 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="text-4xl md:text-6xl font-[900] uppercase italic tracking-tighter text-white leading-tight"
+      >
+        {children}
+      </motion.h2>
     </div>
   );
 }

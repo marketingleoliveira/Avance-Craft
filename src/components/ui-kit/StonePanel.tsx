@@ -1,33 +1,31 @@
-import type { ReactNode } from "react";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import stone from "@/assets/tex-stone.jpg";
+import { ReactNode } from "react";
 
-type Props = {
+interface StonePanelProps {
   title?: string;
   children: ReactNode;
   className?: string;
   bodyClassName?: string;
-};
+}
 
-/** Painel com moldura de pedra e corpo em tom bege claro. */
-export function StonePanel({ title, children, className, bodyClassName }: Props) {
+/**
+ * REBRANDING: StonePanel agora é um Card AAA.
+ * Mantido para compatibilidade.
+ */
+export function StonePanel({ title, children, className, bodyClassName }: StonePanelProps) {
   return (
-    <section
-      className={cn("pixel-border border-stone-dark pixel-shadow p-2", className)}
-      style={{
-        backgroundImage: `url(${stone})`,
-        backgroundSize: "120px",
-        imageRendering: "pixelated",
-      }}
-    >
-      {title ? (
-        <header className="bg-dirt-dark/85 mb-2 px-3 py-2">
-          <h3 className="font-pixel text-[11px] uppercase text-parchment">{title}</h3>
-        </header>
-      ) : null}
-      <div className={cn("bg-parchment/95 p-4 text-foreground sm:p-5", bodyClassName)}>
+    <Card className={cn("p-0", className)}>
+      {title && (
+        <div className="px-8 py-5 border-b border-white/5 bg-white/[0.01]">
+          <h3 className="text-sm font-black uppercase tracking-widest text-emerald-500 italic">
+            {title}
+          </h3>
+        </div>
+      )}
+      <div className={cn("p-8", bodyClassName)}>
         {children}
       </div>
-    </section>
+    </Card>
   );
 }

@@ -1,9 +1,8 @@
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Container } from "@/components/ui-kit/Container";
-import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { WoodSign } from "@/components/ui-kit/WoodSign";
-import { PixelButton } from "@/components/ui-kit/PixelButton";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { getMyProfile, listMyOrders, listMyPlayerAccounts } from "@/lib/services/orders.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,7 +18,9 @@ import {
   XCircle, 
   AlertCircle,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Shield,
+  History
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/perfil")({
     meta: [
       { title: "Meu Perfil | Avance" },
       { name: "description", content: "Gerencie seus pedidos, vincule sua conta Minecraft e acompanhe suas conquistas no Avance." },
-      { name: "robots", content: "noindex, nofollow" }, // Privado
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
   beforeLoad: async () => {
@@ -95,102 +96,121 @@ function ProfilePage() {
   const primaryAccount = accounts?.[0];
 
   return (
-    <main className="py-12 bg-parchment/30">
-      <Container className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
+    <main className="min-h-screen py-24 bg-stone-950 text-white">
+      <Container className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-12 items-start">
         {/* Sidebar */}
-        <aside className="space-y-6 lg:sticky lg:top-24">
-          <StonePanel className="p-6 text-center">
-            <div className="relative mx-auto mb-4 w-24 h-24 pixel-border border-dirt-dark bg-stone overflow-hidden">
-               {/* Avatar Placeholder - Voxel Head */}
-               <div className="absolute inset-0 flex flex-col">
-                  <div className="h-1/2 bg-wood-dark"></div>
-                  <div className="h-1/2 bg-dirt"></div>
-                  <div className="absolute top-1/2 left-1/4 w-3 h-3 bg-white border border-black/20"></div>
-                  <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-white border border-black/20"></div>
-               </div>
+        <aside className="space-y-8 lg:sticky lg:top-32">
+          <Card className="p-8 text-center flex flex-col items-center">
+            <div className="relative mb-6 group">
+              <div className="absolute inset-0 bg-emerald-500/20 blur-2xl group-hover:bg-emerald-500/40 transition-colors" />
+              <div className="relative w-24 h-24 rounded-3xl overflow-hidden border-2 border-emerald-500/20 shadow-2xl">
+                <img 
+                  src={`https://mc-heads.net/avatar/${primaryAccount?.minecraft_nickname || 'Steve'}/96`}
+                  alt="Avatar"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-xl flex items-center justify-center border-4 border-stone-900 shadow-lg">
+                <Shield className="w-3.5 h-3.5 text-stone-950" />
+              </div>
             </div>
-            <h2 className="font-pixel text-[11px] uppercase text-dirt-dark truncate px-2">
+
+            <h2 className="text-2xl font-black uppercase italic tracking-tight text-white mb-1">
               {profile.username || "Jogador"}
             </h2>
-            <p className="text-[10px] font-pixel text-grass-dark mt-1">
-              {profile.role === 'admin' ? 'Administrador' : 'Membro'}
-            </p>
+            <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-stone-400">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+              {profile.role === 'admin' ? 'Administrador' : 'Membro Premium'}
+            </div>
             
-            <div className="mt-6 pt-6 border-t-2 border-dirt-dark/10 grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-[9px] font-pixel text-muted-foreground uppercase">Saldo</p>
-                <p className="font-pixel text-[10px] text-dirt-dark">0 Cash</p>
+            <div className="w-full mt-8 pt-8 border-t border-white/5 grid grid-cols-2 gap-4">
+              <div className="text-left">
+                <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-1">Saldo</p>
+                <p className="text-lg font-black italic text-emerald-400">0 CASH</p>
               </div>
-              <div>
-                <p className="text-[9px] font-pixel text-muted-foreground uppercase">VIP</p>
-                <p className="font-pixel text-[10px] text-emerald-block">Nenhum</p>
+              <div className="text-left border-l border-white/5 pl-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-1">Nível</p>
+                <p className="text-lg font-black italic text-white">42</p>
               </div>
             </div>
-          </StonePanel>
+          </Card>
 
-          <nav className="flex flex-col gap-2">
+          <nav className="flex flex-col gap-3">
             <ProfileNavItem icon={User} label="Visão Geral" active />
-            <ProfileNavItem icon={ShoppingBag} label="Histórico" />
-            <ProfileNavItem icon={Ticket} label="Meus Tickets" />
-            <ProfileNavItem icon={Settings} label="Configurações" />
+            <ProfileNavItem icon={ShoppingBag} label="Meus Pedidos" />
+            <ProfileNavItem icon={Ticket} label="Central de Tickets" />
+            <ProfileNavItem icon={Settings} label="Segurança & Conta" />
             <button 
               onClick={handleLogout}
-              className="flex items-center gap-3 p-3 font-pixel text-[10px] uppercase text-red-600 hover:bg-red-50 transition-colors w-full text-left mt-4"
+              className="flex items-center gap-4 p-4 font-black text-[11px] uppercase tracking-widest text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-all rounded-2xl group mt-4"
             >
-              <LogOut className="w-4 h-4" /> Sair da conta
+              <LogOut className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Sair da conta
             </button>
           </nav>
         </aside>
 
         {/* Content */}
-        <div className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <WoodSign subtitle="Bem-vindo à sua área exclusiva">
-              Seu Perfil
-            </WoodSign>
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] font-pixel uppercase text-muted-foreground">ID: #{profile.id.slice(0, 8)}</span>
+        <div className="space-y-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+            <div className="space-y-2">
+              <span className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px]">Área do Jogador</span>
+              <h1 className="text-4xl md:text-6xl font-[900] uppercase italic tracking-tighter text-white">
+                Dashboard
+              </h1>
+            </div>
+            <div className="px-4 py-2 bg-white/[0.02] border border-white/5 rounded-xl">
+              <span className="text-[10px] font-black uppercase tracking-widest text-stone-500">ID Único:</span>
+              <span className="ml-2 font-mono text-xs text-white">#{profile.id.slice(0, 8)}</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StatCard 
               label="Conta Minecraft" 
               value={primaryAccount?.minecraft_nickname || "Não vinculado"} 
               subtitle={primaryAccount ? `Edição ${primaryAccount.edition}` : "Vincule agora"}
               icon={Box}
+              color="text-emerald-500"
             />
             <StatCard 
-              label="Total Gasto" 
+              label="Investimento Total" 
               value={`R$ ${orders?.reduce((acc, o) => acc + (o.status === 'paid' ? o.total : 0), 0).toFixed(2)}`} 
-              subtitle={`${orders?.filter(o => o.status === 'paid').length || 0} pedidos concluídos`}
+              subtitle={`${orders?.filter(o => o.status === 'paid').length || 0} pedidos confirmados`}
               icon={CreditCard}
+              color="text-white"
             />
             <StatCard 
-              label="Cupons" 
-              value="0" 
-              subtitle="Nenhum ativo no momento"
-              icon={Ticket}
+              label="Vantagens Ativas" 
+              value="3 Ativos" 
+              subtitle="Expira em 12 dias"
+              icon={Shield}
+              color="text-emerald-500"
             />
           </div>
 
-          {/* Histórico de Pedidos */}
-          <section className="space-y-4">
+          {/* Pedidos Recentes */}
+          <section className="space-y-8">
             <div className="flex items-center justify-between">
-              <h3 className="font-pixel text-[11px] uppercase text-dirt-dark">Últimos Pedidos</h3>
-              <button className="text-[9px] font-pixel text-grass-dark uppercase hover:underline">Ver todos</button>
+              <div className="flex items-center gap-3">
+                <History className="w-5 h-5 text-emerald-500" />
+                <h3 className="text-xl font-black uppercase italic tracking-wider text-white">Histórico de Pedidos</h3>
+              </div>
+              <Button variant="ghost" size="sm" className="text-[10px]">Ver tudo</Button>
             </div>
 
             {orders?.length === 0 ? (
-              <StonePanel className="p-12 text-center opacity-70">
-                <ShoppingBag className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="font-pixel text-[10px] text-muted-foreground uppercase">Você ainda não realizou compras.</p>
-                <Link to="/loja">
-                  <PixelButton variant="wood" className="mt-4">Visitar Loja</PixelButton>
-                </Link>
-              </StonePanel>
+              <Card className="p-20 text-center flex flex-col items-center">
+                <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mb-6">
+                  <ShoppingBag className="w-8 h-8 text-stone-500" />
+                </div>
+                <h4 className="text-lg font-black uppercase italic text-stone-400 mb-2">Sem atividade comercial</h4>
+                <p className="text-stone-500 font-medium mb-8 max-w-xs">Sua conta ainda não possui registros de compras na nossa loja oficial.</p>
+                <Button asChild className="h-14 px-10">
+                  <Link to="/loja">Visitar Loja Premium</Link>
+                </Button>
+              </Card>
             ) : (
-              <div className="space-y-4">
+              <div className="grid gap-4">
                 {orders?.map((order) => (
                   <OrderCard key={order.id} order={order} />
                 ))}
@@ -200,7 +220,7 @@ function ProfilePage() {
         </div>
       </Container>
       
-      <ScrollReveal className="mt-20">
+      <ScrollReveal className="mt-32">
         <SiteFooter />
       </ScrollReveal>
     </main>
@@ -210,88 +230,101 @@ function ProfilePage() {
 function ProfileNavItem({ icon: Icon, label, active }: { icon: any; label: string; active?: boolean }) {
   return (
     <button className={cn(
-      "flex items-center gap-3 p-4 font-pixel text-[10px] uppercase transition-all",
-      active ? "bg-wood border-2 border-wood-dark text-dirt-dark shadow-[0_4px_0_0_var(--wood-dark)]" : "text-muted-foreground hover:text-dirt-dark"
+      "flex items-center justify-between p-5 rounded-2xl transition-all border group",
+      active 
+        ? "bg-emerald-500 border-emerald-500 text-stone-950 shadow-xl shadow-emerald-500/20" 
+        : "bg-white/[0.02] border-white/5 text-stone-400 hover:bg-white/[0.05] hover:border-white/10 hover:text-white"
     )}>
-      <Icon className="w-4 h-4" /> {label}
+      <div className="flex items-center gap-4">
+        <Icon className={cn("w-5 h-5", active ? "text-stone-950" : "text-emerald-500")} />
+        <span className="font-black uppercase italic tracking-widest text-[11px]">{label}</span>
+      </div>
+      <ChevronRight className={cn("w-4 h-4 transition-transform", active ? "translate-x-1" : "opacity-0 group-hover:opacity-100 group-hover:translate-x-1")} />
     </button>
   );
 }
 
-function StatCard({ label, value, subtitle, icon: Icon }: { label: string; value: string; subtitle: string; icon: any }) {
+function StatCard({ label, value, subtitle, icon: Icon, color }: { label: string; value: string; subtitle: string; icon: any; color: string }) {
   return (
-    <StonePanel className="p-5">
-      <div className="flex items-start justify-between mb-2">
-        <p className="text-[9px] font-pixel text-muted-foreground uppercase">{label}</p>
-        <Icon className="w-4 h-4 text-grass-dark" />
+    <Card className="p-8">
+      <div className="flex items-start justify-between mb-6">
+        <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+          <Icon className={cn("w-6 h-6", color === 'text-emerald-500' ? 'text-emerald-500' : 'text-white')} />
+        </div>
       </div>
-      <p className="font-pixel text-sm text-dirt-dark truncate">{value}</p>
-      <p className="text-[9px] text-muted-foreground mt-1">{subtitle}</p>
-    </StonePanel>
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-1">{label}</p>
+        <p className={cn("text-2xl font-black uppercase italic tracking-tight mb-2", color)}>{value}</p>
+        <p className="text-xs font-medium text-stone-500">{subtitle}</p>
+      </div>
+    </Card>
   );
 }
 
 function OrderCard({ order }: { order: any }) {
   const statusMap: Record<string, { label: string; color: string; icon: any }> = {
-    pending: { label: "Aguardando Pagamento", color: "text-amber-600", icon: Clock },
-    paid: { label: "Pago", color: "text-emerald-block", icon: CheckCircle2 },
-    delivered: { label: "Entregue", color: "text-emerald-block", icon: CheckCircle2 },
-    cancelled: { label: "Cancelado", color: "text-red-600", icon: XCircle },
-    failed: { label: "Falha na Entrega", color: "text-amber-600", icon: AlertCircle },
+    pending: { label: "Pendente", color: "text-amber-500 bg-amber-500/10 border-amber-500/20", icon: Clock },
+    paid: { label: "Pago", color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20", icon: CheckCircle2 },
+    delivered: { label: "Entregue", color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20", icon: CheckCircle2 },
+    cancelled: { label: "Cancelado", color: "text-red-500 bg-red-500/10 border-red-500/20", icon: XCircle },
+    failed: { label: "Falha", color: "text-red-500 bg-red-500/10 border-red-500/20", icon: AlertCircle },
   };
 
-  const status = statusMap[order.status] || { label: order.status, color: "text-muted-foreground", icon: AlertCircle };
-  const StatusIcon = status.icon;
+  const status = statusMap[order.status] || { label: order.status, color: "text-stone-500 bg-white/5 border-white/10", icon: AlertCircle };
 
   return (
-    <StonePanel className="p-0 overflow-hidden group">
-      <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-[auto_1fr_auto] gap-6 items-center">
-        <div className="h-12 w-12 bg-dirt-dark/10 grid place-items-center rounded-sm">
-          <ShoppingBag className="w-6 h-6 text-dirt-dark" />
-        </div>
-        
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
-            <span className="font-pixel text-[10px] text-dirt-dark">#{order.id.slice(0, 8)}</span>
-            <span className={cn("font-pixel text-[8px] uppercase px-1.5 py-0.5 bg-black/5 rounded-sm", status.color)}>
-              {status.label}
-            </span>
+    <Card className="p-0 hover:bg-white/[0.04]">
+      <div className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+        <div className="flex items-center gap-6 flex-1 min-w-0">
+          <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5">
+            <ShoppingBag className="w-8 h-8 text-stone-500" />
           </div>
-          <p className="text-xs text-muted-foreground truncate">
-            {order.items?.length || 0} itens • {new Date(order.created_at).toLocaleDateString('pt-BR')}
-          </p>
+          <div className="min-w-0">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="font-mono text-xs text-stone-500">#{order.id.slice(0, 8)}</span>
+              <span className={cn("px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border", status.color)}>
+                {status.label}
+              </span>
+            </div>
+            <h4 className="text-lg font-black uppercase italic text-white truncate">
+              {order.items?.length || 0} Itens Adquiridos
+            </h4>
+            <p className="text-sm font-medium text-stone-500">
+              {new Date(order.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+            </p>
+          </div>
         </div>
 
-        <div className="text-right">
-          <p className="font-pixel text-sm text-dirt-dark">R$ {order.total.toFixed(2)}</p>
-          <button className="text-[9px] font-pixel text-grass-dark uppercase mt-1 flex items-center justify-end gap-1 group-hover:underline">
-            Ver detalhes <ChevronRight className="w-3 h-3" />
-          </button>
+        <div className="flex items-center gap-8 w-full md:w-auto border-t md:border-t-0 border-white/5 pt-6 md:pt-0">
+          <div className="text-left md:text-right">
+            <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-1">Total</p>
+            <p className="text-2xl font-black text-white italic">R$ {order.total.toFixed(2)}</p>
+          </div>
+          <Button variant="secondary" className="h-14 px-8">Detalhes</Button>
         </div>
       </div>
 
-      {/* Timeline (Miniatura) */}
-      <div className="bg-black/5 p-4 border-t-2 border-dirt-dark/5 overflow-x-auto">
-        <div className="flex items-center gap-2 min-w-max">
-           <TimelineStep active={true} label="Pedido Criado" />
-           <div className={cn("w-8 sm:w-16 h-1", order.paid_at ? "bg-emerald-block/30" : "bg-muted/20")}></div>
-           <TimelineStep active={!!order.paid_at} label="Pagamento" />
-           <div className={cn("w-8 sm:w-16 h-1", order.status === 'delivered' ? "bg-emerald-block/30" : "bg-muted/20")}></div>
-           <TimelineStep active={order.status === 'delivered'} label="Entregue" />
+      <div className="px-8 pb-8 flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <TimelineStep active={true} label="Pedido" />
+          <div className={cn("flex-1 h-1 rounded-full", order.paid_at ? "bg-emerald-500" : "bg-white/5")} />
+          <TimelineStep active={!!order.paid_at} label="Pagamento" />
+          <div className={cn("flex-1 h-1 rounded-full", order.status === 'delivered' ? "bg-emerald-500" : "bg-white/5")} />
+          <TimelineStep active={order.status === 'delivered'} label="Entrega" />
         </div>
       </div>
-    </StonePanel>
+    </Card>
   );
 }
 
 function TimelineStep({ active, label }: { active: boolean; label: string }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-2">
       <div className={cn(
-        "w-3 h-3 pixel-border border-dirt-dark",
-        active ? "bg-emerald-block shadow-[0_0_8px_rgba(34,197,94,0.3)]" : "bg-stone"
-      )}></div>
-      <span className={cn("text-[8px] font-pixel uppercase", active ? "text-dirt-dark" : "text-muted-foreground")}>
+        "w-3 h-3 rounded-full transition-all duration-500",
+        active ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] scale-125" : "bg-white/10"
+      )} />
+      <span className={cn("text-[9px] font-black uppercase tracking-widest", active ? "text-emerald-500" : "text-stone-600")}>
         {label}
       </span>
     </div>

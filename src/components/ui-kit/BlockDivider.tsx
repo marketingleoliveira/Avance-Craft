@@ -1,17 +1,10 @@
-import grassDirt from "@/assets/tex-grass-dirt.jpg";
 import { cn } from "@/lib/utils";
 
-/** Faixa decorativa de blocos de grama/terra. */
+/**
+ * REBRANDING: BlockDivider agora é uma linha sutil AAA.
+ */
 export function BlockDivider({ className }: { className?: string }) {
   return (
-    <div
-      aria-hidden
-      className={cn("h-10 w-full border-y-4 border-dirt-dark", className)}
-      style={{
-        backgroundImage: `url(${grassDirt})`,
-        backgroundSize: "40px",
-        imageRendering: "pixelated",
-      }}
-    />
+    <div className={cn("h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-12", className)} />
   );
 }
