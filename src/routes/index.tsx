@@ -155,7 +155,9 @@ function Index() {
                     "Páginas Institucionais & Aceite Ativo (Checkout)",
                     "Termos, Privacidade e Regras Dinâmicos",
                     "Dockerfile & Docker Compose Configurados",
-                    "Monitoramento & Backup Estruturados"
+                    "Monitoramento & Backup Estruturados",
+                    "Healthcheck de Produção (/api/health)"
+
 
 
 
