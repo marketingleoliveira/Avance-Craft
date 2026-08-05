@@ -368,7 +368,7 @@ function EditNewsPage() {
                   )}
                   Atualizar Notícia
                 </Button>
-                <Link to={`/noticias/${newsItem.slug}`} target="_blank">
+                <Link to="/noticias/$slug" params={{ slug: newsItem.slug }} target="_blank">
                   <Button 
                     type="button" 
                     variant="outline"

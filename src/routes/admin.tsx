@@ -4,9 +4,23 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth"; // Assumindo existência ou criaremos
+import { assertAdmin } from "@/lib/services/admin.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin")({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({ to: "/auth", search: { redirect: "/admin" } });
+    }
+    
+    try {
+      await assertAdmin(supabase, session.user.id);
+    } catch (e) {
+      console.error("Acesso administrativo negado:", e);
+      throw redirect({ to: "/" });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Painel Administrativo | Habblet Mine" },
