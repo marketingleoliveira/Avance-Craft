@@ -14,16 +14,1043 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_logs: {
+        Row: {
+          action: string
+          actor_profile_id: string | null
+          created_at: string
+          entity: string
+          entity_id: string | null
+          id: string
+          metadata: Json
+        }
+        Insert: {
+          action: string
+          actor_profile_id?: string | null
+          created_at?: string
+          entity: string
+          entity_id?: string | null
+          id?: string
+          metadata?: Json
+        }
+        Update: {
+          action?: string
+          actor_profile_id?: string | null
+          created_at?: string
+          entity?: string
+          entity_id?: string | null
+          id?: string
+          metadata?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_actor_profile_id_fkey"
+            columns: ["actor_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          position: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          position?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          position?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      coupon_uses: {
+        Row: {
+          coupon_id: string
+          id: string
+          order_id: string | null
+          profile_id: string | null
+          used_at: string
+        }
+        Insert: {
+          coupon_id: string
+          id?: string
+          order_id?: string | null
+          profile_id?: string | null
+          used_at?: string
+        }
+        Update: {
+          coupon_id?: string
+          id?: string
+          order_id?: string | null
+          profile_id?: string | null
+          used_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupon_uses_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_uses_order_fk"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_uses_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coupons: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          description: string | null
+          discount_amount: number | null
+          discount_percent: number | null
+          expires_at: string | null
+          id: string
+          max_uses: number | null
+          starts_at: string | null
+          updated_at: string
+          uses_count: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          description?: string | null
+          discount_amount?: number | null
+          discount_percent?: number | null
+          expires_at?: string | null
+          id?: string
+          max_uses?: number | null
+          starts_at?: string | null
+          updated_at?: string
+          uses_count?: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          description?: string | null
+          discount_amount?: number | null
+          discount_percent?: number | null
+          expires_at?: string | null
+          id?: string
+          max_uses?: number | null
+          starts_at?: string | null
+          updated_at?: string
+          uses_count?: number
+        }
+        Relationships: []
+      }
+      delivery_attempts: {
+        Row: {
+          attempt_number: number
+          created_at: string
+          delivery_queue_id: string
+          id: string
+          response: string | null
+          success: boolean
+        }
+        Insert: {
+          attempt_number: number
+          created_at?: string
+          delivery_queue_id: string
+          id?: string
+          response?: string | null
+          success?: boolean
+        }
+        Update: {
+          attempt_number?: number
+          created_at?: string
+          delivery_queue_id?: string
+          id?: string
+          response?: string | null
+          success?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_attempts_delivery_queue_id_fkey"
+            columns: ["delivery_queue_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_queue"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_queue: {
+        Row: {
+          attempts: number
+          available_at: string
+          claimed_at: string | null
+          command: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          idempotency_key: string
+          last_error: string | null
+          order_item_id: string
+          server_id: string
+          status: Database["public"]["Enums"]["delivery_status"]
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          available_at?: string
+          claimed_at?: string | null
+          command: string
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          idempotency_key: string
+          last_error?: string | null
+          order_item_id: string
+          server_id?: string
+          status?: Database["public"]["Enums"]["delivery_status"]
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          available_at?: string
+          claimed_at?: string | null
+          command?: string
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          idempotency_key?: string
+          last_error?: string | null
+          order_item_id?: string
+          server_id?: string
+          status?: Database["public"]["Enums"]["delivery_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_queue_order_item_id_fkey"
+            columns: ["order_item_id"]
+            isOneToOne: false
+            referencedRelation: "order_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news: {
+        Row: {
+          author_profile_id: string | null
+          category_id: string | null
+          content: string | null
+          cover_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published: boolean
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_profile_id?: string | null
+          category_id?: string | null
+          content?: string | null
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_profile_id?: string | null
+          category_id?: string | null
+          content?: string | null
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_author_profile_id_fkey"
+            columns: ["author_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "news_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "news_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          product_id: string | null
+          product_name: string
+          quantity: number
+          total: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          product_id?: string | null
+          product_name: string
+          quantity?: number
+          total: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          product_id?: string | null
+          product_name?: string
+          quantity?: number
+          total?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          coupon_id: string | null
+          created_at: string
+          delivered_at: string | null
+          discount: number
+          edition: Database["public"]["Enums"]["minecraft_edition"]
+          external_reference: string | null
+          id: string
+          idempotency_key: string
+          minecraft_nickname: string
+          paid_at: string | null
+          payment_provider: string | null
+          profile_id: string | null
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          coupon_id?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          discount?: number
+          edition: Database["public"]["Enums"]["minecraft_edition"]
+          external_reference?: string | null
+          id?: string
+          idempotency_key: string
+          minecraft_nickname: string
+          paid_at?: string | null
+          payment_provider?: string | null
+          profile_id?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          coupon_id?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          discount?: number
+          edition?: Database["public"]["Enums"]["minecraft_edition"]
+          external_reference?: string | null
+          id?: string
+          idempotency_key?: string
+          minecraft_nickname?: string
+          paid_at?: string | null
+          payment_provider?: string | null
+          profile_id?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          external_event_id: string | null
+          id: string
+          payload: Json
+          payment_id: string | null
+          provider: string
+          signature_valid: boolean
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          external_event_id?: string | null
+          id?: string
+          payload?: Json
+          payment_id?: string | null
+          provider?: string
+          signature_valid?: boolean
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          external_event_id?: string | null
+          id?: string
+          payload?: Json
+          payment_id?: string | null
+          provider?: string
+          signature_valid?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_events_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          method: string | null
+          order_id: string
+          provider: string
+          provider_payment_id: string | null
+          raw_payload: Json | null
+          status: Database["public"]["Enums"]["payment_status"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          method?: string | null
+          order_id: string
+          provider?: string
+          provider_payment_id?: string | null
+          raw_payload?: Json | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          method?: string | null
+          order_id?: string
+          provider?: string
+          provider_payment_id?: string | null
+          raw_payload?: Json | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_accounts: {
+        Row: {
+          created_at: string
+          edition: Database["public"]["Enums"]["minecraft_edition"]
+          id: string
+          minecraft_nickname: string
+          profile_id: string
+          updated_at: string
+          uuid: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          edition: Database["public"]["Enums"]["minecraft_edition"]
+          id?: string
+          minecraft_nickname: string
+          profile_id: string
+          updated_at?: string
+          uuid?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          edition?: Database["public"]["Enums"]["minecraft_edition"]
+          id?: string
+          minecraft_nickname?: string
+          profile_id?: string
+          updated_at?: string
+          uuid?: string | null
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_accounts_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_benefits: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          position: number
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          position?: number
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          position?: number
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_benefits_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_commands: {
+        Row: {
+          command: string
+          created_at: string
+          id: string
+          position: number
+          product_id: string
+          server_id: string
+        }
+        Insert: {
+          command: string
+          created_at?: string
+          id?: string
+          position?: number
+          product_id: string
+          server_id?: string
+        }
+        Update: {
+          command?: string
+          created_at?: string
+          id?: string
+          position?: number
+          product_id?: string
+          server_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_commands_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean
+          category_id: string
+          created_at: string
+          duration_days: number | null
+          featured: boolean
+          full_description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          position: number
+          price: number
+          promotional_price: number | null
+          short_description: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category_id: string
+          created_at?: string
+          duration_days?: number | null
+          featured?: boolean
+          full_description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          position?: number
+          price: number
+          promotional_price?: number | null
+          short_description?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category_id?: string
+          created_at?: string
+          duration_days?: number | null
+          featured?: boolean
+          full_description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          position?: number
+          price?: number
+          promotional_price?: number | null
+          short_description?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      rankings: {
+        Row: {
+          category: string
+          created_at: string
+          display_value: string | null
+          id: string
+          minecraft_nickname: string
+          period: string
+          position: number
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          display_value?: string | null
+          id?: string
+          minecraft_nickname: string
+          period?: string
+          position: number
+          updated_at?: string
+          value?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          display_value?: string | null
+          id?: string
+          minecraft_nickname?: string
+          period?: string
+          position?: number
+          updated_at?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      server_modes: {
+        Row: {
+          available: boolean
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          position: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          available?: boolean
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          position?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          available?: boolean
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          position?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      server_status: {
+        Row: {
+          id: string
+          ip: string
+          max_players: number
+          online: boolean
+          players_online: number
+          server_id: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          id?: string
+          ip?: string
+          max_players?: number
+          online?: boolean
+          players_online?: number
+          server_id?: string
+          updated_at?: string
+          version?: string
+        }
+        Update: {
+          id?: string
+          ip?: string
+          max_players?: number
+          online?: boolean
+          players_online?: number
+          server_id?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          is_public: boolean
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      support_messages: {
+        Row: {
+          author_profile_id: string | null
+          body: string
+          created_at: string
+          from_staff: boolean
+          id: string
+          ticket_id: string
+        }
+        Insert: {
+          author_profile_id?: string | null
+          body: string
+          created_at?: string
+          from_staff?: boolean
+          id?: string
+          ticket_id: string
+        }
+        Update: {
+          author_profile_id?: string | null
+          body?: string
+          created_at?: string
+          from_staff?: boolean
+          id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_author_profile_id_fkey"
+            columns: ["author_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          order_id: string | null
+          profile_id: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          profile_id: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          profile_id?: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_access_ticket: { Args: { _ticket_id: string }; Returns: boolean }
+      current_profile_id: { Args: never; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
+      is_staff: { Args: never; Returns: boolean }
+      owns_order: { Args: { _order_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      delivery_status:
+        | "queued"
+        | "claimed"
+        | "delivered"
+        | "failed"
+        | "cancelled"
+      minecraft_edition: "java" | "bedrock"
+      order_status:
+        | "pending"
+        | "paid"
+        | "delivering"
+        | "delivered"
+        | "cancelled"
+        | "refunded"
+        | "failed"
+      payment_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "refunded"
+        | "chargeback"
+        | "cancelled"
+      ticket_status: "open" | "pending" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +1177,34 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      delivery_status: [
+        "queued",
+        "claimed",
+        "delivered",
+        "failed",
+        "cancelled",
+      ],
+      minecraft_edition: ["java", "bedrock"],
+      order_status: [
+        "pending",
+        "paid",
+        "delivering",
+        "delivered",
+        "cancelled",
+        "refunded",
+        "failed",
+      ],
+      payment_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "refunded",
+        "chargeback",
+        "cancelled",
+      ],
+      ticket_status: ["open", "pending", "closed"],
+    },
   },
 } as const
