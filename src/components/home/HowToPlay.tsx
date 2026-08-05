@@ -31,9 +31,14 @@ export function HowToPlay() {
     <section className="relative overflow-hidden" id="how-to-play">
       <Container>
         <div className="space-y-4 mb-16 text-center">
-          <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white"
+          >
             Prepare sua <span className="text-emerald-500">Jornada</span>
-          </h2>
+          </motion.h2>
           <p className="text-stone-400 font-medium text-lg max-w-xl mx-auto">
             Comece sua jornada em minutos.
           </p>

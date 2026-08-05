@@ -37,9 +37,14 @@ export function ShopHighlight({ products }: { products: any[] }) {
               <Star className="w-3 h-3" />
               Upgrade sua jornada
             </div>
-            <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white"
+            >
               Vips em <span className="text-emerald-500">Destaque</span>
-            </h2>
+            </motion.h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
               Desbloqueie benefícios exclusivos.
             </p>

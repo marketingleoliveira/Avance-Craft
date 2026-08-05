@@ -32,9 +32,14 @@ export function RankingSection() {
               <Trophy className="w-3 h-3" />
               Lendas do servidor
             </div>
-            <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white"
+            >
               Hall da <span className="text-emerald-500">Fama</span>
-            </h2>
+            </motion.h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
               Os jogadores dominando o Avance.
             </p>

@@ -31,9 +31,14 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
                 <MessageSquare className="w-3 h-3" />
                 Vida Social
               </div>
-              <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white"
+              >
                 Nossa <span className="text-emerald-500">Comunidade</span>
-              </h2>
+              </motion.h2>
               <p className="text-stone-400 font-medium text-lg max-w-xl leading-relaxed">
                 Junte-se à nossa comunidade oficial no Discord.
               </p>
