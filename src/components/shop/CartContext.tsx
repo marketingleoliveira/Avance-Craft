@@ -6,11 +6,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-// Cupons reais devem vir do banco, mantendo local para demo por enquanto
-const COUPONS: Record<string, number> = {
-  HABBLET10: 0.1,
-  BEMVINDO5: 0.05,
-};
+import { validateCouponPublic } from "@/lib/services/admin-coupons.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 import type { Platform } from "@/lib/payments/checkout-service";
 
@@ -38,7 +35,7 @@ type CartContextValue = {
   coupon: string;
   setCoupon: (value: string) => void;
   appliedCoupon: string | null;
-  applyCoupon: () => boolean;
+  applyCoupon: () => Promise<boolean>;
   subtotalCents: number;
   discountCents: number;
   totalCents: number;
@@ -54,6 +51,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [coupon, setCoupon] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
+  const [discountCents, setDiscountCents] = useState(0);
+  const validateCoupon = useServerFn(validateCouponPublic);
 
   const setNickname = useCallback((value: string) => {
     setNicknameState(value);
@@ -100,15 +99,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCoupon("");
   }, []);
 
-  const applyCoupon = useCallback(() => {
+  const applyCoupon = useCallback(async () => {
     const code = coupon.trim().toUpperCase();
-    if (code in COUPONS) {
-      setAppliedCoupon(code);
-      return true;
+    if (!code) {
+      setAppliedCoupon(null);
+      setDiscountCents(0);
+      return false;
     }
-    setAppliedCoupon(null);
-    return false;
-  }, [coupon]);
+
+    try {
+      const result = await validateCoupon({ data: { code, subtotalCents } });
+      if (result.valid) {
+        setAppliedCoupon(code);
+        setDiscountCents(result.discountCents);
+        return true;
+      }
+      setAppliedCoupon(null);
+      setDiscountCents(0);
+      return false;
+    } catch (error) {
+      console.error("Erro ao validar cupom:", error);
+      setAppliedCoupon(null);
+      setDiscountCents(0);
+      return false;
+    }
+  }, [coupon, subtotalCents, validateCoupon]);
 
   const detailed = useMemo(
     () => lines.filter(l => !!l.product).map(l => ({ product: l.product as any, quantity: l.quantity })),
@@ -120,9 +135,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     () => detailed.reduce((sum, item) => sum + item.product.priceCents * item.quantity, 0),
     [detailed],
   );
-  const discountCents = appliedCoupon
-    ? Math.round(subtotalCents * (COUPONS[appliedCoupon] ?? 0))
-    : 0;
+  // Desconto agora vem do estado atualizado via applyCoupon
+  // No caso de mudança no subtotal (ex: remover item), invalidamos o cupom por segurança
+  // ou poderíamos revalidar automaticamente. Aqui limpamos para forçar nova aplicação.
+  useMemo(() => {
+    if (appliedCoupon) {
+      setAppliedCoupon(null);
+      setDiscountCents(0);
+    }
+  }, [lines]);
 
   const value: CartContextValue = {
     nickname,

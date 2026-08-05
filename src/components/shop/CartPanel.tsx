@@ -123,11 +123,14 @@ export function CartPanel() {
         />
         <PixelButton
           variant="wood"
-          onClick={() =>
-            cart.applyCoupon()
-              ? toast.success("Cupom aplicado.")
-              : toast.error("Cupom inválido.")
-          }
+          onClick={async () => {
+            const success = await cart.applyCoupon();
+            if (success) {
+              toast.success("Cupom aplicado.");
+            } else {
+              toast.error("Cupom inválido ou não atende aos requisitos.");
+            }
+          }}
         >
           Aplicar
         </PixelButton>
