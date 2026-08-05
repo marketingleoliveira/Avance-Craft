@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui-kit/Container";
+import { Card } from "@/components/ui/card";
 import { Gamepad2, Layout, Boxes, Trophy } from "lucide-react";
 
 export function ModesSection({ modes }: { modes: any[] }) {
