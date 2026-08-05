@@ -138,15 +138,49 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [isMaintenance, setIsMaintenance] = useState(false);
+  const fetchFlags = useServerFn(getServerFlags);
 
   useEffect(() => {
+    // Check maintenance mode
+    fetchFlags().then(flags => {
+      if (flags?.MAINTENANCE_MODE) {
+        // Only show maintenance if not an admin route (staff needs access)
+        if (!window.location.pathname.startsWith('/admin') && !window.location.pathname.startsWith('/auth')) {
+          setIsMaintenance(true);
+        }
+      }
+    });
+
     // Perform startup health and config validation
     checkSystemHealth().then(health => {
       if (health.status === 'unhealthy') {
         console.error('System health check failed:', health.error);
       }
     });
-  }, []);
+  }, [fetchFlags]);
+
+  if (isMaintenance) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-stone-950 p-4">
+        <StonePanel className="max-w-md w-full p-8 text-center space-y-6 border-t-4 border-t-amber-500">
+          <div className="flex justify-center">
+            <div className="p-4 bg-amber-500/10 rounded-full">
+              <Lock className="w-12 h-12 text-amber-500" />
+            </div>
+          </div>
+          <h1 className="text-2xl font-pixel text-stone-100">Manutenção em Andamento</h1>
+          <p className="text-stone-400 text-sm font-sans leading-relaxed">
+            Estamos minerando algumas atualizações importantes para melhorar sua experiência. 
+            Voltaremos em breve com novidades!
+          </p>
+          <div className="pt-4 border-t border-stone-800">
+            <p className="text-[10px] font-pixel text-stone-500">HABBLET MINE — STATUS: EM MANUTENÇÃO</p>
+          </div>
+        </StonePanel>
+      </div>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -160,7 +194,6 @@ function RootComponent() {
       </div>
       <Toaster />
     </QueryClientProvider>
-
   );
 }
 
