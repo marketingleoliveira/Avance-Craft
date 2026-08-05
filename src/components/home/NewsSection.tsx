@@ -126,8 +126,16 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
         <div className="grid gap-12 lg:grid-cols-[1.8fr_1fr]">
           {/* Main Feed */}
           <div className="space-y-6">
-            {news.map((item: any) => (
-              <NewsCard key={item.id} item={item} />
+            {news.map((item: any, index: number) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <NewsCard item={item} />
+              </motion.div>
             ))}
             <div className="md:hidden mt-8">
               <Button asChild className="w-full h-16 rounded-2xl">
