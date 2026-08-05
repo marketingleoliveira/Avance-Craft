@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Container } from "@/components/ui-kit/Container";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
@@ -24,6 +24,14 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/perfil")({
+  beforeLoad: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw redirect({
+        to: "/auth",
+      });
+    }
+  },
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
       queryKey: ["my-profile"],
@@ -68,7 +76,6 @@ function ProfilePage() {
   };
 
   if (!profile) {
-    navigate({ to: "/auth" });
     return null;
   }
 
@@ -78,7 +85,7 @@ function ProfilePage() {
     <main className="py-12 bg-parchment/30">
       <Container className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
         {/* Sidebar */}
-        <aside className="space-y-6 sticky top-24">
+        <aside className="space-y-6 lg:sticky lg:top-24">
           <StonePanel className="p-6 text-center">
             <div className="relative mx-auto mb-4 w-24 h-24 pixel-border border-dirt-dark bg-stone overflow-hidden">
                {/* Avatar Placeholder - Voxel Head */}
@@ -89,7 +96,7 @@ function ProfilePage() {
                   <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-white border border-black/20"></div>
                </div>
             </div>
-            <h2 className="font-pixel text-[11px] uppercase text-dirt-dark truncate">
+            <h2 className="font-pixel text-[11px] uppercase text-dirt-dark truncate px-2">
               {profile.username || "Jogador"}
             </h2>
             <p className="text-[10px] font-pixel text-grass-dark mt-1">
@@ -226,14 +233,14 @@ function OrderCard({ order }: { order: any }) {
           <ShoppingBag className="w-6 h-6 text-dirt-dark" />
         </div>
         
-        <div>
+        <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
             <span className="font-pixel text-[10px] text-dirt-dark">#{order.id.slice(0, 8)}</span>
             <span className={cn("font-pixel text-[8px] uppercase px-1.5 py-0.5 bg-black/5 rounded-sm", status.color)}>
               {status.label}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground truncate">
             {order.items?.length || 0} itens • {new Date(order.created_at).toLocaleDateString('pt-BR')}
           </p>
         </div>
@@ -247,12 +254,12 @@ function OrderCard({ order }: { order: any }) {
       </div>
 
       {/* Timeline (Miniatura) */}
-      <div className="bg-black/5 p-4 border-t-2 border-dirt-dark/5">
-        <div className="flex items-center gap-2">
+      <div className="bg-black/5 p-4 border-t-2 border-dirt-dark/5 overflow-x-auto">
+        <div className="flex items-center gap-2 min-w-max">
            <TimelineStep active={true} label="Pedido Criado" />
-           <div className={cn("flex-1 h-1", order.paid_at ? "bg-emerald-block/30" : "bg-muted/20")}></div>
+           <div className={cn("w-8 sm:w-16 h-1", order.paid_at ? "bg-emerald-block/30" : "bg-muted/20")}></div>
            <TimelineStep active={!!order.paid_at} label="Pagamento" />
-           <div className={cn("flex-1 h-1", order.status === 'delivered' ? "bg-emerald-block/30" : "bg-muted/20")}></div>
+           <div className={cn("w-8 sm:w-16 h-1", order.status === 'delivered' ? "bg-emerald-block/30" : "bg-muted/20")}></div>
            <TimelineStep active={order.status === 'delivered'} label="Entregue" />
         </div>
       </div>
