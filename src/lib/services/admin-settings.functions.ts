@@ -1,16 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin } from "@/lib/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const adminUpdateSiteSettings = createServerFn({ method: "POST" })
-  .middleware([requireAdmin])
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z.object({
       settings: z.record(z.string(), z.string())
     }).parse(input)
   )
   .handler(async ({ data, context }) => {
-    const { supabaseAdmin } = await import("@/lib/supabase/admin.server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
     
     // Preparar inserts/updates
     const upserts = Object.entries(data.settings).map(([key, value]) => ({
