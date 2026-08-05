@@ -34,7 +34,7 @@ export function RankingSection() {
               Hall da <span className="text-emerald-500">Fama</span>
             </h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
-              Confira os jogadores que estão dominando o Avance nesta semana.
+              Os jogadores dominando o Avance.
             </p>
           </div>
         </div>

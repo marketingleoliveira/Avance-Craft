@@ -34,7 +34,7 @@ export function HowToPlay() {
             Prepare sua <span className="text-emerald-500">Jornada</span>
           </h2>
           <p className="text-stone-400 font-medium text-lg max-w-xl mx-auto">
-            Nunca foi tão fácil começar. Siga os passos abaixo e entre no universo Avance agora mesmo.
+            Comece sua jornada em minutos.
           </p>
         </div>
 

@@ -34,8 +34,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
                 Nossa <span className="text-emerald-500">Comunidade</span>
               </h2>
               <p className="text-stone-400 font-medium text-lg max-w-xl leading-relaxed">
-                O Avance é mais que um servidor, é um ponto de encontro. Participe de eventos exclusivos, 
-                tire dúvidas com a equipe e encontre novos aliados no nosso Discord oficial.
+                Junte-se à nossa comunidade oficial no Discord.
               </p>
             </div>
 

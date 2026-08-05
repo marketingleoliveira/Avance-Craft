@@ -32,7 +32,7 @@ export function FinalCta() {
           </h2>
           
           <p className="text-stone-400 font-medium text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed">
-            Sua jornada épica começa agora. Junte-se a centenas de jogadores e construa seu legado no servidor mais ambicioso do Brasil.
+            Sua jornada épica começa agora.
           </p>
 
           <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-xl inline-block group cursor-pointer hover:border-emerald-500/30 transition-all">

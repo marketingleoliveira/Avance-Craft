@@ -18,7 +18,7 @@ export function ModesSection({ modes }: { modes: any[] }) {
             Nossos <span className="text-emerald-500">Mundos</span>
           </h2>
           <p className="text-stone-400 font-medium text-lg max-w-xl mx-auto">
-            Escolha sua aventura. Cada modo foi projetado para oferecer uma experiência única e desafiadora.
+            Escolha sua aventura.
           </p>
         </div>
 
