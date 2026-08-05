@@ -19,8 +19,8 @@ export const Route = createFileRoute("/loja")({
         queryFn: () => listCategories(),
       }),
       context.queryClient.ensureQueryData({
-        queryKey: ["products", { categorySlug: "" }],
-        queryFn: () => listProducts({}),
+        queryKey: ["products", ""],
+        queryFn: () => listProducts({ data: { categorySlug: "" } }),
       }),
     ]);
   },
@@ -37,8 +37,8 @@ function ShopPage() {
   });
 
   const { data: products } = useSuspenseQuery({
-    queryKey: ["products", { categorySlug: selectedCategory || "" }],
-    queryFn: () => listProducts({ categorySlug: selectedCategory }),
+    queryKey: ["products", selectedCategory || ""],
+    queryFn: () => listProducts({ data: { categorySlug: selectedCategory } }),
   });
 
   return (
@@ -51,18 +51,18 @@ function ShopPage() {
         <div className="mt-8 flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             <CategoryNav
-              categories={categories.map((c) => ({ id: c.slug, label: c.name, description: "" }))}
+              categories={categories.map((c: any) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
               activeId={selectedCategory || categories[0]?.slug || ""}
               onSelect={setSelectedCategory}
             />
 
             <div className="mt-8">
               <WoodSign className="mb-6">
-                {categories.find(c => c.slug === (selectedCategory || categories[0]?.slug))?.name || "Produtos"}
+                {categories.find((c: any) => c.slug === (selectedCategory || categories[0]?.slug))?.name || "Produtos"}
               </WoodSign>
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.map((product) => (
+                {products.map((product: any) => (
                   <ProductCard
                     key={product.id}
                     product={{
@@ -71,7 +71,7 @@ function ShopPage() {
                       name: product.name,
                       shortDescription: product.short_description || "",
                       fullDescription: product.full_description || "",
-                      perks: product.benefits.map(b => b.description),
+                      perks: product.benefits.map((b: any) => b.description),
                       commands: [],
                       priceCents: Math.round(product.price * 100),
                       previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
