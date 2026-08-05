@@ -76,10 +76,10 @@ export const adminCreateBetaInvite = createServerFn({ method: "POST" })
       .insert({
         code: data.code.toUpperCase(),
         max_uses: data.max_uses,
-        campaign: data.campaign,
-        expires_at: data.expires_at,
-        created_by: userId
-      })
+        campaign: data.campaign || null,
+        expires_at: data.expires_at || null,
+        created_by: userId || null
+      } as any)
       .select()
       .single();
 
@@ -115,7 +115,7 @@ export const adminUpdateParticipantStatus = createServerFn({ method: "POST" })
     
     if (data.status === 'approved') {
       updateData.approved_at = new Date().toISOString();
-      updateData.approved_by = userId;
+      updateData.approved_by = userId || null;
     }
 
     const { data: updated, error } = await supabaseAdmin
