@@ -3,6 +3,7 @@ import { MessageSquare, Instagram, Youtube, Share2, Users, Bell, LifeBuoy, Sword
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
 
 export function CommunitySection({ settings }: { settings?: Record<string, string> }) {
   const discordUrl = settings?.["discord_url"] || "https://discord.gg/avance";
@@ -39,14 +40,22 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              {FEATURES.map((item) => (
-                <Card key={item.label} className="flex items-center gap-4 p-5">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <span className="text-sm font-bold uppercase tracking-tight text-stone-200">{item.label}</span>
-                </Card>
-              ))}
+                {FEATURES.map((item, index) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <Card className="flex items-center gap-4 p-5 hover:bg-white/[0.04] transition-colors">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-stone-950 transition-all">
+                        <item.icon className="w-5 h-5" />
+                      </div>
+                      <span className="text-sm font-bold uppercase tracking-tight text-stone-200">{item.label}</span>
+                    </Card>
+                  </motion.div>
+                ))}
             </div>
 
             <div className="flex flex-wrap gap-4">
