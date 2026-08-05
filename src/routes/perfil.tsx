@@ -24,6 +24,13 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/perfil")({
+  head: () => ({
+    meta: [
+      { title: "Meu Perfil | Habblet Mine" },
+      { name: "description", content: "Gerencie seus pedidos, vincule sua conta Minecraft e acompanhe suas conquistas no Habblet Mine." },
+      { name: "robots", content: "noindex, nofollow" }, // Privado
+    ],
+  }),
   beforeLoad: async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
@@ -32,6 +39,7 @@ export const Route = createFileRoute("/perfil")({
       });
     }
   },
+
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
       queryKey: ["my-profile"],

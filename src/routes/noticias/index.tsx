@@ -10,14 +10,15 @@ const description = "Atualizações, eventos e novidades do servidor Habblet Min
 export const Route = createFileRoute("/noticias/")({
   head: () => ({
     meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
+      { title: "Notícias & Atualizações | Habblet Mine" },
+      { name: "description", content: "Fique por dentro das últimas atualizações, eventos e novidades do universo Habblet Mine." },
+      { property: "og:title", content: "Notícias | Habblet Mine" },
+      { property: "og:description", content: "As últimas novidades do servidor de Minecraft Habblet Mine." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
       queryKey: ["news", "published", 12],

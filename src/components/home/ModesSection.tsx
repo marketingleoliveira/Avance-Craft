@@ -8,7 +8,7 @@ export function ModesSection({ modes }: { modes: any[] }) {
 
 
   return (
-    <section className="border-y-4 border-dirt-dark bg-stone/20 py-14">
+    <section className="border-y-4 border-dirt-dark bg-stone/20 py-14" id="modes">
       <Container>
         <WoodSign subtitle="Modalidades disponíveis no servidor.">Modalidades</WoodSign>
 

@@ -7,13 +7,13 @@ const description = "Conheça a equipe de moderação e administração do Habbl
 export const Route = createFileRoute("/equipe")({
   head: () => ({
     meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
+      { title: "Nossa Equipe | Habblet Mine" },
+      { name: "description", content: "Conheça os administradores e moderadores responsáveis por manter o Habblet Mine seguro e organizado." },
+      { property: "og:title", content: "Equipe Oficial | Habblet Mine" },
+      { property: "og:description", content: "Conheça quem faz o servidor acontecer." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
   }),
+
   component: () => <PlaceholderPage title="Equipe" description="Apresentação da equipe de moderação e administração." />,
 });

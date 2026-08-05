@@ -14,6 +14,16 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 
 
 export const Route = createFileRoute("/loja")({
+  head: () => ({
+    meta: [
+      { title: "Loja | Habblet Mine — Vips, Cash e Itens" },
+      { name: "description", content: "Adquira VIPs, moedas e itens exclusivos para melhorar sua experiência no Habblet Mine. Entrega automática e segura." },
+      { property: "og:title", content: "Loja Oficial | Habblet Mine" },
+      { property: "og:description", content: "Turbine sua jornada com benefícios exclusivos na nossa loja oficial." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData({
@@ -28,6 +38,7 @@ export const Route = createFileRoute("/loja")({
   },
   component: ShopPage,
 });
+
 
 function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();

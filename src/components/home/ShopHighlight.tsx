@@ -28,7 +28,7 @@ export function ShopHighlight({ products }: { products: any[] }) {
 
 
   return (
-    <section className="bg-dirt/15 border-b-4 border-dirt-dark py-14">
+    <section className="bg-dirt/15 border-b-4 border-dirt-dark py-14" id="shop">
       <Container>
         <WoodSign subtitle="Confira nossos pacotes VIP em destaque.">Loja Destaque</WoodSign>
 

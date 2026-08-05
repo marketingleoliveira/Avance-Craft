@@ -24,7 +24,7 @@ const STEPS = [
 
 export function HowToPlay() {
   return (
-    <section className="border-y-4 border-dirt-dark bg-stone/20 py-14">
+    <section className="border-y-4 border-dirt-dark bg-stone/20 py-14" id="how-to-play">
       <Container>
         <WoodSign subtitle="Três passos para entrar no servidor.">Como jogar</WoodSign>
 
