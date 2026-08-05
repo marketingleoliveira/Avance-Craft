@@ -138,6 +138,11 @@ function ShopPage() {
           </aside>
         </div>
       </div>
+      
+      <ScrollReveal>
+        <SiteFooter />
+      </ScrollReveal>
+    </div>
     </div>
   );
 }
