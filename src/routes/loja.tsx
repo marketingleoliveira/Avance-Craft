@@ -78,36 +78,38 @@ function ShopPage() {
               </WoodSign>
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={{
-                      id: product.id,
-                      category: (product.category?.slug as any) || "vips",
-                      name: product.name,
-                      shortDescription: product.short_description || "",
-                      fullDescription: product.full_description || "",
-                      perks: product.benefits?.map((b) => b.label) || [],
-                      commands: [],
-                      priceCents: Math.round(product.price * 100),
-                      previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
-                        ? Math.round(product.promotional_price * 100) 
-                        : undefined,
-                      duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
-                      platforms: ["java", "bedrock"],
-                      art: (product.position % 3)
-                    }}
-                    onBuy={(p: any) => cart.add(p.id, 1, p)}
-                  />
-                ))}
-
-                
-                {products.length === 0 && (
-                  <div className="col-span-full py-12 text-center text-muted-foreground">
-                    Nenhum produto encontrado nesta categoria.
+                {products.length === 0 ? (
+                  <div className="col-span-full py-20 text-center">
+                    <StonePanel className="max-w-md mx-auto">
+                      <p className="text-muted-foreground">Nenhum produto encontrado nesta categoria.</p>
+                    </StonePanel>
                   </div>
+                ) : (
+                  products.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={{
+                        id: product.id,
+                        category: (product.category?.slug as any) || "vips",
+                        name: product.name,
+                        shortDescription: product.short_description || "",
+                        fullDescription: product.full_description || "",
+                        perks: product.benefits?.map((b) => b.label) || [],
+                        commands: [],
+                        priceCents: Math.round(product.price * 100),
+                        previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
+                          ? Math.round(product.promotional_price * 100) 
+                          : undefined,
+                        duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
+                        platforms: ["java", "bedrock"],
+                        art: (product.position % 3)
+                      }}
+                      onBuy={(p: any) => cart.add(p.id, 1, p)}
+                    />
+                  ))
                 )}
               </div>
+
             </div>
             
             <div className="mt-12 grid gap-8">
