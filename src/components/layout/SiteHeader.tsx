@@ -41,10 +41,12 @@ export function SiteHeader() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         scrolled 
-          ? "bg-stone-950/80 backdrop-blur-xl border-b border-white/5 py-3" 
+          ? "bg-stone-950/80 backdrop-blur-xl border-b border-white/5 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.4)]" 
           : "bg-transparent py-5"
       )}
     >
+      {/* Header Lighting Background */}
+      {scrolled && <div className="absolute inset-0 ambient-glow opacity-20 pointer-events-none" />}
       <Container className="flex items-center justify-between gap-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
