@@ -71,7 +71,7 @@ function AdminNewsList() {
           scheduled: { label: "Agendado", color: "text-blue-500", icon: Calendar },
           archived: { label: "Arquivado", color: "text-destructive", icon: Trash2 },
         };
-        const config = statusMap[row.status] || statusMap["draft"];
+        const config = statusMap[row.status as string] || statusMap["draft"]!;
         const Icon = config.icon;
         
         return (
