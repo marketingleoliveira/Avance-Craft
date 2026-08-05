@@ -7,8 +7,15 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth"; // Assumindo existência ou criaremos
 
 export const Route = createFileRoute("/admin")({
+  head: () => ({
+    meta: [
+      { title: "Painel Administrativo | Habblet Mine" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: AdminLayout,
 });
+
 
 function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
