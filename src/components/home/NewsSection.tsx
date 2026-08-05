@@ -18,10 +18,12 @@ const statusLabel: Record<string, string> = {
   offline: "Offline",
 };
 
+import { Card } from "@/components/ui/card";
+
 function NewsCard({ item }: { item: any }) {
   return (
     <Link to="/noticias" className="group block">
-      <article className="bg-white/[0.02] border border-white/5 p-6 rounded-3xl transition-all hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1">
+      <Card className="p-6">
         <div className="flex flex-col gap-8 sm:flex-row items-center">
           <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-2xl sm:h-40 sm:w-40 border border-white/5">
             <img
@@ -63,7 +65,7 @@ function NewsCard({ item }: { item: any }) {
             </div>
           </div>
         </div>
-      </article>
+      </Card>
     </Link>
   );
 }
