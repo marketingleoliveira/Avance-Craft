@@ -152,8 +152,9 @@ function Index() {
                     "Backup & Restauração Testada",
                     "SSL & Webhook MP Configurados",
                     "Plugin Online & Fila Controlada",
-                    "Páginas Institucionais & Aceite Ativo",
-                    "Termos & Políticas Publicados"
+                    "Páginas Institucionais & Aceite Ativo (Checkout)",
+                    "Termos, Privacidade e Regras Dinâmicos"
+
 
                   ].map((item) => (
                     <label key={item} className="flex items-center gap-3 p-3 bg-black/20 border border-white/5 rounded-sm cursor-pointer hover:bg-black/30 transition-colors">

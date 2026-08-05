@@ -5,6 +5,8 @@ import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { Container } from "@/components/ui-kit/Container";
 import { Mail, MapPin, MessageCircle } from "lucide-react";
+import { PixelButton } from "@/components/ui-kit/PixelButton";
+
 
 export const Route = createFileRoute("/contato")({
   head: () => ({

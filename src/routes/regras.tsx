@@ -1,11 +1,62 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PlaceholderPage } from "@/components/layout/PlaceholderPage";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getPageBySlug } from "@/lib/services/pages.functions";
+import { StonePanel } from "@/components/ui-kit/StonePanel";
+import { WoodSign } from "@/components/ui-kit/WoodSign";
+import { Container } from "@/components/ui-kit/Container";
 
 export const Route = createFileRoute("/regras")({
-  component: () => (
-    <PlaceholderPage
-      title="Regras do Servidor"
-      description="Diretrizes de comportamento e convivência no Habblet Mine."
-    />
-  ),
+  head: () => ({
+    meta: [
+      { title: "Regras do Servidor — Habblet Mine" },
+      { name: "description", content: "Regras de convivência e comportamento no Habblet Mine." },
+    ],
+  }),
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData({
+      queryKey: ["page", "regras"],
+      queryFn: () => getPageBySlug({ data: { slug: "regras" } }),
+    });
+  },
+  component: RegrasPage,
 });
+
+function RegrasPage() {
+  const { data: page } = useSuspenseQuery({
+    queryKey: ["page", "regras"],
+    queryFn: () => getPageBySlug({ data: { slug: "regras" } }),
+  });
+
+  if (!page) {
+    return (
+      <Container className="py-20 text-center">
+        <WoodSign>Regras</WoodSign>
+        <StonePanel className="mt-8 p-12 max-w-2xl mx-auto">
+          <p className="text-muted-foreground font-pixel text-sm">
+            As regras estão sendo revisadas.
+          </p>
+        </StonePanel>
+      </Container>
+    );
+  }
+
+  return (
+    <Container className="py-20">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <WoodSign>{page.title}</WoodSign>
+        </div>
+
+        <StonePanel className="p-8 md:p-12">
+          <article 
+            className="prose prose-stone prose-invert max-w-none 
+              prose-headings:font-pixel prose-headings:text-primary prose-headings:uppercase
+              prose-p:text-muted-foreground prose-p:leading-relaxed
+              prose-li:text-muted-foreground"
+            dangerouslySetInnerHTML={{ __html: page.content }}
+          />
+        </StonePanel>
+      </div>
+    </Container>
+  );
+}
