@@ -170,6 +170,6 @@ export function SiteHeader() {
           </div>
         </Container>
       </div>
-    </header>
+    </motion.header>
   );
 }

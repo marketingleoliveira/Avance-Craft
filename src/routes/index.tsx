@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AnimatePresence } from "framer-motion";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getHomeData } from "@/lib/services/content.functions";
 import { Hero } from "@/components/home/Hero";
@@ -49,7 +50,8 @@ function Index() {
   const { news, status, modes, featuredProducts, settings } = homeData;
 
   return (
-    <main className="relative bg-stone-950 overflow-x-hidden">
+    <AnimatePresence>
+      <main className="relative bg-stone-950 overflow-x-hidden">
       <div className="flex flex-col">
         {/* Section: Hero */}
         <Hero settings={settings} />
@@ -106,5 +108,6 @@ function Index() {
         <SiteFooter />
       </div>
     </main>
+    </AnimatePresence>
   );
 }
