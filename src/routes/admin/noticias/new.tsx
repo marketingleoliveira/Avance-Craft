@@ -153,7 +153,7 @@ function NewNewsPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-pixel text-[9px] uppercase">Categoria</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
+                        <Select onValueChange={field.onChange} value={field.value ?? undefined}>
                           <FormControl>
                             <SelectTrigger className="pixel-border">
                               <SelectValue placeholder="Selecione..." />
