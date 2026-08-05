@@ -49,10 +49,9 @@ function Index() {
   return (
     <main className="relative">
       {/* 
-        DOCUMENTAÇÃO DE DEPLOY SEGURO (Server-side only reference)
-        Ambientes: development, staging, production
-        Flags: STORE_ENABLED, REAL_PAYMENTS_ENABLED, PLUGIN_DELIVERY_ENABLED
-        Checklist: Validar secrets MP e Plugin, URL base correta.
+        HABBLET MINE - RELEASE CANDIDATE v1.0.0-rc.1
+        Status: Congelado para QA
+        Documentação: CHANGELOG.md, RELEASE_CHECKLIST.md, DEPLOYMENT.md
       */}
       <Hero settings={settings} />
       <NewsSection news={news} status={status} />
