@@ -152,7 +152,9 @@ function Index() {
                     "Backup & Restauração Testada",
                     "SSL & Webhook MP Configurados",
                     "Plugin Online & Fila Controlada",
+                    "Páginas Institucionais & Aceite Ativo",
                     "Termos & Políticas Publicados"
+
                   ].map((item) => (
                     <label key={item} className="flex items-center gap-3 p-3 bg-black/20 border border-white/5 rounded-sm cursor-pointer hover:bg-black/30 transition-colors">
                       <input type="checkbox" className="w-4 h-4 rounded border-white/10 bg-black/40 text-orange-500 focus:ring-orange-500/50" />
