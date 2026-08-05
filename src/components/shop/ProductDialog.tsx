@@ -85,7 +85,7 @@ export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
               Compatibilidade
             </dt>
             <dd className="font-semibold">
-              {product.platforms.map((p) => (p === "java" ? "Java" : "Bedrock")).join(" e ")}
+              {product.platforms.map((p: any) => (p === "java" ? "Java" : "Bedrock")).join(" e ")}
             </dd>
           </div>
         </dl>
