@@ -31,15 +31,31 @@ function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
   const cart = useCart();
 
-  const { data: categories } = useSuspenseQuery({
+  const { data: categories, error: catError, refetch: refetchCats } = useSuspenseQuery({
     queryKey: ["categories"],
     queryFn: () => listCategories(),
   });
 
-  const { data: products } = useSuspenseQuery({
+  const { data: products, error: prodError, refetch: refetchProds } = useSuspenseQuery({
     queryKey: ["products", selectedCategory || ""],
     queryFn: () => listProducts({ data: { categorySlug: selectedCategory } }),
   });
+
+  if (catError || prodError) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <WoodSign className="mb-6">Ocorreu um erro</WoodSign>
+        <p className="text-muted-foreground mb-8">Não foi possível carregar o catálogo. Por favor, tente novamente.</p>
+        <button 
+          onClick={() => { refetchCats(); refetchProds(); }}
+          className="px-6 py-2 bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity"
+        >
+          Tentar Novamente
+        </button>
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen pb-20">
