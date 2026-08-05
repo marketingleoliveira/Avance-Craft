@@ -145,8 +145,7 @@ export function CartPanel() {
         {pending ? "Verificando..." : "Ir para pagamento"}
       </PixelButton>
       <p className="mt-2 text-xs text-muted-foreground">
-        Pagamentos ainda não estão habilitados. Integração preparada para o Mercado Pago
-        via backend.
+        Nesta versão demonstrativa, o pagamento redireciona para uma página de sucesso mockada.
       </p>
     </StonePanel>
   );

@@ -6,10 +6,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { MOCK_COUPONS, SHOP_PRODUCTS, type ShopProduct } from "@/data/shop";
+import { MOCK_COUPONS } from "@/data/shop";
 import type { Platform } from "@/lib/payments/checkout-service";
+import type { ShopProduct } from "@/data/shop";
 
-export type CartLine = { productId: string; quantity: number };
+export type CartLine = { productId: string; quantity: number; product?: any };
 
 type CartContextValue = {
   nickname: string;
@@ -20,7 +21,7 @@ type CartContextValue = {
   setConfirmed: (value: boolean) => void;
   lines: CartLine[];
   detailed: { product: ShopProduct; quantity: number }[];
-  add: (productId: string, quantity?: number) => void;
+  add: (productId: string, quantity?: number, productData?: any) => void;
   setQuantity: (productId: string, quantity: number) => void;
   remove: (productId: string) => void;
   clear: () => void;
@@ -44,7 +45,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [coupon, setCoupon] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
 
-  // Alterar nick ou plataforma invalida a confirmação anterior.
   const setNickname = useCallback((value: string) => {
     setNicknameState(value);
     setConfirmed(false);
@@ -54,7 +54,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setConfirmed(false);
   }, []);
 
-  const add = useCallback((productId: string, quantity = 1) => {
+  const add = useCallback((productId: string, quantity = 1, productData?: any) => {
     setLines((prev) => {
       const existing = prev.find((line) => line.productId === productId);
       if (existing) {
@@ -64,7 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             : line,
         );
       }
-      return [...prev, { productId, quantity }];
+      return [...prev, { productId, quantity, product: productData }];
     });
   }, []);
 
@@ -101,11 +101,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [coupon]);
 
   const detailed = useMemo(
-    () =>
-      lines.flatMap((line) => {
-        const product = SHOP_PRODUCTS.find((item) => item.id === line.productId);
-        return product ? [{ product, quantity: line.quantity }] : [];
-      }),
+    () => lines.filter(l => !!l.product).map(l => ({ product: l.product as ShopProduct, quantity: l.quantity })),
     [lines],
   );
 

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Copy, Check } from "lucide-react";
-import { MOCK_SERVER } from "@/data/mock";
 import { Container } from "@/components/ui-kit/Container";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getServerStatus } from "@/lib/services/content.functions";
 
-const statusLabel: Record<typeof MOCK_SERVER.status, string> = {
+const statusLabel: Record<string, string> = {
   online: "Online",
   manutencao: "Em preparação",
   offline: "Offline",
@@ -20,8 +21,23 @@ function StatusChip({ label, value }: { label: string; value: string }) {
   );
 }
 
-/** Barra de status — dados mockados, sem contagem real de jogadores. */
+const DEFAULT_STATUS = {
+  online: true,
+  players_online: 0,
+  max_players: 100,
+  version: "1.21+",
+  ip: "jogar.habbletmine.com.br"
+};
+
 export function StatusBar() {
+  const { data: serverStatus } = useSuspenseQuery({
+    queryKey: ["server-status"],
+    queryFn: () => getServerStatus(),
+  });
+
+  const status = serverStatus ?? DEFAULT_STATUS;
+  const statusKey = status.online ? "online" : "offline";
+
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -29,9 +45,9 @@ export function StatusBar() {
 
   const copyIp = async () => {
     try {
-      await navigator.clipboard.writeText(MOCK_SERVER.ip);
+      await navigator.clipboard.writeText(status.ip);
     } catch {
-      /* área de transferência indisponível */
+      /* clipboard unavailable */
     }
     setCopied(true);
     clearTimeout(timer.current);
@@ -41,16 +57,13 @@ export function StatusBar() {
   return (
     <div className="border-b-4 border-dirt-dark bg-dirt-dark/95 text-parchment">
       <Container className="flex flex-col gap-2 py-2 lg:flex-row lg:items-center lg:justify-between">
-        {/* linha 1: status deslizável no mobile */}
         <div className="-mx-1 flex items-center gap-4 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] lg:mx-0 lg:overflow-visible lg:px-0">
           <div className="flex shrink-0 items-center gap-2 whitespace-nowrap border-r-2 border-parchment/15 pr-4">
             <span
               className={`h-3 w-3 shrink-0 ${
-                MOCK_SERVER.status === "online"
+                status.online
                   ? "bg-emerald-block"
-                  : MOCK_SERVER.status === "manutencao"
-                    ? "bg-wood"
-                    : "bg-destructive"
+                  : "bg-destructive"
               }`}
               aria-hidden
             />
@@ -58,22 +71,21 @@ export function StatusBar() {
               Servidor
             </span>
             <span className="text-xs font-bold sm:text-sm">
-              {statusLabel[MOCK_SERVER.status]}
+              {statusLabel[statusKey] || "Offline"}
             </span>
           </div>
           <StatusChip
             label="Jogadores"
-            value={`${MOCK_SERVER.playersOnline}/${MOCK_SERVER.slots}`}
+            value={`${status.players_online}/${status.max_players}`}
           />
           <StatusChip label="Modo" value="Survival" />
-          <StatusChip label="Versão" value="1.21+" />
+          <StatusChip label="Versão" value={status.version} />
         </div>
 
-        {/* linha 2: IP sempre visível */}
         <button
           type="button"
           onClick={copyIp}
-          aria-label={`Copiar IP ${MOCK_SERVER.ip}`}
+          aria-label={`Copiar IP ${status.ip}`}
           className="pixel-border flex w-full items-center justify-between gap-3 border-grass-dark bg-grass-dark/60 px-3 py-2 text-left transition-colors hover:bg-grass-dark lg:w-auto"
         >
           <span className="flex min-w-0 items-center gap-2">
@@ -81,7 +93,7 @@ export function StatusBar() {
               IP
             </span>
             <span className="truncate text-xs font-bold sm:text-sm">
-              {copied ? "IP copiado!" : MOCK_SERVER.ip}
+              {copied ? "IP copiado!" : status.ip}
             </span>
           </span>
           {copied ? (

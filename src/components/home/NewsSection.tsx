@@ -3,31 +3,26 @@ import { Container } from "@/components/ui-kit/Container";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import {
-  MOCK_NEWS,
-  MOCK_SERVER,
-  MOCK_LAST_PLAYERS,
-  MOCK_EVENTS,
-  MOCK_RANKING_TABS,
-} from "@/data/mock";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { listPublishedNews, getServerStatus, listRankings } from "@/lib/services/content.functions";
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
 import news3 from "@/assets/news-3.jpg";
 
 const NEWS_IMAGES: Record<string, string> = { "1": news1, "2": news2, "3": news3 };
 
-const statusLabel: Record<typeof MOCK_SERVER.status, string> = {
+const statusLabel: Record<string, string> = {
   online: "Online",
   manutencao: "Em preparação",
   offline: "Offline",
 };
 
-function NewsCard({ item }: { item: (typeof MOCK_NEWS)[number] }) {
+function NewsCard({ item }: { item: any }) {
   return (
     <StonePanel bodyClassName="p-3 sm:p-4">
       <article className="flex flex-col gap-4 sm:flex-row">
         <img
-          src={NEWS_IMAGES[item.id]}
+          src={NEWS_IMAGES[item.id] || news1}
           alt={`Ilustração voxel da notícia: ${item.title}`}
           width={640}
           height={640}
@@ -36,16 +31,16 @@ function NewsCard({ item }: { item: (typeof MOCK_NEWS)[number] }) {
         />
         <div className="min-w-0">
           <span className="font-pixel pixel-border border-grass-dark bg-grass px-2 py-1 text-[8px] uppercase text-primary-foreground">
-            {item.category}
+            {item.category?.name || "Geral"}
           </span>
           <h3 className="mt-3 text-lg font-extrabold leading-tight">{item.title}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             {item.excerpt}
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold uppercase text-dirt">
-            <span>{item.date}</span>
+            <span>{new Date(item.published_at).toLocaleDateString("pt-BR")}</span>
             <span aria-hidden>•</span>
-            <span>por {item.author}</span>
+            <span>por {item.author || "Equipe"}</span>
           </div>
           <Link to="/noticias" className="mt-4 inline-block">
             <PixelButton variant="wood">Leia mais</PixelButton>
@@ -65,19 +60,43 @@ function SidebarRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+const DEFAULT_STATUS = {
+  online: true,
+  players_online: 0,
+  max_players: 100,
+  version: "1.21+",
+  ip: "jogar.habbletmine.com.br"
+};
+
 export function NewsSection() {
-  const weekly = MOCK_RANKING_TABS[0]!.rows.slice(0, 3);
+  const { data: news } = useSuspenseQuery({
+    queryKey: ["published-news", 3],
+    queryFn: () => listPublishedNews({ data: { limit: 3 } }),
+  });
+
+  const { data: serverStatus } = useSuspenseQuery({
+    queryKey: ["server-status"],
+    queryFn: () => getServerStatus(),
+  });
+
+  const { data: rankings } = useSuspenseQuery({
+    queryKey: ["rankings", "ricos", "weekly", 3],
+    queryFn: () => listRankings({ data: { category: "ricos", period: "weekly", limit: 3 } }),
+  });
+
+  const status = serverStatus ?? DEFAULT_STATUS;
+  const statusKey = status.online ? "online" : "offline";
 
   return (
     <section className="py-14">
       <Container>
-        <WoodSign subtitle="Conteúdo de exemplo até a integração com o backend.">
+        <WoodSign subtitle="Fique por dentro das novidades.">
           Novidades
         </WoodSign>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.7fr_1fr]">
           <div className="grid gap-6">
-            {MOCK_NEWS.map((item) => (
+            {news.map((item: any) => (
               <NewsCard key={item.id} item={item} />
             ))}
             <div className="flex justify-center">
@@ -90,59 +109,40 @@ export function NewsSection() {
           <aside className="grid content-start gap-6">
             <StonePanel title="Status do servidor">
               <ul className="grid">
-                <SidebarRow label="Servidor" value={statusLabel[MOCK_SERVER.status]} />
+                <SidebarRow label="Servidor" value={statusLabel[statusKey] || "Offline"} />
                 <SidebarRow
                   label="Jogadores"
-                  value={`${MOCK_SERVER.playersOnline}/${MOCK_SERVER.slots}`}
+                  value={`${status.players_online}/${status.max_players}`}
                 />
                 <SidebarRow label="Modo" value="Survival" />
-                <SidebarRow label="Versão" value="1.21+" />
+                <SidebarRow label="Versão" value={status.version} />
               </ul>
               <p className="mt-3 break-all bg-dirt-dark/10 p-2 text-sm font-bold">
-                {MOCK_SERVER.ip}
-              </p>
-            </StonePanel>
-
-            <StonePanel title="Últimos jogadores">
-              <ul className="grid gap-2 text-sm">
-                {MOCK_LAST_PLAYERS.map((player) => (
-                  <li key={player} className="flex items-center gap-2 font-semibold">
-                    <span className="h-3 w-3 shrink-0 bg-stone-dark" aria-hidden />
-                    {player}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Lista ilustrativa — ninguém está conectado ainda.
+                {status.ip}
               </p>
             </StonePanel>
 
             <StonePanel title="Ranking semanal">
               <ol className="grid gap-2 text-sm">
-                {weekly.map((row) => (
-                  <li key={row.position} className="flex items-center gap-3">
+                {rankings.map((row: any) => (
+                  <li key={row.minecraft_nickname} className="flex items-center gap-3">
                     <span className="font-pixel text-[10px] text-grass-dark">
                       {row.position}
                     </span>
                     <span className="min-w-0 flex-1 truncate font-semibold">
-                      {row.player}
+                      {row.minecraft_nickname}
                     </span>
-                    <span className="text-xs text-muted-foreground">{row.score}</span>
+                    <span className="text-xs text-muted-foreground">{row.display_value}</span>
                   </li>
                 ))}
               </ol>
             </StonePanel>
 
-            <StonePanel title="Próximos eventos">
-              <ul className="grid gap-3 text-sm">
-                {MOCK_EVENTS.map((event) => (
-                  <li key={event.id}>
-                    <p className="font-extrabold">{event.title}</p>
-                    <p className="text-xs uppercase text-muted-foreground">{event.date}</p>
-                  </li>
-                ))}
-              </ul>
-              <a href={MOCK_SERVER.discord} className="mt-4 block">
+            <StonePanel title="Comunidade">
+              <p className="text-sm text-muted-foreground">
+                Junte-se a milhares de jogadores em nosso Discord oficial.
+              </p>
+              <a href="https://discord.gg/habbletmine" target="_blank" rel="noopener noreferrer" className="mt-4 block">
                 <PixelButton variant="emerald" className="w-full">
                   Entrar no Discord
                 </PixelButton>
