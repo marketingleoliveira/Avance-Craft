@@ -1,10 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { createFileRoute, Link } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { listPublishedNews } from "@/lib/services/content.functions";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
-import { Newspaper, Calendar, User, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Newspaper, Calendar, ArrowRight } from "lucide-react";
 
 const title = "Notícias — Habblet Mine";
 const description = "Atualizações, eventos e novidades do servidor Habblet Mine.";
@@ -59,9 +57,9 @@ function NewsListPage() {
             >
               <StonePanel className="flex-1 flex flex-col p-0 overflow-hidden" bodyClassName="p-0 flex flex-col flex-1">
                 <div className="aspect-video overflow-hidden relative">
-                  {item.image_url ? (
+                  {(item as any).image_url || (item as any).cover_url ? (
                     <img 
-                      src={item.image_url} 
+                      src={(item as any).image_url || (item as any).cover_url} 
                       alt={item.title} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -83,7 +81,7 @@ function NewsListPage() {
                   <div className="flex items-center gap-4 text-[10px] text-muted-foreground uppercase font-bold mb-3">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
-                      {new Date(item.published_at!).toLocaleDateString('pt-BR')}
+                      {item.published_at ? new Date(item.published_at).toLocaleDateString('pt-BR') : '-'}
                     </span>
                   </div>
                   
@@ -92,7 +90,7 @@ function NewsListPage() {
                   </h3>
                   
                   <p className="text-sm text-muted-foreground line-clamp-3 mb-6 flex-1">
-                    {item.summary}
+                    {(item as any).summary || (item as any).excerpt}
                   </p>
                   
                   <div className="flex items-center text-emerald-block font-pixel text-[9px] uppercase mt-auto group-hover:translate-x-1 transition-transform">
