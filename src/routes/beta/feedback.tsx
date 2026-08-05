@@ -209,7 +209,6 @@ function BetaFeedbackPage() {
               <div className="md:col-span-2 flex justify-end pt-4">
                 <PixelButton 
                   type="submit" 
-                  variant="grass" 
                   disabled={mutation.isPending}
                   className="w-full md:w-auto px-12"
                 >
@@ -266,7 +265,7 @@ function BetaFeedbackPage() {
                           </span>
                         </div>
                       </div>
-                      <PixelButton variant="stone" className="px-3 py-1 text-xs">
+                      <PixelButton className="px-3 py-1 text-xs">
                         Detalhes
                       </PixelButton>
                     </div>
