@@ -28,6 +28,11 @@ export async function createCheckoutRequest(
   const APP_URL = env.APP_BASE_URL;
   const IS_PROD = isProd();
 
+  // 0. Verificar se a loja está ativa
+  if (!flags.STORE_ENABLED) {
+    throw new Error("A loja está temporariamente fechada para manutenção.");
+  }
+
   // 1. Validar produtos e calcular valores reais do banco
   const productIds = data.items.map((i) => i.productId);
   const { data: products } = await supabase
