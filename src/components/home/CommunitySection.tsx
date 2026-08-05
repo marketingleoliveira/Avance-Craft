@@ -20,7 +20,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
   ];
 
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="community">
+    <section className="relative overflow-hidden" id="community">
       <Container>
         <div className="grid gap-12 lg:grid-cols-2 items-center">
           {/* Left Content */}
@@ -34,8 +34,7 @@ export function CommunitySection({ settings }: { settings?: Record<string, strin
                 Nossa <span className="text-emerald-500">Comunidade</span>
               </h2>
               <p className="text-stone-400 font-medium text-lg max-w-xl leading-relaxed">
-                O Avance é mais que um servidor, é um ponto de encontro. Participe de eventos exclusivos, 
-                tire dúvidas com a equipe e encontre novos aliados no nosso Discord oficial.
+                Junte-se à nossa comunidade oficial no Discord.
               </p>
             </div>
 

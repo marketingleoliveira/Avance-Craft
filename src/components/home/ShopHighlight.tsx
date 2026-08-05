@@ -25,7 +25,7 @@ function ChestImage({ index, name }: { index: number; name: string }) {
 
 export function ShopHighlight({ products }: { products: any[] }) {
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="shop">
+    <section className="relative overflow-hidden" id="shop">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -40,7 +40,7 @@ export function ShopHighlight({ products }: { products: any[] }) {
               Vips em <span className="text-emerald-500">Destaque</span>
             </h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
-              Alcance o status lendário e desbloqueie benefícios exclusivos no Avance.
+              Desbloqueie benefícios exclusivos.
             </p>
           </div>
           <Link to="/loja" className="hidden md:flex items-center gap-2 text-stone-400 hover:text-white font-bold uppercase tracking-widest text-xs transition-colors">

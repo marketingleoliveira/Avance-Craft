@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getHomeData } from "@/lib/services/content.functions";
 import { Hero } from "@/components/home/Hero";
@@ -9,6 +9,7 @@ import { RankingSection } from "@/components/home/RankingSection";
 import { HowToPlay } from "@/components/home/HowToPlay";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { FinalCta } from "@/components/home/FinalCta";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 const title = "Avance — Servidor Brasileiro de Minecraft (Java & Bedrock)";
 const description =
@@ -48,15 +49,46 @@ function Index() {
 
   return (
     <main className="relative bg-stone-950 overflow-x-hidden">
-      <Hero settings={settings} />
-      <div className="relative space-y-0">
-        <NewsSection news={news} status={status} />
-        <ModesSection modes={modes} />
-        <ShopHighlight products={featuredProducts} />
-        <RankingSection />
-        <HowToPlay />
-        <CommunitySection settings={settings} />
-        <FinalCta />
+      <div className="flex flex-col">
+        {/* Section: Hero */}
+        <Hero settings={settings} />
+        
+        {/* Section: Novidades */}
+        <div className="py-32 md:py-64 border-t border-white/5">
+          <NewsSection news={news} status={status} />
+        </div>
+
+        {/* Section: Modalidades */}
+        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
+          <ModesSection modes={modes} />
+        </div>
+
+        {/* Section: Por que jogar (HowToPlay) */}
+        <div className="py-32 md:py-64">
+          <HowToPlay />
+        </div>
+
+        {/* Section: Loja */}
+        <div className="py-32 md:py-64 bg-emerald-500/5 border-y border-emerald-500/10">
+          <ShopHighlight products={featuredProducts} />
+        </div>
+
+        {/* Section: Ranking */}
+        <div className="py-32 md:py-64">
+          <RankingSection />
+        </div>
+
+        {/* Section: Comunidade */}
+        <div className="py-32 md:py-64 bg-stone-900/20 border-y border-white/5">
+          <CommunitySection settings={settings} />
+        </div>
+
+        {/* Section: CTA Final */}
+        <div className="py-32 md:py-64">
+          <FinalCta />
+        </div>
+
+        <SiteFooter />
       </div>
     </main>
   );

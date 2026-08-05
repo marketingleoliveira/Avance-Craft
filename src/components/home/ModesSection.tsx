@@ -11,14 +11,14 @@ export function ModesSection({ modes }: { modes: any[] }) {
   };
 
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="modes">
+    <section className="relative overflow-hidden" id="modes">
       <Container>
         <div className="space-y-4 mb-16 text-center">
           <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
             Nossos <span className="text-emerald-500">Mundos</span>
           </h2>
           <p className="text-stone-400 font-medium text-lg max-w-xl mx-auto">
-            Escolha sua aventura. Cada modo foi projetado para oferecer uma experiência única e desafiadora.
+            Escolha sua aventura.
           </p>
         </div>
 

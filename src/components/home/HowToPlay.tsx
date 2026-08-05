@@ -27,14 +27,14 @@ const STEPS = [
 
 export function HowToPlay() {
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="how-to-play">
+    <section className="relative overflow-hidden" id="how-to-play">
       <Container>
         <div className="space-y-4 mb-16 text-center">
           <h2 className="text-4xl md:text-6xl font-[900] tracking-[-0.03em] uppercase italic text-white">
             Prepare sua <span className="text-emerald-500">Jornada</span>
           </h2>
           <p className="text-stone-400 font-medium text-lg max-w-xl mx-auto">
-            Nunca foi tão fácil começar. Siga os passos abaixo e entre no universo Avance agora mesmo.
+            Comece sua jornada em minutos.
           </p>
         </div>
 

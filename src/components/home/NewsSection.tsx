@@ -100,7 +100,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
   const statusKey = currentStatus.online ? "online" : "offline";
 
   return (
-    <section className="relative py-24 bg-stone-950 overflow-hidden" id="news">
+    <section className="relative overflow-hidden" id="news">
       <Container>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div className="space-y-4">
@@ -112,7 +112,7 @@ export function NewsSection({ news, status }: { news: any[]; status: any }) {
               Últimas <span className="text-emerald-500">Notícias</span>
             </h2>
             <p className="text-stone-400 font-medium text-lg max-w-xl">
-              Fique por dentro das atualizações, eventos e anúncios do Avance.
+              Atualizações e eventos do Avance.
             </p>
           </div>
           <Button asChild variant="ghost" className="hidden md:flex text-emerald-500 hover:text-white hover:bg-emerald-500/10">
