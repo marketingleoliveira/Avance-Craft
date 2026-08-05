@@ -4,12 +4,11 @@ import { formatBRL } from "@/data/shop";
 import { ProductArt } from "./ProductArt";
 
 type Props = {
-  product: any; // Temporário enquanto ajustamos tipos
+  product: any;
   onBuy: (product: any) => void;
 };
 
 export function ProductCard({ product, onBuy }: Props) {
-
   return (
     <StonePanel title={product.badge ?? "Produto"} className="h-full">
       <div className="flex h-full flex-col">
@@ -29,7 +28,7 @@ export function ProductCard({ product, onBuy }: Props) {
         </ul>
 
         <p className="mt-3 text-xs font-bold uppercase text-muted-foreground">
-          Validade: {product.duration} · {product.platforms.map((p) => (p === "java" ? "Java" : "Bedrock")).join(" e ")}
+          Validade: {product.duration} · {product.platforms.map((p: any) => (p === "java" ? "Java" : "Bedrock")).join(" e ")}
         </p>
 
         <div className="mt-auto pt-4">
@@ -44,7 +43,6 @@ export function ProductCard({ product, onBuy }: Props) {
             <PixelButton variant="grass" onClick={() => onBuy(product)}>
               Adicionar ao carrinho
             </PixelButton>
-
           </div>
         </div>
       </div>

@@ -7,9 +7,8 @@ import { PlayerIdentity } from "@/components/shop/PlayerIdentity";
 import { CategoryNav } from "@/components/shop/CategoryNav";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { CartPanel } from "@/components/shop/CartPanel";
-import { ShopInfo } from "@/components/shop/ShopInfo";
+import { ShopFaq, ShopTerms } from "@/components/shop/ShopInfo";
 import { useCart } from "@/components/shop/CartContext";
-
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 
 export const Route = createFileRoute("/loja")({
@@ -23,7 +22,6 @@ export const Route = createFileRoute("/loja")({
         queryKey: ["products", { categorySlug: "" }],
         queryFn: () => listProducts({}),
       }),
-
     ]);
   },
   component: ShopPage,
@@ -31,7 +29,7 @@ export const Route = createFileRoute("/loja")({
 
 function ShopPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
-  const { addToCart } = useCart();
+  const cart = useCart();
 
   const { data: categories } = useSuspenseQuery({
     queryKey: ["categories"],
@@ -39,7 +37,7 @@ function ShopPage() {
   });
 
   const { data: products } = useSuspenseQuery({
-    queryKey: ["products", { categorySlug: selectedCategory }],
+    queryKey: ["products", { categorySlug: selectedCategory || "" }],
     queryFn: () => listProducts({ categorySlug: selectedCategory }),
   });
 
@@ -53,8 +51,8 @@ function ShopPage() {
         <div className="mt-8 flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             <CategoryNav
-              categories={categories.map((c) => ({ id: c.slug, label: c.name, description: c.description || "" }))}
-              activeId={selectedCategory || categories[0]?.slug}
+              categories={categories.map((c) => ({ id: c.slug, label: c.name, description: "" }))}
+              activeId={selectedCategory || categories[0]?.slug || ""}
               onSelect={setSelectedCategory}
             />
 
@@ -76,21 +74,14 @@ function ShopPage() {
                       perks: product.benefits.map(b => b.description),
                       commands: [],
                       priceCents: Math.round(product.price * 100),
-                      previousPriceCents: product.promotional_price 
+                      previousPriceCents: product.promotional_price !== null && product.promotional_price !== undefined
                         ? Math.round(product.promotional_price * 100) 
-                        : undefined,
+                        : undefined as any,
                       duration: product.duration_days ? `${product.duration_days} dias` : "Permanente",
                       platforms: ["java", "bedrock"],
-                      art: (product.position % 3) as any // Mapeamento temporário para arte
+                      art: (product.position % 3) as any
                     }}
-                    onBuy={() =>
-                      addToCart({
-                        id: product.id,
-                        name: product.name,
-                        priceCents: Math.round((product.promotional_price || product.price) * 100),
-                        quantity: 1,
-                      })
-                    }
+                    onBuy={(p: any) => cart.add(p.id)}
                   />
                 ))}
                 
@@ -102,7 +93,10 @@ function ShopPage() {
               </div>
             </div>
             
-            <FAQSection />
+            <div className="mt-12 grid gap-8">
+              <ShopFaq />
+              <ShopTerms />
+            </div>
           </div>
 
           <aside className="lg:w-80 shrink-0">
