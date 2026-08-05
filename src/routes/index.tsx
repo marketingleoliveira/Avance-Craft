@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-start";
+import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getHomeData } from "@/lib/services/content.functions";
 import { Hero } from "@/components/home/Hero";

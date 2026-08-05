@@ -2,6 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { assertAdmin } from "./admin.functions";
+import { Database } from "@/integrations/supabase/types";
+
+type OrderStatus = Database["public"]["Enums"]["order_status"];
+type PaymentStatus = Database["public"]["Enums"]["payment_status"];
 
 /**
  * Lista pedidos com filtros avançados para o painel administrativo.
@@ -44,7 +48,7 @@ export const adminListOrders = createServerFn({ method: "GET" })
         )
       `, { count: "exact" });
 
-    if (data.status) query = query.eq("status", data.status);
+    if (data.status) query = query.eq("status", data.status as OrderStatus);
     if (data.nickname) query = query.ilike("minecraft_nickname", `%${data.nickname}%`);
     if (data.email) query = query.ilike("profiles.email", `%${data.email}%`);
     if (data.externalReference) query = query.eq("id", data.externalReference);
@@ -119,7 +123,7 @@ export const adminListPayments = createServerFn({ method: "GET" })
         )
       `, { count: "exact" });
 
-    if (data.status) query = query.eq("status", data.status);
+    if (data.status) query = query.eq("status", data.status as PaymentStatus);
     if (data.provider) query = query.eq("provider", data.provider);
 
     const { data: rows, count, error } = await query
