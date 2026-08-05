@@ -157,7 +157,10 @@ function Index() {
                     "Dockerfile & Docker Compose Configurados",
                     "Monitoramento & Backup Estruturados",
                     "Healthcheck de Produção (/api/health)",
-                    "Configuração Nginx & SSL Preparada"
+                    "Configuração Nginx & SSL Preparada",
+                    "Política de Backup & Restore Definida",
+                    "PITR & Snapshots Externos Agendados"
+
 
 
 
