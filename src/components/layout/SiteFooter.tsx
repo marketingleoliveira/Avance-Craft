@@ -29,8 +29,8 @@ export function SiteFooter() {
     <footer className="mt-16">
       <BlockDivider />
       <div className="bg-dirt-dark text-parchment">
-        <Container className="grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
+        <Container className="grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4" id="footer-navigation">
+          <div className="flex flex-col h-full">
             <h3 className="font-pixel text-outline text-[13px] uppercase text-emerald-block">
               Habblet
               <br />
@@ -40,11 +40,14 @@ export function SiteFooter() {
               Portal comunitário de um servidor brasileiro de blocos, com economia, missões
               e eventos.
             </p>
-            <p className="mt-3 break-all bg-black/25 p-2 text-sm font-semibold">
-              jogar.habbletmine.com.br
-            </p>
-
+            <div className="mt-auto pt-4">
+              <p className="mb-2 text-[10px] font-pixel uppercase text-parchment/50">Endereço IP</p>
+              <p className="break-all bg-black/25 p-2 text-sm font-semibold select-all cursor-pointer hover:bg-black/40 transition-colors" title="Clique para selecionar">
+                jogar.habbletmine.com.br
+              </p>
+            </div>
           </div>
+
 
           <nav aria-label="Rodapé">
             <h3 className="font-pixel text-[11px] uppercase text-emerald-block">Navegar</h3>
