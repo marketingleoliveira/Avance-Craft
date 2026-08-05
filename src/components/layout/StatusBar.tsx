@@ -75,4 +75,5 @@ function StatusItem({ icon: Icon, label, value, color = "text-white/90" }: { ico
         <span className={cn("text-[11px] font-black uppercase tracking-tight leading-none", color)}>{value}</span>
       </div>
     </div>
+  );
 }

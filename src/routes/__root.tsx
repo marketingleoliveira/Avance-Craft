@@ -192,6 +192,7 @@ function RootComponent() {
             <AlertTriangle className="w-3 h-3" /> Ambiente de Staging — Dados podem ser resetados
           </div>
         )}
+        <StatusBar />
         <SiteHeader />
         <main className="flex-1">
           <Outlet />
