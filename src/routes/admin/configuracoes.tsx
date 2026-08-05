@@ -227,6 +227,47 @@ function AdminFlagsPage() {
         </div>
 
         <div className="space-y-6">
+          {(isStaging() || isDev()) && (
+            <StonePanel className="p-6 border-l-4 border-l-amber-500 bg-amber-500/5">
+              <h2 className="font-pixel text-sm mb-4 flex items-center gap-2 text-amber-500">
+                <Database className="w-4 h-4" /> FERRAMENTAS DE STAGING
+              </h2>
+              <p className="text-xs text-muted-foreground mb-4">
+                Ambiente de testes detectado. Use as ferramentas abaixo para gerenciar dados simulados.
+              </p>
+              <div className="space-y-3">
+                <button
+                  onClick={async () => {
+                    const fn = runStagingSeed;
+                    toast.promise(fn(), {
+                      loading: 'Executando seed...',
+                      success: 'Ambiente de staging populado!',
+                      error: (err) => `Erro: ${err.message}`
+                    });
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-100 font-pixel text-[10px] border-b-2 border-stone-900 transition-all"
+                >
+                  <Database className="w-3 h-3" /> POPULAR STAGING (SEED)
+                </button>
+                
+                <button
+                  onClick={async () => {
+                    if (!confirm("ATENÇÃO: Isso apagará TODOS os pedidos, pagamentos e tickets deste ambiente. Continuar?")) return;
+                    const fn = clearStagingData;
+                    toast.promise(fn({ data: { confirm: true } }), {
+                      loading: 'Limpando dados...',
+                      success: 'Dados transacionais limpos!',
+                      error: (err) => `Erro: ${err.message}`
+                    });
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-900/20 hover:bg-red-900/40 text-red-500 font-pixel text-[10px] border-b-2 border-red-900/60 transition-all"
+                >
+                  <Trash2 className="w-3 h-3" /> LIMPAR TRANSAÇÕES
+                </button>
+              </div>
+            </StonePanel>
+          )}
+
           <StonePanel className="p-6">
             <h2 className="font-pixel text-sm mb-4 flex items-center gap-2 text-primary">
               <RefreshCw className="w-4 h-4" /> RESUMO DO AMBIENTE
