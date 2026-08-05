@@ -100,7 +100,7 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
             </Link>
 
             <a 
-              href={settings?.discord_url || "https://discord.gg/avance"}
+              href={settings?.['discord_url'] || "https://discord.gg/avance"}
               target="_blank"
               rel="noopener noreferrer"
               className="group px-12 py-6 border-2 border-white/10 text-white font-bold uppercase tracking-widest text-sm hover:bg-white/5 hover:border-white/20 transition-all flex items-center gap-3 rounded-xl"
