@@ -38,7 +38,7 @@ export function StatusBar() {
   };
 
   return (
-    <div className="bg-stone-950/40 backdrop-blur-sm border-b border-white/5 text-white py-2 hidden md:block">
+    <div className="bg-black/90 backdrop-blur-md border-b border-white/5 text-white py-2 hidden md:block relative z-[60]">
       <Container className="flex items-center justify-between">
         <div className="flex items-center gap-8">
           <StatusItem icon={Zap} label="Status" value={status.online ? "Online" : "Offline"} color={status.online ? "text-emerald-500" : "text-rose-500"} />
