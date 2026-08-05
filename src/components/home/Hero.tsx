@@ -37,7 +37,7 @@ export function Hero({ settings }: { settings?: Record<string, string> }) {
               O PRÓXIMO NÍVEL DO <span className="text-emerald-500">SURVIVAL</span>
             </h2>
             <p className="text-xl md:text-2xl text-stone-400 font-medium max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-              Uma experiência definitiva. Tecnologia de ponta, economia real e aventuras épicas em um mundo persistente.
+              Uma experiência definitiva. Tecnologia de ponta, economia real e aventuras épicas.
             </p>
           </div>
 
