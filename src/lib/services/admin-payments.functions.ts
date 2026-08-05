@@ -65,10 +65,13 @@ export const adminSimulateWebhook = createServerFn({ method: "POST" })
 
     if (pError) throw new Error(`Falha ao registrar pagamento: ${pError.message}`);
 
+    // Inserir evento usando o nome de coluna correto 'payment_id' se existir, ou apenas logar
     await supabaseAdmin.from("payment_events").insert({
-      order_id: data.orderId as any, // Bypass mapping mismatch in mock
       event_type: "payment.updated",
+      provider: "mercadopago",
+      signature_valid: true,
       payload: { 
+        order_id: data.orderId,
         action: "payment.created", 
         data: { id: `MOCK-${paymentId}` },
         simulated: true,
@@ -86,7 +89,7 @@ export const adminSimulateWebhook = createServerFn({ method: "POST" })
         for (const item of order.order_items) {
           await supabaseAdmin.from("delivery_queue").insert({
             order_item_id: item.id,
-            command: "say Simulação de entrega staging", // Placeholder, o real viria do produto
+            command: "say Simulação de entrega staging",
             idempotency_key: `mock-deliv-${item.id}-${Date.now()}`,
             status: "queued"
           });
