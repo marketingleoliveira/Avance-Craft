@@ -48,7 +48,7 @@ export function SiteHeader() {
             <div className="absolute inset-0 bg-emerald-500/20 blur-lg group-hover:bg-emerald-500/40 transition-colors" />
             <span className="relative h-5 w-5 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] rotate-45 transition-transform group-hover:rotate-90 duration-500" />
           </div>
-          <span className="font-sans font-black text-xl tracking-tighter text-white uppercase italic">
+          <span className="font-sans font-[900] text-3xl tracking-[-0.05em] text-white uppercase italic">
             Avance
           </span>
         </Link>
