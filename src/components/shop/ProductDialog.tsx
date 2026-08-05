@@ -55,7 +55,7 @@ export function ProductDialog({ product, open, onOpenChange, onAdd }: Props) {
           <div>
             <h4 className="font-pixel text-[10px] uppercase text-grass-dark">Vantagens</h4>
             <ul className="mt-2 grid gap-1.5 text-sm">
-              {product.perks.map((perk) => (
+              {product.perks.map((perk: any) => (
                 <li key={perk} className="flex items-start gap-2">
                   <span className="mt-1.5 h-2.5 w-2.5 shrink-0 bg-emerald-block" aria-hidden />
                   {perk}
