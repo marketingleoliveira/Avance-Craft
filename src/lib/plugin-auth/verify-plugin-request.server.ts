@@ -10,7 +10,7 @@ const MAX_PAYLOAD_SIZE = 1024 * 512; // 512KB
 export async function verifyPluginRequest(
   request: Request,
   supabase: SupabaseClient<Database>
-): Promise<PluginAuthResult> {
+): Promise<PluginAuthResult & { body?: string }> {
   // 1. Validar Content-Type
   const contentType = request.headers.get("Content-Type");
   if (!contentType?.includes("application/json")) {
@@ -98,5 +98,5 @@ export async function verifyPluginRequest(
     last_seen_at: new Date().toISOString()
   } as any).eq("server_id", server.server_id);
 
-  return { valid: true, serverId: server.server_id, status: 200 };
+  return { valid: true, serverId: server.server_id, status: 200, body: rawBody };
 }

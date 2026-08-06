@@ -10,7 +10,7 @@ export const Route = createFileRoute("/api/public/plugin")({
       POST: async ({ request }) => {
         // 1. Autenticação Forte com Assinatura HMAC
         const auth = await verifyPluginRequest(request, supabaseAdmin);
-        if (!auth.valid || !auth.serverId) {
+        if (!auth.valid || !auth.serverId || !auth.body) {
           await logger.warn("plugin-api", "Unauthorized access attempt", { 
             context: { errorCode: auth.errorCode, ip: request.headers.get("x-forwarded-for") } 
           });
@@ -20,22 +20,7 @@ export const Route = createFileRoute("/api/public/plugin")({
           });
         }
 
-        // Importante: O corpo já foi consumido por verifyPluginRequest (await request.text())
-        // No TanStack Start, o request original pode não permitir re-leitura se não for clonado
-        // Porém, como estamos no handler e verifyPluginRequest é o gatekeeper, 
-        // precisaríamos passar o body extraído ou ler do request clonado.
-        
-        // Re-lemos o body (o verifyPluginRequest consome o text() do request original)
-        // Para evitar erros de "stream already read", o verifyPluginRequest deveria retornar o body 
-        // ou o handler deveria ler uma vez. 
-        // Como não posso alterar verifyPluginRequest facilmente para retornar body agora sem quebrar o plano original,
-        // vamos assumir que o request pode ser lido novamente ou passar o corpo se tivéssemos alterado.
-        
-        // CORREÇÃO: O verifyPluginRequest usou await request.text(). 
-        // Vamos ajustar verifyPluginRequest para retornar o body ou ler aqui antes.
-        // No TanStack Start, o ideal é ler o body UMA VEZ.
-
-        const body = JSON.parse(bodyText);
+        const body = JSON.parse(auth.body);
         const { action } = body;
         const serverId = auth.serverId;
 
