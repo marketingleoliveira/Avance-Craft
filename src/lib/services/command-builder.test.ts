@@ -57,7 +57,7 @@ describe("Command Builder Security", () => {
     const result = await buildDeliveryCommands({ order_item: mockOrderItem }, mockSupabase);
     
     expect(result).toHaveLength(1);
-    expect(result[0].command).toBe("give LeonardoMine diamond 1");
+    expect(result[0]!.command).toBe("give LeonardoMine diamond 1");
   });
 
   it("should block multi-commands with semicolons", async () => {
