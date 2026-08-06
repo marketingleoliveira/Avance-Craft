@@ -4,7 +4,7 @@ import { Container } from "@/components/ui-kit/Container";
 import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
-import { getServerStatus, listServerModes } from "@/lib/services/content.functions";
+import { getPublicServerStatus } from "@/lib/services/status.functions";
 import { cn } from "@/lib/utils";
 import { 
   Users, 
@@ -56,7 +56,7 @@ function StatusCard({ icon: Icon, label, value, colorClass = "text-foreground" }
 function StatusPage() {
   const { data: status } = useSuspenseQuery({
     queryKey: ["server-status-page"],
-    queryFn: () => getServerStatus(),
+    queryFn: () => getPublicServerStatus(),
   });
 
   const { data: modes } = useSuspenseQuery({
@@ -73,11 +73,8 @@ function StatusPage() {
   };
 
   const isOnline = status?.online ?? false;
-  // Heartbeat check: if last_heartbeat is older than timeout, it's offline
-  const lastHeartbeat = status?.updated_at ? new Date(status.updated_at) : null;
-  const timeoutSeconds = 60; // fallback hardcoded for now or from site settings
-  const isHeartbeatValid = lastHeartbeat && (Date.now() - lastHeartbeat.getTime()) < (timeoutSeconds * 1000);
-  const effectivelyOnline = isOnline && isHeartbeatValid;
+  const effectivelyOnline = isOnline && status?.status !== 'offline';
+  const lastHeartbeat = status?.lastUpdate ? new Date(status.lastUpdate) : null;
 
   return (
     <main className="min-h-screen py-20">
@@ -94,13 +91,13 @@ function StatusPage() {
                 <StatusCard 
                   icon={effectivelyOnline ? Wifi : WifiOff} 
                   label="Estado Atual" 
-                  value={effectivelyOnline ? "Online" : "Offline / Aguardando"}
-                  colorClass={effectivelyOnline ? "text-emerald-block" : "text-destructive"}
+                  value={status?.status === 'online' ? "Online" : status?.status === 'unstable' ? "Instável" : status?.status === 'maintenance' ? "Manutenção" : "Offline"}
+                  colorClass={status?.status === 'online' ? "text-emerald-block" : status?.status === 'unstable' ? "text-amber-500" : "text-destructive"}
                 />
                 <StatusCard 
                   icon={Users} 
                   label="Jogadores Online" 
-                  value={`${status?.players_online ?? 0} / ${status?.max_players ?? 100}`}
+                  value={`${status?.players ?? 0} / ${status?.maxPlayers ?? 500}`}
                   colorClass="text-emerald-block"
                 />
                 <StatusCard 
@@ -141,7 +138,7 @@ function StatusPage() {
                 <div>
                   <label className="font-pixel text-[9px] uppercase text-muted-foreground block mb-2">Java Edition</label>
                   <button 
-                    onClick={() => copy(status?.ip ?? "jogar.avance.com.br", 'java')}
+                    onClick={() => copy("jogar.avancemine.com.br", 'java')}
                     className="pixel-border flex w-full items-center justify-between border-grass-dark bg-grass-dark/10 p-3 text-left hover:bg-grass-dark/20 transition-colors"
                   >
                     <span className="font-bold truncate">{status?.ip ?? "jogar.avance.com.br"}</span>

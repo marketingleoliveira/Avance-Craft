@@ -116,12 +116,12 @@ export const Route = createFileRoute("/api/public/plugin")({
                   online_players: body.online_players,
                   max_players: body.max_players,
                   tps: body.tps,
-                  memory_used_mb: body.memory_used_mb,
-                  memory_max_mb: body.memory_max_mb,
-                  uptime_seconds: body.uptime_seconds,
-                  plugin_version: body.plugin_version,
-                  minecraft_version: body.minecraft_version,
-                  paper_version: body.paper_version,
+                  memory_used_mb: (body as any).memory_used_mb,
+                  memory_max_mb: (body as any).memory_max_mb,
+                  uptime_seconds: (body as any).uptime_seconds,
+                  plugin_version: (body as any).plugin_version,
+                  minecraft_version: (body as any).minecraft_version,
+                  paper_version: (body as any).paper_version,
                   last_seen_at: new Date().toISOString()
                 } as any, { onConflict: 'server_id' });
 
@@ -137,9 +137,9 @@ export const Route = createFileRoute("/api/public/plugin")({
               const { error } = await supabaseAdmin
                 .from("server_status")
                 .update({
-                  plugin_version: body.plugin_version,
-                  minecraft_version: body.minecraft_version,
-                  paper_version: body.paper_version,
+                  plugin_version: (body as any).plugin_version,
+                  minecraft_version: (body as any).minecraft_version,
+                  paper_version: (body as any).paper_version,
                   last_seen_at: new Date().toISOString()
                 } as any)
                 .eq("server_id", serverId);

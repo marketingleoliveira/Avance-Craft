@@ -83,11 +83,11 @@ function AdminRankingPage() {
                 </span>
               </div>
               <div className="space-y-1 text-xs text-muted-foreground">
-                <p>IP: {server.ip}</p>
-                <p>Versão: {server.version}</p>
-                <p>Jogadores: {server.players_online}/{server.max_players}</p>
+                <p>IP: jogar.avancemine.com.br</p>
+                <p>Versão: {server.minecraft_version || 'unknown'}</p>
+                <p>Jogadores: {server.online_players}/{server.max_players}</p>
                 <p className="mt-2 text-[10px] uppercase border-t border-dirt-dark/10 pt-1">
-                  Último Sinal: {new Date(server.updated_at).toLocaleTimeString()}
+                  Último Sinal: {server.last_seen_at ? new Date(server.last_seen_at).toLocaleTimeString() : 'N/A'}
                 </p>
               </div>
             </StonePanel>
