@@ -569,6 +569,60 @@ export type Database = {
         }
         Relationships: []
       }
+      minecraft_servers: {
+        Row: {
+          allowed_ip_ranges: Json | null
+          created_at: string | null
+          display_name: string
+          enabled: boolean | null
+          environment: Database["public"]["Enums"]["server_environment"]
+          id: string
+          last_seen_at: string | null
+          minecraft_version: string | null
+          paper_version: string | null
+          plugin_version: string | null
+          previous_secret_expires_at: string | null
+          previous_secret_hash: string | null
+          secret_hash: string
+          server_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          allowed_ip_ranges?: Json | null
+          created_at?: string | null
+          display_name: string
+          enabled?: boolean | null
+          environment?: Database["public"]["Enums"]["server_environment"]
+          id?: string
+          last_seen_at?: string | null
+          minecraft_version?: string | null
+          paper_version?: string | null
+          plugin_version?: string | null
+          previous_secret_expires_at?: string | null
+          previous_secret_hash?: string | null
+          secret_hash: string
+          server_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          allowed_ip_ranges?: Json | null
+          created_at?: string | null
+          display_name?: string
+          enabled?: boolean | null
+          environment?: Database["public"]["Enums"]["server_environment"]
+          id?: string
+          last_seen_at?: string | null
+          minecraft_version?: string | null
+          paper_version?: string | null
+          plugin_version?: string | null
+          previous_secret_expires_at?: string | null
+          previous_secret_hash?: string | null
+          secret_hash?: string
+          server_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           author_profile_id: string | null
@@ -938,6 +992,41 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_nonces: {
+        Row: {
+          created_at: string | null
+          expires_at: string
+          id: string
+          nonce: string
+          request_timestamp: string
+          server_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          nonce: string
+          request_timestamp: string
+          server_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          nonce?: string
+          request_timestamp?: string
+          server_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_nonces_server_id_fkey"
+            columns: ["server_id"]
+            isOneToOne: false
+            referencedRelation: "minecraft_servers"
+            referencedColumns: ["server_id"]
           },
         ]
       }
@@ -1349,6 +1438,7 @@ export type Database = {
     }
     Functions: {
       can_access_ticket: { Args: { _ticket_id: string }; Returns: boolean }
+      cleanup_expired_nonces: { Args: never; Returns: undefined }
       current_profile_id: { Args: never; Returns: string }
       has_role: {
         Args: {
@@ -1421,6 +1511,7 @@ export type Database = {
         | "refunded"
         | "chargeback"
         | "cancelled"
+      server_environment: "production" | "staging" | "development"
       ticket_status: "open" | "pending" | "closed"
     }
     CompositeTypes: {
@@ -1599,6 +1690,7 @@ export const Constants = {
         "chargeback",
         "cancelled",
       ],
+      server_environment: ["production", "staging", "development"],
       ticket_status: ["open", "pending", "closed"],
     },
   },
