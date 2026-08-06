@@ -130,22 +130,35 @@ export const Route = createFileRoute("/api/public/mercadopago")({
               }).eq("id", order.id);
 
               for (const item of order.items) {
-                const { data: commands } = await supabaseAdmin
-                  .from("product_commands")
-                  .select("*")
-                  .eq("product_id", item.product_id as string);
+                const { buildDeliveryCommands } = await import("@/lib/services/command-builder.server");
+                
+                try {
+                  const validatedCommands = await buildDeliveryCommands({
+                    order_item: {
+                      id: item.id,
+                      order_id: order.id,
+                      product_id: item.product_id as string,
+                      quantity: item.quantity,
+                      player_name: order.minecraft_nickname,
+                    }
+                  }, supabaseAdmin);
 
-                if (commands) {
-                  const deliveryItems = commands.map(cmd => ({
-                    order_item_id: item.id,
-                    server_id: cmd.server_id,
-                    command: cmd.command
-                      .replace("{player}", order.minecraft_nickname)
-                      .replace("{quantity}", item.quantity.toString()),
-                    status: "queued" as const,
-                    idempotency_key: `${order.id}-${item.id}-${cmd.id}`
-                  }));
-                  await supabaseAdmin.from("delivery_queue").upsert(deliveryItems, { onConflict: 'idempotency_key' });
+                  if (validatedCommands.length > 0) {
+                    const deliveryItems = validatedCommands.map((vCmd, index) => ({
+                      order_item_id: item.id,
+                      server_id: vCmd.server_id,
+                      command: vCmd.command,
+                      status: "queued" as const,
+                      available_at: new Date(Date.now() + (vCmd.delay_seconds * 1000)).toISOString(),
+                      maximum_attempts: vCmd.max_attempts,
+                      idempotency_key: `${order.id}-${item.id}-${index}`
+                    }));
+                    await supabaseAdmin.from("delivery_queue").upsert(deliveryItems as any, { onConflict: 'idempotency_key' });
+                  }
+                } catch (cmdErr) {
+                  await logger.error("webhook-mercadopago", "Failed to build commands", { 
+                    context: { error: (cmdErr as Error).message, orderId: order.id, itemId: item.id } 
+                  });
                 }
               }
             } else if (["rejected", "cancelled", "refunded"].includes(payment.status)) {

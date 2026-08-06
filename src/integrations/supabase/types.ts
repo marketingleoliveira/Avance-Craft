@@ -303,6 +303,24 @@ export type Database = {
         }
         Relationships: []
       }
+      command_allowlist: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          prefix: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          prefix: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          prefix?: string
+        }
+        Relationships: []
+      }
       coupon_uses: {
         Row: {
           coupon_id: string
@@ -1088,28 +1106,46 @@ export type Database = {
       }
       product_commands: {
         Row: {
-          command: string
-          created_at: string
+          command_template: string
+          created_at: string | null
+          delivery_delay_seconds: number | null
+          enabled: boolean | null
+          event_type: string
+          execution_order: number | null
           id: string
-          position: number
+          maximum_attempts: number | null
           product_id: string
+          requires_online_player: boolean | null
           server_id: string
+          updated_at: string | null
         }
         Insert: {
-          command: string
-          created_at?: string
+          command_template: string
+          created_at?: string | null
+          delivery_delay_seconds?: number | null
+          enabled?: boolean | null
+          event_type?: string
+          execution_order?: number | null
           id?: string
-          position?: number
+          maximum_attempts?: number | null
           product_id: string
-          server_id?: string
+          requires_online_player?: boolean | null
+          server_id: string
+          updated_at?: string | null
         }
         Update: {
-          command?: string
-          created_at?: string
+          command_template?: string
+          created_at?: string | null
+          delivery_delay_seconds?: number | null
+          enabled?: boolean | null
+          event_type?: string
+          execution_order?: number | null
           id?: string
-          position?: number
+          maximum_attempts?: number | null
           product_id?: string
+          requires_online_player?: boolean | null
           server_id?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
