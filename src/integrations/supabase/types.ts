@@ -1336,35 +1336,64 @@ export type Database = {
       server_status: {
         Row: {
           id: string
-          ip: string
-          max_players: number
-          online: boolean
-          players_online: number
+          last_seen_at: string | null
+          maintenance_mode: boolean | null
+          max_players: number | null
+          memory_max_mb: number | null
+          memory_used_mb: number | null
+          minecraft_version: string | null
+          online: boolean | null
+          online_players: number | null
+          paper_version: string | null
+          plugin_version: string | null
           server_id: string
-          updated_at: string
-          version: string
+          tps: number | null
+          updated_at: string | null
+          uptime_seconds: number | null
         }
         Insert: {
           id?: string
-          ip?: string
-          max_players?: number
-          online?: boolean
-          players_online?: number
-          server_id?: string
-          updated_at?: string
-          version?: string
+          last_seen_at?: string | null
+          maintenance_mode?: boolean | null
+          max_players?: number | null
+          memory_max_mb?: number | null
+          memory_used_mb?: number | null
+          minecraft_version?: string | null
+          online?: boolean | null
+          online_players?: number | null
+          paper_version?: string | null
+          plugin_version?: string | null
+          server_id: string
+          tps?: number | null
+          updated_at?: string | null
+          uptime_seconds?: number | null
         }
         Update: {
           id?: string
-          ip?: string
-          max_players?: number
-          online?: boolean
-          players_online?: number
+          last_seen_at?: string | null
+          maintenance_mode?: boolean | null
+          max_players?: number | null
+          memory_max_mb?: number | null
+          memory_used_mb?: number | null
+          minecraft_version?: string | null
+          online?: boolean | null
+          online_players?: number | null
+          paper_version?: string | null
+          plugin_version?: string | null
           server_id?: string
-          updated_at?: string
-          version?: string
+          tps?: number | null
+          updated_at?: string | null
+          uptime_seconds?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "server_status_server_id_fkey"
+            columns: ["server_id"]
+            isOneToOne: true
+            referencedRelation: "minecraft_servers"
+            referencedColumns: ["server_id"]
+          },
+        ]
       }
       site_settings: {
         Row: {
