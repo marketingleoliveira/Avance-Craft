@@ -16,7 +16,8 @@ import type {
   ProductCommand,
   ProductBenefit,
   News,
-  NewsCategory
+  NewsCategory,
+  MinecraftServer
 } from "@/lib/types/database";
 
 const categoryInput = z.object({
