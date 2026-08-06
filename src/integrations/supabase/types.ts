@@ -1527,6 +1527,14 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       owns_order: { Args: { _order_id: string }; Returns: boolean }
+      process_approved_payment: {
+        Args: {
+          _external_reference: string
+          _metadata?: Json
+          _payment_id: string
+        }
+        Returns: Json
+      }
       process_checkout: {
         Args: {
           p_coupon_code?: string
