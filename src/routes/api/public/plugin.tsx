@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { validatePluginSignature } from "@/lib/services/plugin-auth.server";
+import { verifyPluginRequest } from "@/lib/plugin-auth/verify-plugin-request.server";
 import { handleDeliverySuccess, handleDeliveryFailure } from "@/lib/services/delivery-processor.server";
 import { logger } from "@/lib/config/logger.server";
 
@@ -8,18 +8,19 @@ export const Route = createFileRoute("/api/public/plugin")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const bodyText = await request.text();
-        
         // 1. Autenticação Forte com Assinatura HMAC
-        const auth = await validatePluginSignature(request, bodyText, supabaseAdmin);
-        if (!auth.valid || !auth.serverId) {
+        const auth = await verifyPluginRequest(request, supabaseAdmin);
+        if (!auth.valid || !auth.serverId || !auth.body) {
           await logger.warn("plugin-api", "Unauthorized access attempt", { 
-            context: { error: auth.error, ip: request.headers.get("x-forwarded-for") } 
+            context: { errorCode: auth.errorCode, ip: request.headers.get("x-forwarded-for") } 
           });
-          return new Response(auth.error || "Unauthorized", { status: 401 });
+          return new Response(JSON.stringify({ error: auth.errorCode || "unauthorized" }), { 
+            status: auth.status,
+            headers: { "Content-Type": "application/json" }
+          });
         }
 
-        const body = JSON.parse(bodyText);
+        const body = JSON.parse(auth.body);
         const { action } = body;
         const serverId = auth.serverId;
 
