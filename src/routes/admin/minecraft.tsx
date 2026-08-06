@@ -86,15 +86,15 @@ function AdminMinecraftPage() {
 
         <Tabs defaultValue="servers" className="w-full">
           <TabsList className="bg-background/50 border border-border/50 p-1">
-            <TabsTrigger value="servers" className="gap-2">
+            <TabsTrigger value="servers" className="gap-2 font-pixel text-[9px] uppercase">
               <Server className="w-4 h-4" />
               Servidores
             </TabsTrigger>
-            <TabsTrigger value="queue" className="gap-2">
+            <TabsTrigger value="queue" className="gap-2 font-pixel text-[9px] uppercase">
               <Send className="w-4 h-4" />
               Fila de Entregas
             </TabsTrigger>
-            <TabsTrigger value="security" className="gap-2">
+            <TabsTrigger value="security" className="gap-2 font-pixel text-[9px] uppercase">
               <ShieldCheck className="w-4 h-4" />
               Segurança
             </TabsTrigger>
@@ -107,12 +107,12 @@ function AdminMinecraftPage() {
                   <table className="w-full text-left">
                     <thead className="border-b border-border/40 bg-muted/30">
                       <tr>
-                        <th className="px-6 py-4 font-semibold text-sm">ID / Nome</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Ambiente</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Status</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Jogadores</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Último Heartbeat</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Versão</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">ID / Nome</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Ambiente</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Status</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Jogadores</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Último Heartbeat</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Versão</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
@@ -123,13 +123,13 @@ function AdminMinecraftPage() {
                           </tr>
                         ))
                       ) : (
-                        servers?.map((server) => (
+                        servers?.map((server: any) => (
                           <tr key={server.id} className="hover:bg-muted/20 transition-colors">
                             <td className="px-6 py-4">
-                              <div className="font-medium">{server.name}</div>
-                              <div className="text-xs text-muted-foreground">{server.server_id}</div>
+                              <div className="font-medium text-sm">{server.display_name}</div>
+                              <div className="text-[10px] text-muted-foreground">{server.server_id}</div>
                             </td>
-                            <td className="px-6 py-4 uppercase text-xs font-bold tracking-wider">
+                            <td className="px-6 py-4 uppercase text-[10px] font-bold tracking-wider">
                               <Badge variant="outline" className={
                                 server.environment === 'production' ? 'border-emerald-500/50 text-emerald-500' : 'border-amber-500/50 text-amber-500'
                               }>
@@ -137,18 +137,18 @@ function AdminMinecraftPage() {
                               </Badge>
                             </td>
                             <td className="px-6 py-4">
-                              <Badge variant={server.active ? "default" : "destructive"}>
-                                {server.active ? "Ativo" : "Inativo"}
+                              <Badge variant={server.enabled ? "default" : "destructive"} className="text-[10px] uppercase">
+                                {server.enabled ? "Ativo" : "Inativo"}
                               </Badge>
                             </td>
-                            <td className="px-6 py-4 text-sm">
-                              {server.server_status?.[0]?.online_players || 0} / {server.server_status?.[0]?.max_players || 0}
+                            <td className="px-6 py-4 text-sm font-mono">
+                              {server.server_status?.online_players || 0} / {server.server_status?.max_players || 0}
                             </td>
                             <td className="px-6 py-4 text-sm text-muted-foreground">
-                              {server.server_status?.[0]?.last_seen_at ? new Date(server.server_status[0].last_seen_at).toLocaleString() : 'Nunca'}
+                              {server.server_status?.last_seen_at ? new Date(server.server_status.last_seen_at).toLocaleString() : 'Nunca'}
                             </td>
                             <td className="px-6 py-4 text-xs font-mono">
-                              {server.server_status?.[0]?.minecraft_version || 'N/A'}
+                              {server.server_status?.minecraft_version || 'N/A'}
                             </td>
                           </tr>
                         ))
@@ -167,12 +167,12 @@ function AdminMinecraftPage() {
                   <table className="w-full text-left">
                     <thead className="border-b border-border/40 bg-muted/30">
                       <tr>
-                        <th className="px-6 py-4 font-semibold text-sm">Pedido / Produto</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Jogador</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Status</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Tentativas</th>
-                        <th className="px-6 py-4 font-semibold text-sm">Criado em</th>
-                        <th className="px-6 py-4 font-semibold text-sm text-right">Ações</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Entrega ID</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Status</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Tentativas</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Servidor</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase">Criado em</th>
+                        <th className="px-6 py-4 font-pixel text-[9px] uppercase text-right">Ações</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
@@ -183,22 +183,22 @@ function AdminMinecraftPage() {
                           </tr>
                         ))
                       ) : (
-                        queue?.map((item) => (
+                        queue?.map((item: any) => (
                           <tr key={item.id} className="hover:bg-muted/20 transition-colors">
                             <td className="px-6 py-4">
-                              <div className="font-medium text-sm">#{item.order_id?.slice(0, 8)}</div>
-                              <div className="text-xs text-muted-foreground">ID: {item.id.slice(0, 8)}</div>
+                              <div className="font-mono text-xs">{item.id.slice(0, 13)}...</div>
+                              <div className="text-[10px] text-muted-foreground truncate max-w-[200px]">{item.command}</div>
                             </td>
-                            <td className="px-6 py-4 font-mono text-sm">{item.player_username}</td>
                             <td className="px-6 py-4">
                               <Badge variant={
                                 item.status === 'delivered' ? 'default' :
                                 item.status === 'failed' ? 'destructive' : 'secondary'
-                              } className="capitalize">
+                              } className="capitalize text-[10px]">
                                 {item.status}
                               </Badge>
                             </td>
-                            <td className="px-6 py-4 text-sm">{item.attempts} / 10</td>
+                            <td className="px-6 py-4 text-sm font-mono">{item.attempts} / 10</td>
+                            <td className="px-6 py-4 text-xs font-mono">{item.server_id}</td>
                             <td className="px-6 py-4 text-sm text-muted-foreground">
                               {new Date(item.created_at).toLocaleString()}
                             </td>
@@ -221,11 +221,11 @@ function AdminMinecraftPage() {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                <Card className="border-border/40 bg-card/30">
                  <CardHeader>
-                   <CardTitle>Nova Instância</CardTitle>
+                   <CardTitle className="font-pixel text-[12px] uppercase">Nova Instância</CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                    <p className="text-sm text-muted-foreground">Cadastre um novo servidor Minecraft autorizado.</p>
-                   <Button className="w-full bg-emerald-600 hover:bg-emerald-500">
+                   <Button className="font-pixel text-[10px] uppercase w-full bg-emerald-block hover:bg-emerald-600 pixel-border">
                      Gerar Credenciais
                    </Button>
                  </CardContent>
@@ -233,11 +233,11 @@ function AdminMinecraftPage() {
                
                <Card className="border-border/40 bg-card/30">
                  <CardHeader>
-                   <CardTitle>Gestão de Segredos</CardTitle>
+                   <CardTitle className="font-pixel text-[12px] uppercase">Gestão de Segredos</CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                    <p className="text-sm text-muted-foreground">Segredos são armazenados em hash e nunca exibidos novamente.</p>
-                   <Button variant="outline" className="w-full">
+                   <Button variant="outline" className="font-pixel text-[10px] uppercase w-full pixel-border">
                      Ver Auditoria de Segurança
                    </Button>
                  </CardContent>
@@ -249,3 +249,4 @@ function AdminMinecraftPage() {
     </AdminLayout>
   );
 }
+
