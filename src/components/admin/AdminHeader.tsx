@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-export function AdminHeader() {
+export function AdminHeader({ title }: { title?: string }) {
   return (
     <header className="flex h-16 items-center justify-between border-b-4 border-stone-dark bg-stone px-6 shadow-sm">
       <div className="flex items-center gap-4">
@@ -31,7 +31,7 @@ export function AdminHeader() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="font-pixel text-[9px] uppercase text-grass-dark">Dashboard</BreadcrumbPage>
+              <BreadcrumbPage className="font-pixel text-[9px] uppercase text-grass-dark">{title || "Dashboard"}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
