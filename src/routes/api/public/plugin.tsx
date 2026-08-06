@@ -33,26 +33,20 @@ export const Route = createFileRoute("/api/public/plugin")({
             return Response.json({ status: "ok" });
 
           case "get_deliveries":
-            // Selecionar apenas entregas pendentes para este servidor específico
-            const { data: queue } = await supabaseAdmin
-              .from("delivery_queue")
-              .select("*")
-              .eq("status", "queued")
-              .eq("server_id", serverId)
-              .lte("available_at", new Date().toISOString())
-              .limit(50);
+            // 3. Reserva Atômica de Entregas (RPC segura)
+            const { data: queue, error: reserveError } = await supabaseAdmin.rpc("reserve_delivery_batch", {
+              _server_id: serverId,
+              _plugin_instance_id: request.headers.get("X-Nonce") || "unknown", // Usamos o nonce como ID da transação
+              _limit: body.limit || 50
+            });
             
-            if (queue?.length) {
-              const leaseExpiresAt = new Date(Date.now() + 30000).toISOString();
-              await supabaseAdmin
-                .from("delivery_queue")
-                .update({ 
-                  status: "claimed", 
-                  claimed_at: new Date().toISOString(),
-                  lease_expires_at: leaseExpiresAt as any 
-                } as any)
-                .in("id", queue.map(q => q.id));
+            if (reserveError) {
+              await logger.error("plugin-api", "Failed to reserve deliveries", { 
+                context: { error: reserveError, serverId } 
+              });
+              return Response.json({ error: "reservation_failed" }, { status: 500 });
             }
+
             return Response.json(queue || []);
 
           case "confirm_delivery":
