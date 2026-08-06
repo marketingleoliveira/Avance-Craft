@@ -127,8 +127,8 @@ export const Route = createFileRoute("/api/public/mercadopago")({
 
                 // Chamada para a RPC atômica que processa tudo no banco
                 const { data: result, error: rpcError } = await supabaseAdmin.rpc("process_approved_payment", {
-                  _payment_id: paymentRecord?.id,
-                  _external_reference: payment.external_reference,
+                  _payment_id: paymentRecord?.id || "",
+                  _external_reference: payment.external_reference || "",
                   _metadata: { webhook_received_at: new Date().toISOString() }
                 });
 
