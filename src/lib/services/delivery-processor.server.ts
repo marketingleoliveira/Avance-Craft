@@ -1,122 +1,71 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/integrations/supabase/types";
 
-type DeliveryStatus = Database["public"]["Enums"]["delivery_status"];
-
 /**
- * Lógica de processamento de falhas na entrega com backoff exponencial.
+ * Lógica de processamento de falhas na entrega usando RPC atômica.
  */
 export async function handleDeliveryFailure(
   deliveryId: string,
   errorResponse: string,
   supabase: SupabaseClient<Database>
 ) {
-  // 1. Buscar estado atual
-  const { data: delivery, error: fetchError } = await supabase
-    .from("delivery_queue")
-    .select("attempts")
-    .eq("id", deliveryId)
-    .single();
-
-  if (fetchError || !delivery) {
-    console.error(`[delivery] Fail to fetch delivery ${deliveryId} for error handling`);
-    return;
-  }
-
-  // max_attempts não está no banco (baseado no erro do TS), usaremos padrão 5
-  const maxAttempts = 5;
-  const currentAttempts = (delivery.attempts ?? 0) + 1;
-
-  // 2. Determinar novo status e próxima tentativa (Backoff)
-  let nextStatus: DeliveryStatus = "queued";
-  let availableAt = new Date().toISOString();
-
-  if (currentAttempts >= maxAttempts) {
-    nextStatus = "failed";
-  } else {
-    // Backoff exponencial: 2^attempts * 60 segundos (1m, 2m, 4m, 8m...)
-    const delayMinutes = Math.pow(2, currentAttempts);
-    const nextDate = new Date();
-    nextDate.setMinutes(nextDate.getMinutes() + delayMinutes);
-    availableAt = nextDate.toISOString();
-  }
-
-  // 3. Atualizar fila
-  await supabase
-    .from("delivery_queue")
-    .update({
-      status: nextStatus,
-      attempts: currentAttempts,
-      available_at: availableAt,
-      last_error: errorResponse,
-      claimed_at: null
-    } as any)
-    .eq("id", deliveryId);
-
-  // 4. Registrar tentativa
-  await supabase.from("delivery_attempts").insert({
-    delivery_queue_id: deliveryId,
-    attempt_number: currentAttempts,
-    success: false,
-    response: errorResponse
+  const { data, error } = await supabase.rpc("fail_delivery", {
+    _delivery_id: deliveryId,
+    _error_code: "PLUGIN_ERROR",
+    _error_message: errorResponse,
+    _response_payload: { raw: errorResponse }
   });
+
+  if (error) {
+    console.error(`[delivery] Fail to execute fail_delivery RPC for ${deliveryId}:`, error);
+  }
 }
 
 /**
- * Lógica de processamento de sucesso na entrega.
+ * Lógica de processamento de sucesso na entrega usando RPC atômica.
  */
 export async function handleDeliverySuccess(
   deliveryId: string,
   response: string,
   supabase: SupabaseClient<Database>
 ) {
-  // 1. Marcar como entregue
-  const { data: delivery, error } = await supabase
-    .from("delivery_queue")
-    .update({
-      status: "delivered" as DeliveryStatus,
-      delivered_at: new Date().toISOString(),
-      last_error: null
-    } as any)
-    .eq("id", deliveryId)
-    .select("order_item_id")
-    .single();
-
-  if (error || !delivery) return;
-
-  // 2. Registrar tentativa bem-sucedida
-  await supabase.from("delivery_attempts").insert({
-    delivery_queue_id: deliveryId,
-    attempt_number: 1,
-    success: true,
-    response
+  const { data: success, error } = await supabase.rpc("confirm_delivery", {
+    _delivery_id: deliveryId,
+    _response_payload: { raw: response }
   });
 
-  // 3. Verificar se o pedido completo pode ser marcado como entregue
-  const { data: orderItem } = await supabase
-    .from("order_items")
-    .select("order_id")
-    .eq("id", delivery.order_item_id)
+  if (error || !success) {
+    console.error(`[delivery] Fail to execute confirm_delivery RPC for ${deliveryId}:`, error);
+    return;
+  }
+
+  // Lógica adicional: atualizar pedido se necessário
+  // A RPC já marca como delivered, mas a orquestração do status do pedido (order)
+  // pode ser feita aqui ou via triggers no DB.
+  
+  // Buscar o order_id associado para verificar se o pedido completo foi entregue
+  const { data: delivery } = await supabase
+    .from("delivery_queue")
+    .select("order_id, order_item_id")
+    .eq("id", deliveryId)
     .single();
 
-  if (orderItem) {
-    // Verificar se ainda existem itens pendentes para este pedido
-    const { data: remaining } = await supabase
+  if (delivery?.order_id) {
+    // Verificar se ainda existem itens não entregues para este pedido
+    const { count } = await supabase
       .from("delivery_queue")
-      .select("id")
-      .eq("status", "queued" as DeliveryStatus)
-      .eq("order_item_id", delivery.order_item_id) // Simplificando a lógica de verificação
-      .limit(1);
+      .select("*", { count: 'exact', head: true })
+      .eq("order_id", delivery.order_id)
+      .neq("status", "delivered" as any);
 
-    // Nota: O ideal é verificar todos os order_item_id associados ao order_id
-    if (!remaining || remaining.length === 0) {
+    if (count === 0) {
       await supabase
         .from("orders")
         .update({ 
           status: "delivered", 
           delivered_at: new Date().toISOString() 
         })
-        .eq("id", orderItem.order_id)
+        .eq("id", delivery.order_id)
         .eq("status", "paid");
     }
   }
