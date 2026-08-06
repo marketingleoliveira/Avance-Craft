@@ -434,3 +434,69 @@ export const adminListAuditLogs = createServerFn({ method: "GET" })
     if (error) throw new Error(`Falha ao carregar os registros: ${error.message}`);
     return rows ?? [];
   });
+
+// --- Servidores Minecraft ---
+
+const serverInput = z.object({
+  serverId: z.string().trim().min(3).max(64).regex(/^[a-z0-9-]+$/),
+  displayName: z.string().trim().min(3).max(64),
+  environment: z.enum(['production', 'staging', 'development'] as const),
+  enabled: z.boolean().optional(),
+  allowedIpRanges: z.array(z.string()).optional(),
+});
+
+export const adminListMinecraftServers = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<MinecraftServer[]> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data, error } = await context.supabase
+      .from("minecraft_servers")
+      .select("id, server_id, display_name, environment, enabled, last_seen_at, created_at, updated_at")
+      .order("created_at", { ascending: false });
+    
+    if (error) throw new Error(error.message);
+    return data as any;
+  });
+
+export const adminCreateMinecraftServer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => 
+    serverInput.extend({ secret: z.string().min(32) }).parse(input)
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+
+    const { data: row, error } = await context.supabase
+      .from("minecraft_servers")
+      .insert({
+        server_id: data.serverId,
+        display_name: data.displayName,
+        environment: data.environment,
+        enabled: data.enabled ?? true,
+        secret_hash: data.secret, // O hash deve ser gerado antes de enviar ou via RPC se possível
+        allowed_ip_ranges: data.allowedIpRanges ?? [],
+      } as any)
+      .select("*")
+      .single();
+
+    if (error) throw new Error(error.message);
+    await logAudit(context.supabase, context.userId, "create", "minecraft_server", row.id, row);
+    return row;
+  });
+
+export const adminToggleMinecraftServer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => 
+    z.object({ id: z.string().uuid(), enabled: z.boolean() }).parse(input)
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { error } = await context.supabase
+      .from("minecraft_servers")
+      .update({ enabled: data.enabled } as any)
+      .eq("id", data.id);
+    
+    if (error) throw new Error(error.message);
+    await logAudit(context.supabase, context.userId, "update_status", "minecraft_server", data.id, { enabled: data.enabled });
+    return { success: true };
+  });

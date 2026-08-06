@@ -40,6 +40,9 @@ export type SupportMessage = Tables<"support_messages">;
 export type AuditLog = Tables<"audit_logs">;
 export type SiteSetting = Tables<"site_settings">;
 export type Page = Tables<"pages">;
+export type MinecraftServer = Tables<"minecraft_servers">;
+export type PluginNonce = Tables<"plugin_nonces">;
+export type ServerEnvironment = Enums<"server_environment">;
 
 /** Produto com os relacionamentos usados na vitrine da loja. */
 export type ProductWithDetails = Product & {
