@@ -10,7 +10,7 @@ const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 export async function checkRateLimit(
   serverId: string,
   ip: string,
-  limit: number = 100,
+  limit: number = 120,
   windowMs: number = 60000
 ): Promise<boolean> {
   const key = `rl:${serverId}:${ip}`;
