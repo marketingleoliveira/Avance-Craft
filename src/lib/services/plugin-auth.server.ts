@@ -18,12 +18,12 @@ export async function validatePluginSignature(
   body: string,
   supabase: SupabaseClient<Database>
 ): Promise<PluginAuthResult> {
-  const pluginId = request.headers.get("X-Plugin-Id");
+  const serverIdentifier = request.headers.get("X-Server-Id"); // Corrigido para bater com o DB
   const timestamp = request.headers.get("X-Timestamp");
   const nonce = request.headers.get("X-Nonce");
   const signature = request.headers.get("X-Signature");
 
-  if (!pluginId || !timestamp || !nonce || !signature) {
+  if (!serverIdentifier || !timestamp || !nonce || !signature) {
     return { valid: false, error: "Missing required auth headers" };
   }
 
@@ -35,25 +35,22 @@ export async function validatePluginSignature(
   }
 
   // 2. Buscar segredo do servidor e validar status
-  // Forçamos o casting para evitar erros de tipagem quando a tabela ainda não está no schema TS gerado
-  const { data, error: serverError } = await supabase
-    .from("minecraft_servers" as any)
-    .select("id, secret_key, active")
-    .eq("id", pluginId)
+  const { data: server, error: serverError } = await supabase
+    .from("minecraft_servers")
+    .select("server_id, secret_hash, enabled")
+    .eq("server_id", serverIdentifier)
     .single();
 
-  const server = data as any;
-
-  if (serverError || !server || !server.active) {
-    return { valid: false, error: "Invalid or inactive plugin ID" };
+  if (serverError || !server || !server.enabled) {
+    return { valid: false, error: "Invalid or inactive server ID" };
   }
 
-  // 3. Verificar Nonce (Anti-replay)
+  // 3. Verificar Nonce (Anti-replay) usando a nova tabela dedicada
   const { data: existingNonce } = await supabase
-    .from("audit_logs")
+    .from("plugin_nonces")
     .select("id")
-    .eq("entity", "plugin_nonce")
-    .eq("entity_id", nonce)
+    .eq("server_id", serverIdentifier)
+    .eq("nonce", nonce)
     .maybeSingle();
 
   if (existingNonce) {
@@ -72,7 +69,9 @@ export async function validatePluginSignature(
   ].join("\n");
 
   // 5. Validar Assinatura
-  const expectedSignature = createHmac("sha256", server.secret_key)
+  // IMPORTANTE: Em produção, o secret_hash seria usado para comparar hashes ou extrair o segredo
+  // Aqui assumimos que secret_hash é o próprio segredo compartilhado (simplificação para o portal)
+  const expectedSignature = createHmac("sha256", server.secret_hash)
     .update(canonicalString)
     .digest("hex");
 
@@ -81,12 +80,18 @@ export async function validatePluginSignature(
   }
 
   // Registrar nonce para evitar replay
-  await supabase.from("audit_logs").insert({
-    action: "use_nonce",
-    entity: "plugin_nonce",
-    entity_id: nonce,
-    metadata: { server_id: server.id }
+  const expiresAt = new Date((requestTime + 600) * 1000); // Expira em 10 min
+  await supabase.from("plugin_nonces").insert({
+    server_id: server.server_id,
+    nonce: nonce,
+    request_timestamp: new Date(requestTime * 1000).toISOString(),
+    expires_at: expiresAt.toISOString()
   });
 
-  return { valid: true, serverId: server.id };
+  // Atualizar heartbeat
+  await supabase.from("minecraft_servers").update({
+    last_seen_at: new Date().toISOString()
+  } as any).eq("server_id", serverIdentifier);
+
+  return { valid: true, serverId: server.server_id };
 }
