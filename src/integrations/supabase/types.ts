@@ -437,10 +437,18 @@ export type Database = {
           command: string
           created_at: string
           delivered_at: string | null
+          failed_at: string | null
           id: string
           idempotency_key: string
           last_error: string | null
+          last_error_code: string | null
+          last_error_message: string | null
+          maximum_attempts: number | null
           order_item_id: string
+          priority: number | null
+          reservation_expires_at: string | null
+          reserved_at: string | null
+          reserved_by: string | null
           server_id: string
           status: Database["public"]["Enums"]["delivery_status"]
           updated_at: string
@@ -452,10 +460,18 @@ export type Database = {
           command: string
           created_at?: string
           delivered_at?: string | null
+          failed_at?: string | null
           id?: string
           idempotency_key: string
           last_error?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          maximum_attempts?: number | null
           order_item_id: string
+          priority?: number | null
+          reservation_expires_at?: string | null
+          reserved_at?: string | null
+          reserved_by?: string | null
           server_id?: string
           status?: Database["public"]["Enums"]["delivery_status"]
           updated_at?: string
@@ -467,10 +483,18 @@ export type Database = {
           command?: string
           created_at?: string
           delivered_at?: string | null
+          failed_at?: string | null
           id?: string
           idempotency_key?: string
           last_error?: string | null
+          last_error_code?: string | null
+          last_error_message?: string | null
+          maximum_attempts?: number | null
           order_item_id?: string
+          priority?: number | null
+          reservation_expires_at?: string | null
+          reserved_at?: string | null
+          reserved_by?: string | null
           server_id?: string
           status?: Database["public"]["Enums"]["delivery_status"]
           updated_at?: string
@@ -1438,8 +1462,25 @@ export type Database = {
     }
     Functions: {
       can_access_ticket: { Args: { _ticket_id: string }; Returns: boolean }
+      cancel_delivery: {
+        Args: { _delivery_id: string; _reason?: string }
+        Returns: boolean
+      }
       cleanup_expired_nonces: { Args: never; Returns: undefined }
+      confirm_delivery: {
+        Args: { _delivery_id: string; _response_payload?: Json }
+        Returns: boolean
+      }
       current_profile_id: { Args: never; Returns: string }
+      fail_delivery: {
+        Args: {
+          _delivery_id: string
+          _error_code: string
+          _error_message: string
+          _response_payload?: Json
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1460,6 +1501,43 @@ export type Database = {
         Returns: Json
       }
       prune_old_logs: { Args: { retention_days?: number }; Returns: undefined }
+      release_expired_deliveries: { Args: never; Returns: number }
+      reserve_delivery_batch: {
+        Args: {
+          _limit?: number
+          _plugin_instance_id: string
+          _server_id: string
+        }
+        Returns: {
+          attempts: number
+          available_at: string
+          claimed_at: string | null
+          command: string
+          created_at: string
+          delivered_at: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          last_error: string | null
+          last_error_code: string | null
+          last_error_message: string | null
+          maximum_attempts: number | null
+          order_item_id: string
+          priority: number | null
+          reservation_expires_at: string | null
+          reserved_at: string | null
+          reserved_by: string | null
+          server_id: string
+          status: Database["public"]["Enums"]["delivery_status"]
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "delivery_queue"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       use_beta_invite: {
         Args: { _code: string; _profile_id: string }
         Returns: Json
@@ -1474,6 +1552,9 @@ export type Database = {
         | "delivered"
         | "failed"
         | "cancelled"
+        | "pending"
+        | "reserved"
+        | "retry"
       feedback_severity: "low" | "medium" | "high" | "critical"
       feedback_status:
         | "new"
@@ -1648,6 +1729,9 @@ export const Constants = {
         "delivered",
         "failed",
         "cancelled",
+        "pending",
+        "reserved",
+        "retry",
       ],
       feedback_severity: ["low", "medium", "high", "critical"],
       feedback_status: [
