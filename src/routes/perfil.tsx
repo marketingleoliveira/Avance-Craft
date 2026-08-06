@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Container } from "@/components/ui-kit/Container";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getMyProfile, listMyOrders, listMyPlayerAccounts } from "@/lib/services/orders.functions";
+import { generateLinkCode, unlinkAccount } from "@/lib/services/account-link.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -20,9 +21,16 @@ import {
   LogOut,
   ChevronRight,
   Shield,
-  History
+  History,
+  Link2,
+  Unlink,
+  ExternalLink,
+  Copy,
+  RefreshCw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { useState } from "react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ScrollReveal } from "@/components/ui-kit/Motion";
 
@@ -188,6 +196,9 @@ function ProfilePage() {
             />
           </div>
 
+          {/* Vinculação de Conta */}
+          <AccountLinkSection accounts={accounts} />
+
           {/* Pedidos Recentes */}
           <section className="space-y-8">
             <div className="flex items-center justify-between">
@@ -330,3 +341,159 @@ function TimelineStep({ active, label }: { active: boolean; label: string }) {
     </div>
   );
 }
+
+function AccountLinkSection({ accounts }: { accounts: any[] }) {
+  const queryClient = useQueryClient();
+  const generateCode = useServerFn(generateLinkCode);
+  const unlink = useServerFn(unlinkAccount);
+  const [activeCode, setActiveCode] = useState<{ code: string; expiresAt: string } | null>(null);
+
+  const primaryAccount = accounts?.find(a => a.verified);
+  const pendingAccount = accounts?.find(a => !a.verified && a.verification_code_hash);
+
+  const generateMutation = useMutation({
+    mutationFn: () => generateCode(),
+    onSuccess: (data) => {
+      setActiveCode(data);
+      queryClient.invalidateQueries({ queryKey: ["my-accounts"] });
+      toast.success("Código gerado! Acesse o servidor para vincular.");
+    },
+    onError: () => toast.error("Falha ao gerar código de vinculação.")
+  });
+
+  const unlinkMutation = useMutation({
+    mutationFn: () => unlink(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-accounts"] });
+      toast.success("Conta desvinculada com sucesso.");
+    },
+    onError: () => toast.error("Falha ao desvincular conta.")
+  });
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Código copiado!");
+  };
+
+  return (
+    <section className="space-y-8">
+      <div className="flex items-center gap-3">
+        <Link2 className="w-5 h-5 text-emerald-500" />
+        <h3 className="text-xl font-black uppercase italic tracking-wider text-white">Vincular Conta Minecraft</h3>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Status Atual */}
+        <Card className="p-8 flex flex-col justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-4">Status de Identidade</p>
+            {primaryAccount ? (
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <img 
+                    src={`https://mc-heads.net/avatar/${primaryAccount.minecraft_nickname}/64`}
+                    alt="Avatar"
+                    className="w-10 h-10 object-contain"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-xl font-black italic text-white leading-none mb-1">{primaryAccount.minecraft_nickname}</h4>
+                  <p className="text-xs font-medium text-emerald-500 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Verificado via Java Edition
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <Shield className="w-8 h-8 text-stone-600" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-black italic text-stone-400 leading-none mb-1">Não Vinculado</h4>
+                  <p className="text-xs font-medium text-stone-600">Conecte sua conta para receber itens.</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-white/5">
+            {primaryAccount ? (
+              <Button 
+                variant="destructive" 
+                className="w-full h-12 gap-2"
+                onClick={() => {
+                  if (confirm("Tem certeza que deseja desvincular sua conta? Suas entregas pendentes podem ser afetadas.")) {
+                    unlinkMutation.mutate();
+                  }
+                }}
+                disabled={unlinkMutation.isPending}
+              >
+                <Unlink className="w-4 h-4" /> Desvincular Conta
+              </Button>
+            ) : (
+              <Button 
+                className="w-full h-12 gap-2" 
+                onClick={() => generateMutation.mutate()}
+                disabled={generateMutation.isPending}
+              >
+                <RefreshCw className={cn("w-4 h-4", generateMutation.isPending && "animate-spin")} /> 
+                {generateMutation.isPending ? "Gerando..." : "Gerar Novo Código"}
+              </Button>
+            )}
+          </div>
+        </Card>
+
+        {/* Guia de Vinculação */}
+        <Card className="p-8 bg-emerald-500/5 border-emerald-500/10">
+          <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500/60 mb-4">Instruções de Resgate</p>
+          
+          {(activeCode || pendingAccount) ? (
+            <div className="space-y-6">
+              <div className="p-6 bg-stone-900/50 rounded-2xl border border-white/5 text-center relative group">
+                <p className="text-[10px] font-black uppercase tracking-widest text-stone-500 mb-3">Seu Código Ativo</p>
+                <div className="flex items-center justify-center gap-4">
+                  <span className="text-4xl font-black italic tracking-tighter text-white font-mono">
+                    {activeCode?.code || "******"}
+                  </span>
+                  <button 
+                    onClick={() => copyToClipboard(activeCode?.code || "")}
+                    className="p-2 hover:bg-white/5 rounded-lg transition-colors text-stone-400 hover:text-white"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="mt-3 text-[9px] font-black uppercase tracking-widest text-emerald-500/60">
+                  Expira em 15 minutos
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 text-stone-950 flex items-center justify-center text-[10px] font-black shrink-0">1</div>
+                  <p className="text-xs font-medium text-stone-300">Entre no servidor: <span className="text-white font-bold">jogar.avancemine.com</span></p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 text-stone-950 flex items-center justify-center text-[10px] font-black shrink-0">2</div>
+                  <p className="text-xs font-medium text-stone-300">Execute o comando: <code className="px-2 py-0.5 bg-stone-900 rounded border border-white/10 text-emerald-400">/vincular {activeCode?.code || 'CODIGO'}</code></p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 text-stone-950 flex items-center justify-center text-[10px] font-black shrink-0">3</div>
+                  <p className="text-xs font-medium text-stone-300">Aguarde a mensagem de confirmação no chat do Minecraft.</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full py-6 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-4">
+                <ExternalLink className="w-6 h-6 text-stone-600" />
+              </div>
+              <h5 className="text-sm font-black uppercase italic text-stone-400 mb-2">Aguardando Início</h5>
+              <p className="text-xs text-stone-500 max-w-[200px]">Clique em gerar código para começar o processo de vinculação segura.</p>
+            </div>
+          )}
+        </Card>
+      </div>
+    </section>
+  );
+}
+

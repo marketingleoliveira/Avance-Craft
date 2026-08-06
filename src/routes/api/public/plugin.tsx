@@ -144,6 +144,58 @@ export const Route = createFileRoute("/api/public/plugin")({
               return Response.json({ success: true, request_id: requestId });
             }
 
+            case "link_account": {
+              const { data: accounts, error } = await supabaseAdmin
+                .from("player_accounts")
+                .select("*")
+                .eq("verified", false)
+                .not("verification_code_hash", "is", null)
+                .gt("verification_expires_at", new Date().toISOString());
+
+              if (error) return Response.json({ success: false, request_id: requestId, error: "internal_error" }, { status: 500 });
+
+              // Comparação segura do hash (usando crypto.subtle ou similar se disponível, 
+              // mas para protótipo vamos usar comparação direta do hash SHA256 gerado no front/server)
+              const encoder = new TextEncoder();
+              const data = encoder.encode(body.verification_code);
+              const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+              const codeHash = Array.from(new Uint8Array(hashBuffer))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+
+              const account = accounts?.find(a => a.verification_code_hash === codeHash);
+
+              if (!account) {
+                await logger.warn("plugin-api", "Invalid or expired link code attempt", { 
+                  context: { serverId, requestId, username: body.minecraft_username } 
+                });
+                return Response.json({ success: false, request_id: requestId, error: "invalid_code" }, { status: 403 });
+              }
+
+              // Atualizar conta como verificada e vincular UUID
+              const { error: updateError } = await supabaseAdmin
+                .from("player_accounts")
+                .update({
+                  verified: true,
+                  uuid: body.minecraft_uuid,
+                  minecraft_nickname: body.minecraft_username,
+                  verified_at: new Date().toISOString(),
+                  verification_code_hash: null,
+                  verification_expires_at: null
+                } as any)
+                .eq("id", account.id);
+
+              if (updateError) {
+                return Response.json({ success: false, request_id: requestId, error: "update_failed" }, { status: 500 });
+              }
+
+              await logger.info("plugin-api", "Account linked successfully", {
+                context: { profileId: account.profile_id, minecraftUuid: body.minecraft_uuid }
+              });
+
+              return Response.json({ success: true, request_id: requestId, message: "Account verified!" });
+            }
+
             case "healthcheck": {
               return Response.json({ 
                 success: true, 
