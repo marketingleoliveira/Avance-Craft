@@ -3,128 +3,170 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { verifyPluginRequest } from "@/lib/plugin-auth/verify-plugin-request.server";
 import { handleDeliverySuccess, handleDeliveryFailure } from "@/lib/services/delivery-processor.server";
 import { logger } from "@/lib/config/logger.server";
+import { pluginActionSchema } from "@/lib/plugin-auth/schemas";
+import { z } from "zod";
 
 export const Route = createFileRoute("/api/public/plugin")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        // 1. Autenticação Forte com Assinatura HMAC
-        const auth = await verifyPluginRequest(request, supabaseAdmin);
-        if (!auth.valid || !auth.serverId || !auth.body) {
-          await logger.warn("plugin-api", "Unauthorized access attempt", { 
-            context: { errorCode: auth.errorCode, ip: request.headers.get("x-forwarded-for") } 
-          });
-          return new Response(JSON.stringify({ error: auth.errorCode || "unauthorized" }), { 
-            status: auth.status,
-            headers: { "Content-Type": "application/json" }
-          });
-        }
-
-        const body = JSON.parse(auth.body);
-        const { action } = body;
-        const serverId = auth.serverId;
-
-        // 2. Processamento de Ações
-        switch (action) {
-          case "heartbeat":
-            // O verifyPluginRequest já atualiza last_seen_at em minecraft_servers
-            return Response.json({ status: "ok" });
-
-          case "get_deliveries":
-            // 3. Reserva Atômica de Entregas (RPC segura)
-            const { data: queue, error: reserveError } = await supabaseAdmin.rpc("reserve_delivery_batch", {
-              _server_id: serverId,
-              _plugin_instance_id: request.headers.get("X-Nonce") || "unknown", // Usamos o nonce como ID da transação
-              _limit: body.limit || 50
+        const requestId = crypto.randomUUID();
+        
+        try {
+          // 1. Autenticação e Integridade via HMAC
+          const auth = await verifyPluginRequest(request, supabaseAdmin);
+          
+          if (!auth.valid || !auth.serverId || !auth.body) {
+            await logger.warn("plugin-api", "Unauthorized access attempt", { 
+              context: { errorCode: auth.errorCode, requestId, ip: request.headers.get("x-forwarded-for") } 
             });
-            
-            if (reserveError) {
-              await logger.error("plugin-api", "Failed to reserve deliveries", { 
-                context: { error: reserveError, serverId } 
+            return new Response(JSON.stringify({ 
+              success: false,
+              request_id: requestId,
+              error: auth.errorCode || "unauthorized" 
+            }), { 
+              status: auth.status,
+              headers: { "Content-Type": "application/json" }
+            });
+          }
+
+          // 2. Validação de Payload com Zod
+          let body;
+          try {
+            body = pluginActionSchema.parse(JSON.parse(auth.body));
+          } catch (err) {
+            const error = err as z.ZodError;
+            return Response.json({ 
+              success: false, 
+              request_id: requestId, 
+              error: "invalid_payload",
+              details: error.errors 
+            }, { status: 400 });
+          }
+
+          const serverId = auth.serverId;
+
+          // 3. Roteamento de Ações
+          switch (body.action) {
+            case "get_deliveries": {
+              const { data: queue, error: reserveError } = await supabaseAdmin.rpc("reserve_delivery_batch", {
+                _server_id: serverId,
+                _plugin_instance_id: body.plugin_instance_id,
+                _limit: body.limit
               });
-              return Response.json({ error: "reservation_failed" }, { status: 500 });
+              
+              if (reserveError) {
+                await logger.error("plugin-api", "Failed to reserve deliveries", { 
+                  context: { error: reserveError, serverId, requestId } 
+                });
+                return Response.json({ success: false, request_id: requestId, error: "internal_error" }, { status: 500 });
+              }
+
+              return Response.json({
+                success: true,
+                request_id: requestId,
+                deliveries: (queue || []).map((q: any) => ({
+                  delivery_id: q.id,
+                  idempotency_key: q.idempotency_key,
+                  player_name: q.player_name,
+                  action: q.action,
+                  payload: q.payload,
+                  attempt: q.attempts
+                }))
+              });
             }
 
-            return Response.json(queue || []);
+            case "confirm_delivery": {
+              const { data: success, error } = await supabaseAdmin.rpc("confirm_delivery", {
+                _delivery_id: body.delivery_id,
+                _response_payload: body.execution_result
+              });
 
-          case "confirm_delivery":
-            const { deliveryId, success, response } = body;
-            if (!deliveryId) return new Response("Missing deliveryId", { status: 400 });
-            
-            const { data: delivery } = await supabaseAdmin
-              .from("delivery_queue")
-              .select("id, order_item_id")
-              .eq("id", deliveryId)
-              .eq("server_id", serverId)
-              .single();
+              if (error) {
+                return Response.json({ success: false, request_id: requestId, error: error.message }, { status: 500 });
+              }
 
-            if (!delivery) return new Response("Delivery not found or not owned", { status: 403 });
+              // Lógica de orquestração pós-sucesso (ex: atualizar pedido)
+              await handleDeliverySuccess(body.delivery_id, body.execution_result.message || "Confirmed", supabaseAdmin);
 
-            if (success) {
-              await handleDeliverySuccess(deliveryId, response || "Success", supabaseAdmin);
-            } else {
-              await handleDeliveryFailure(deliveryId, response || "Failed", supabaseAdmin);
+              return Response.json({ success: true, request_id: requestId });
             }
 
-            return Response.json({ ok: true });
+            case "fail_delivery": {
+              const { error } = await supabaseAdmin.rpc("fail_delivery", {
+                _delivery_id: body.delivery_id,
+                _error_code: body.error_code,
+                _error_message: body.error_message,
+                _response_payload: { retryable: body.retryable }
+              });
 
-          case "send_server_status":
-            const { playersOnline, maxPlayers, version, ip } = body;
-            await supabaseAdmin.from("server_status").upsert({
-              server_id: serverId,
-              players_online: Number(playersOnline) || 0,
-              max_players: Number(maxPlayers) || 0,
-              version: String(version || ""),
-              ip: String(ip || ""),
-              online: true,
-              updated_at: new Date().toISOString()
-            } as any, { onConflict: 'server_id' });
-            return Response.json({ ok: true });
+              if (error) {
+                return Response.json({ success: false, request_id: requestId, error: error.message }, { status: 500 });
+              }
 
-          case "verify_account":
-            const { nickname: vNick, code: vCode, uuid: mUuid, edition: vEdition } = body;
-            if (!vNick || !vCode || !mUuid) return new Response("Missing data", { status: 400 });
-
-            const { data: log, error: logError } = await supabaseAdmin
-              .from("audit_logs")
-              .select("*")
-              .eq("action", "verification_request")
-              .filter("metadata->>nickname", "eq", vNick)
-              .filter("metadata->>code", "eq", vCode.toUpperCase())
-              .order("created_at", { ascending: false })
-              .limit(1)
-              .maybeSingle();
-
-            if (logError || !log) return new Response("Invalid code", { status: 404 });
-            
-            const meta = log.metadata as any;
-            if (new Date(meta.expires_at) < new Date()) {
-              return new Response("Code expired", { status: 410 });
+              return Response.json({ success: true, request_id: requestId });
             }
 
-            const { error: linkError } = await supabaseAdmin
-              .from("player_accounts")
-              .upsert({
-                profile_id: log.actor_profile_id as string,
-                minecraft_nickname: vNick,
-                edition: (vEdition || meta.edition || "java") as any,
-                uuid: mUuid,
-                verified_at: new Date().toISOString(),
+            case "heartbeat": {
+              await supabaseAdmin.from("minecraft_servers").update({
+                last_seen_at: new Date().toISOString(),
+                plugin_version: body.plugin_version,
+                minecraft_version: body.minecraft_version,
+                paper_version: body.paper_version
+              } as any).eq("server_id", serverId);
+
+              // Atualizar status em tempo real se os dados estiverem presentes
+              if (body.online_players !== undefined) {
+                await supabaseAdmin.from("server_status").upsert({
+                  server_id: serverId,
+                  players_online: body.online_players,
+                  max_players: body.max_players || 0,
+                  version: body.minecraft_version || "unknown",
+                  online: true,
+                  updated_at: new Date().toISOString()
+                } as any, { onConflict: 'server_id' });
+              }
+
+              return Response.json({ success: true, request_id: requestId });
+            }
+
+            case "update_server_status": {
+              await supabaseAdmin.from("server_status").upsert({
+                server_id: serverId,
+                players_online: body.players_online,
+                max_players: body.max_players,
+                version: body.version || "unknown",
+                ip: body.ip || "",
+                online: body.online,
                 updated_at: new Date().toISOString()
-              } as any, { onConflict: 'minecraft_nickname,edition' }); // Nickname e Edition devem ser únicos
-
-            if (linkError) {
-              console.error("[Audit] Plugin verification failure", linkError);
-              return new Response("Verification failed", { status: 500 });
+              } as any, { onConflict: 'server_id' });
+              
+              return Response.json({ success: true, request_id: requestId });
             }
 
-            // Atômico: invalidar log após uso
-            await supabaseAdmin.from("audit_logs").delete().eq("id", log.id);
+            case "healthcheck": {
+              return Response.json({ 
+                success: true, 
+                request_id: requestId, 
+                status: "ok", 
+                server_id: serverId,
+                timestamp: new Date().toISOString()
+              });
+            }
 
-            return Response.json({ ok: true });
-
-          default:
-            return new Response("Unknown action", { status: 400 });
+            default:
+              return Response.json({ success: false, request_id: requestId, error: "unknown_action" }, { status: 400 });
+          }
+        } catch (error) {
+          const err = error as Error;
+          await logger.error("plugin-api", "Critical failure in plugin route", { 
+            context: { error: err.message, requestId } 
+          });
+          return Response.json({ 
+            success: false, 
+            request_id: requestId, 
+            error: "internal_server_error" 
+          }, { status: 500 });
         }
       },
     },
