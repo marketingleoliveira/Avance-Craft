@@ -1001,30 +1001,42 @@ export type Database = {
           created_at: string
           edition: Database["public"]["Enums"]["minecraft_edition"]
           id: string
+          last_username_check_at: string | null
           minecraft_nickname: string
           profile_id: string
           updated_at: string
           uuid: string | null
+          verification_code_hash: string | null
+          verification_expires_at: string | null
+          verified: boolean | null
           verified_at: string | null
         }
         Insert: {
           created_at?: string
           edition: Database["public"]["Enums"]["minecraft_edition"]
           id?: string
+          last_username_check_at?: string | null
           minecraft_nickname: string
           profile_id: string
           updated_at?: string
           uuid?: string | null
+          verification_code_hash?: string | null
+          verification_expires_at?: string | null
+          verified?: boolean | null
           verified_at?: string | null
         }
         Update: {
           created_at?: string
           edition?: Database["public"]["Enums"]["minecraft_edition"]
           id?: string
+          last_username_check_at?: string | null
           minecraft_nickname?: string
           profile_id?: string
           updated_at?: string
           uuid?: string | null
+          verification_code_hash?: string | null
+          verification_expires_at?: string | null
+          verified?: boolean | null
           verified_at?: string | null
         }
         Relationships: [

@@ -58,6 +58,14 @@ export const healthcheckSchema = z.object({
   server_id: z.string(),
 });
 
+export const linkAccountSchema = z.object({
+  action: z.literal("link_account"),
+  server_id: z.string(),
+  minecraft_uuid: z.string().uuid(),
+  minecraft_username: z.string(),
+  verification_code: z.string().length(6),
+});
+
 export const pluginActionSchema = z.discriminatedUnion("action", [
   getDeliveriesSchema,
   confirmDeliverySchema,
@@ -65,6 +73,7 @@ export const pluginActionSchema = z.discriminatedUnion("action", [
   heartbeatSchema,
   updateServerStatusSchema,
   healthcheckSchema,
+  linkAccountSchema,
 ]);
 
 export type PluginAction = z.infer<typeof pluginActionSchema>;
