@@ -115,9 +115,9 @@ export async function buildDeliveryCommands(
     validatedCommands.push({
       command: finalCommand.trim(),
       server_id: template.server_id,
-      requires_online_player: template.requires_online_player,
-      delay_seconds: template.delivery_delay_seconds,
-      max_attempts: template.maximum_attempts
+      requires_online_player: template.requires_online_player || false,
+      delay_seconds: template.delivery_delay_seconds || 0,
+      max_attempts: template.maximum_attempts || 5
     });
   }
 
