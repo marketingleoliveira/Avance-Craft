@@ -114,55 +114,55 @@ export const Route = createFileRoute("/api/public/mercadopago")({
               await supabaseAdmin.from("payment_events").update({ payment_id: paymentRecord.id }).eq("id", eventRow.id);
             }
 
-            // 8. Se aprovado, processar entrega
-            if (payment.status === "approved" && order.status !== "paid") {
-              if (Math.abs(payment.transaction_amount - order.total) > 0.01) {
-                await logger.critical("mercadopago", "Amount mismatch", { 
-                  orderId: order.id, 
-                  context: { expected: order.total, actual: payment.transaction_amount } 
-                });
-                return new Response("Amount mismatch", { status: 200 });
-              }
-
-              await supabaseAdmin.from("orders").update({ 
-                status: "paid", 
-                paid_at: new Date().toISOString() 
-              }).eq("id", order.id);
-
-              for (const item of order.items) {
-                const { buildDeliveryCommands } = await import("@/lib/services/command-builder.server");
-                
-                try {
-                  const validatedCommands = await buildDeliveryCommands({
-                    order_item: {
-                      id: item.id,
-                      order_id: order.id,
-                      product_id: item.product_id as string,
-                      quantity: item.quantity,
-                      player_name: order.minecraft_nickname,
-                    }
-                  }, supabaseAdmin);
-
-                  if (validatedCommands.length > 0) {
-                    const deliveryItems = validatedCommands.map((vCmd, index) => ({
-                      order_item_id: item.id,
-                      server_id: vCmd.server_id,
-                      command: vCmd.command,
-                      status: "queued" as const,
-                      available_at: new Date(Date.now() + (vCmd.delay_seconds * 1000)).toISOString(),
-                      maximum_attempts: vCmd.max_attempts,
-                      idempotency_key: `${order.id}-${item.id}-${index}`
-                    }));
-                    await supabaseAdmin.from("delivery_queue").upsert(deliveryItems as any, { onConflict: 'idempotency_key' });
-                  }
-                } catch (cmdErr) {
-                  await logger.error("webhook-mercadopago", "Failed to build commands", { 
-                    context: { error: (cmdErr as Error).message, orderId: order.id, itemId: item.id } 
+            // 8. Se aprovado, processar entrega atômica
+            try {
+              if (payment.status === "approved" && order.status !== "paid") {
+                if (Math.abs(payment.transaction_amount - order.total) > 0.01) {
+                  await logger.critical("mercadopago", "Amount mismatch", { 
+                    orderId: order.id, 
+                    context: { expected: order.total, actual: payment.transaction_amount } 
                   });
+                  return new Response("Amount mismatch", { status: 200 });
+                }
+
+                // Chamada para a RPC atômica que processa tudo no banco
+                const { data: result, error: rpcError } = await supabaseAdmin.rpc("process_approved_payment", {
+                  _payment_id: paymentRecord?.id,
+                  _external_reference: payment.external_reference,
+                  _metadata: { webhook_received_at: new Date().toISOString() }
+                });
+
+                if (rpcError) {
+                  await logger.error("webhook-mercadopago", "RPC atomic process failed", { 
+                    context: { error: rpcError, paymentId: paymentRecord?.id, orderId: order.id } 
+                  });
+                  return new Response("Internal Processing Error", { status: 500 });
+                }
+
+                const processResult = result as { success: boolean; error?: string; message?: string };
+                
+                if (!processResult.success) {
+                  await logger.warn("webhook-mercadopago", "RPC returned failure", { 
+                    context: { error: processResult.error, paymentId: paymentRecord?.id } 
+                  });
+                  return new Response(processResult.error || "failed", { status: 400 });
+                }
+
+                await logger.info("webhook-mercadopago", "Payment processed successfully via RPC", {
+                  context: { paymentId: paymentRecord?.id, orderId: order.id, result: processResult }
+                });
+
+              } else if (["rejected", "cancelled", "refunded"].includes(payment.status)) {
+                await supabaseAdmin.from("orders").update({ status: payment.status as any }).eq("id", order.id);
+                if (paymentRecord) {
+                  await supabaseAdmin.from("payments").update({ status: payment.status as any }).eq("id", paymentRecord.id);
                 }
               }
-            } else if (["rejected", "cancelled", "refunded"].includes(payment.status)) {
-              await supabaseAdmin.from("orders").update({ status: payment.status as any }).eq("id", order.id);
+            } catch (err) {
+              await logger.error("webhook-mercadopago", "Critical error in webhook processing", {
+                context: { error: (err as Error).message, paymentId: paymentRecord?.id }
+              });
+              return new Response("Internal Error", { status: 500 });
             }
           } catch (err) {
             console.error("Webhook processing error:", err);
