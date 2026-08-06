@@ -149,12 +149,11 @@ export const Route = createFileRoute("/api/public/mercadopago")({
                       server_id: vCmd.server_id,
                       command: vCmd.command,
                       status: "queued" as const,
-                      requires_online: vCmd.requires_online_player,
                       available_at: new Date(Date.now() + (vCmd.delay_seconds * 1000)).toISOString(),
-                      max_attempts: vCmd.max_attempts,
+                      maximum_attempts: vCmd.max_attempts,
                       idempotency_key: `${order.id}-${item.id}-${index}`
                     }));
-                    await supabaseAdmin.from("delivery_queue").upsert(deliveryItems, { onConflict: 'idempotency_key' });
+                    await supabaseAdmin.from("delivery_queue").upsert(deliveryItems as any, { onConflict: 'idempotency_key' });
                   }
                 } catch (cmdErr) {
                   await logger.error("webhook-mercadopago", "Failed to build commands", { 
