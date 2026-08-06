@@ -95,7 +95,7 @@ export const getOperationalMetrics = createServerFn({ method: "GET" })
       users: {
         total: profilesCount.count || 0,
         linked: linkedPlayers.count || 0,
-        online: serverStatus.data?.players_online || 0,
+        online: serverStatus.data?.online_players || 0,
         peak: serverStatus.data?.max_players || 0
       },
       finance: {

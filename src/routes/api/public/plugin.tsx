@@ -108,39 +108,43 @@ export const Route = createFileRoute("/api/public/plugin")({
             }
 
             case "heartbeat": {
-              await supabaseAdmin.from("minecraft_servers").update({
-                last_seen_at: new Date().toISOString(),
-                plugin_version: body.plugin_version,
-                minecraft_version: body.minecraft_version,
-                paper_version: body.paper_version
-              } as any).eq("server_id", serverId);
-
-              // Atualizar status em tempo real se os dados estiverem presentes
-              if (body.online_players !== undefined) {
-                await supabaseAdmin.from("server_status").upsert({
+              const { error } = await supabaseAdmin
+                .from("server_status")
+                .upsert({
                   server_id: serverId,
-                  players_online: body.online_players,
-                  max_players: body.max_players || 0,
-                  version: body.minecraft_version || "unknown",
                   online: true,
-                  updated_at: new Date().toISOString()
+                  online_players: body.online_players,
+                  max_players: body.max_players,
+                  tps: body.tps,
+                  memory_used_mb: (body as any).memory_used_mb,
+                  memory_max_mb: (body as any).memory_max_mb,
+                  uptime_seconds: (body as any).uptime_seconds,
+                  plugin_version: (body as any).plugin_version,
+                  minecraft_version: (body as any).minecraft_version,
+                  paper_version: (body as any).paper_version,
+                  last_seen_at: new Date().toISOString()
                 } as any, { onConflict: 'server_id' });
+
+              if (error) {
+                await logger.error("plugin-api", "Failed to update heartbeat", { context: { error, serverId } });
+                return Response.json({ success: false, request_id: requestId }, { status: 500 });
               }
 
               return Response.json({ success: true, request_id: requestId });
             }
 
             case "update_server_status": {
-              await supabaseAdmin.from("server_status").upsert({
-                server_id: serverId,
-                players_online: body.players_online,
-                max_players: body.max_players,
-                version: body.version || "unknown",
-                ip: body.ip || "",
-                online: body.online,
-                updated_at: new Date().toISOString()
-              } as any, { onConflict: 'server_id' });
-              
+              const { error } = await supabaseAdmin
+                .from("server_status")
+                .update({
+                  plugin_version: (body as any).plugin_version,
+                  minecraft_version: (body as any).minecraft_version,
+                  paper_version: (body as any).paper_version,
+                  last_seen_at: new Date().toISOString()
+                } as any)
+                .eq("server_id", serverId);
+
+              if (error) return Response.json({ success: false, request_id: requestId }, { status: 500 });
               return Response.json({ success: true, request_id: requestId });
             }
 
