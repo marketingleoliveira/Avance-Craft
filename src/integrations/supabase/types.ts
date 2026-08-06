@@ -1462,6 +1462,10 @@ export type Database = {
     }
     Functions: {
       can_access_ticket: { Args: { _ticket_id: string }; Returns: boolean }
+      cancel_delivery: {
+        Args: { _delivery_id: string; _reason?: string }
+        Returns: boolean
+      }
       cleanup_expired_nonces: { Args: never; Returns: undefined }
       confirm_delivery: {
         Args: { _delivery_id: string; _response_payload?: Json }
@@ -1497,6 +1501,7 @@ export type Database = {
         Returns: Json
       }
       prune_old_logs: { Args: { retention_days?: number }; Returns: undefined }
+      release_expired_deliveries: { Args: never; Returns: number }
       reserve_delivery_batch: {
         Args: {
           _limit?: number

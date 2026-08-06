@@ -27,9 +27,7 @@ export const Route = createFileRoute("/api/public/plugin")({
         // 2. Processamento de Ações
         switch (action) {
           case "heartbeat":
-            await supabaseAdmin.from("minecraft_servers" as any).update({ 
-              last_heartbeat: new Date().toISOString() 
-            }).eq("id", serverId);
+            // O verifyPluginRequest já atualiza last_seen_at em minecraft_servers
             return Response.json({ status: "ok" });
 
           case "get_deliveries":
