@@ -34,7 +34,7 @@ const MENU_ITEMS = [
   { type: "divider", label: "Conteúdo" },
   { label: "Notícias", icon: Newspaper, to: "/admin/noticias" },
   { label: "Ranking", icon: Trophy, to: "/admin/ranking" },
-  { label: "Servidores", icon: Server, to: "/admin/servidores" },
+  { label: "Integração MC", icon: Server, to: "/admin/minecraft" },
   { type: "divider", label: "Comunidade" },
   { label: "Jogadores", icon: Users, to: "/admin/jogadores" },
   { label: "Tickets", icon: LifeBuoy, to: "/admin/tickets" },
