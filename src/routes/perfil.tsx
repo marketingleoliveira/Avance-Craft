@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate, Link, redirect } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Container } from "@/components/ui-kit/Container";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getMyProfile, listMyOrders, listMyPlayerAccounts } from "@/lib/services/orders.functions";
+import { generateLinkCode, unlinkAccount } from "@/lib/services/account-link.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -20,9 +21,16 @@ import {
   LogOut,
   ChevronRight,
   Shield,
-  History
+  History,
+  Link2,
+  Unlink,
+  ExternalLink,
+  Copy,
+  RefreshCw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { useState } from "react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ScrollReveal } from "@/components/ui-kit/Motion";
 
@@ -187,6 +195,9 @@ function ProfilePage() {
               color="text-emerald-500"
             />
           </div>
+
+          {/* Vinculação de Conta */}
+          <AccountLinkSection accounts={accounts} />
 
           {/* Pedidos Recentes */}
           <section className="space-y-8">
