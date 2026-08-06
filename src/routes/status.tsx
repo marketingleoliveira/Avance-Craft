@@ -142,7 +142,7 @@ function StatusPage() {
                     onClick={() => copy("jogar.avancemine.com.br", 'java')}
                     className="pixel-border flex w-full items-center justify-between border-grass-dark bg-grass-dark/10 p-3 text-left hover:bg-grass-dark/20 transition-colors"
                   >
-                    <span className="font-bold truncate">{status?.ip ?? "jogar.avance.com.br"}</span>
+                    <span className="font-bold truncate">jogar.avancemine.com.br</span>
                     {copiedIp === 'java' ? <Check className="h-4 w-4 text-emerald-block" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
