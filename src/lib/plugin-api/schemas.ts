@@ -32,7 +32,7 @@ export const HeartbeatSchema = BaseRequestSchema.extend({
 
 export const GetDeliveriesSchema = BaseRequestSchema.extend({
   action: z.literal("get_deliveries"),
-  limit: z.number().min(1).max(100).default(50),
+  limit: z.number().min(1).max(100).default(10),
 });
 
 export const ConfirmDeliverySchema = BaseRequestSchema.extend({
