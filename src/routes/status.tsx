@@ -5,6 +5,7 @@ import { WoodSign } from "@/components/ui-kit/WoodSign";
 import { StonePanel } from "@/components/ui-kit/StonePanel";
 import { PixelButton } from "@/components/ui-kit/PixelButton";
 import { getPublicServerStatus } from "@/lib/services/status.functions";
+import { listServerModes } from "@/lib/services/content.functions";
 import { cn } from "@/lib/utils";
 import { 
   Users, 
@@ -103,7 +104,7 @@ function StatusPage() {
                 <StatusCard 
                   icon={Settings} 
                   label="Versão" 
-                  value={status?.version ?? "1.21+"}
+                  value={status?.version ?? "1.20.x"}
                 />
                 <StatusCard 
                   icon={Clock} 
@@ -115,7 +116,7 @@ function StatusPage() {
               <div className="mt-8 border-t-2 border-dirt-dark/10 pt-8">
                 <h3 className="font-pixel text-xs uppercase mb-4">Modos Disponíveis</h3>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {modes.map(mode => (
+                  {modes.map((mode: any) => (
                     <div key={mode.id} className="pixel-border border-dirt-dark/15 bg-stone/30 p-3">
                       <div className="flex items-center gap-2">
                         <span className={cn(
