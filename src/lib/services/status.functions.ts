@@ -29,7 +29,7 @@ export const getPublicServerStatus = createServerFn({ method: "GET" })
       };
     }
 
-    const lastSeen = new Date(data.last_seen_at);
+    const lastSeen = data.last_seen_at ? new Date(data.last_seen_at) : new Date(0);
     const now = new Date();
     const secondsSinceLastSeen = (now.getTime() - lastSeen.getTime()) / 1000;
     
@@ -49,6 +49,6 @@ export const getPublicServerStatus = createServerFn({ method: "GET" })
       maxPlayers: data.max_players || 500,
       version: data.minecraft_version || "1.20.x",
       status,
-      lastUpdate: data.last_seen_at
+      lastUpdate: data.last_seen_at || new Date().toISOString()
     };
   });

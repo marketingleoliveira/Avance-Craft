@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Copy, Check, Zap, Users, Monitor, Smartphone } from "lucide-react";
 import { Container } from "@/components/ui-kit/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getServerStatus } from "@/lib/services/content.functions";
+import { getPublicServerStatus } from "@/lib/services/status.functions";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_STATUS = {
@@ -16,8 +16,11 @@ const DEFAULT_STATUS = {
 export function StatusBar() {
   const { data: serverStatus } = useSuspenseQuery({
     queryKey: ["server-status"],
-    queryFn: () => getServerStatus(),
+    queryFn: () => getPublicServerStatus(),
+    refetchInterval: 30000, // 30s
   });
+
+  const ip = "jogar.avancemine.com.br";
 
   const status = serverStatus ?? DEFAULT_STATUS;
 
@@ -28,7 +31,7 @@ export function StatusBar() {
 
   const copyIp = async () => {
     try {
-      await navigator.clipboard.writeText(status.ip);
+      await navigator.clipboard.writeText(ip);
     } catch {
       /* clipboard unavailable */
     }
@@ -41,9 +44,12 @@ export function StatusBar() {
     <div className="bg-black/90 backdrop-blur-md border-b border-white/5 text-white py-2 hidden md:block relative z-[60]">
       <Container className="flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <StatusItem icon={Zap} label="Status" value={status.online ? "Online" : "Offline"} color={status.online ? "text-emerald-500" : "text-rose-500"} />
-          <StatusItem icon={Users} label="Jogadores" value={`${status.players_online}/${status.max_players}`} />
-          <StatusItem icon={Monitor} label="Versão" value={status.version} />
+          <StatusItem icon={Zap} label="Status" value={serverStatus.status} color={
+            serverStatus.status === 'online' ? "text-emerald-500" : 
+            serverStatus.status === 'unstable' ? "text-amber-500" : "text-rose-500"
+          } />
+          <StatusItem icon={Users} label="Jogadores" value={`${serverStatus.players}/${serverStatus.maxPlayers}`} />
+          <StatusItem icon={Monitor} label="Versão" value={serverStatus.version} />
         </div>
 
         <button
@@ -53,7 +59,7 @@ export function StatusBar() {
         >
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">IP:</span>
           <span className="text-[11px] font-black tracking-tight text-white uppercase">
-            {copied ? "IP Copiado!" : status.ip}
+            {copied ? "IP Copiado!" : ip}
           </span>
           {copied ? (
             <Check className="w-3 h-3 text-emerald-500" />
