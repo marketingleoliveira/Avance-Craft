@@ -5,7 +5,7 @@ import { computePluginSignature, safeCompareSignatures } from "./hmac.server";
 import { checkAndRegisterNonce } from "./nonce.server";
 import { checkRateLimit } from "./rate-limit.server";
 
-import { MAX_BODY_SIZE, TIMESTAMP_WINDOW_SECONDS } from "../plugin-api/contract";
+import { MAX_BODY_SIZE, TIMESTAMP_WINDOW_SECONDS, RATE_LIMIT_PER_MINUTE } from "../plugin-api/contract";
 
 const MAX_PAYLOAD_SIZE = MAX_BODY_SIZE;
 
