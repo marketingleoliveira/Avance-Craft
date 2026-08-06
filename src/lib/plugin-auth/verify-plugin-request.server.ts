@@ -5,7 +5,9 @@ import { computePluginSignature, safeCompareSignatures } from "./hmac.server";
 import { checkAndRegisterNonce } from "./nonce.server";
 import { checkRateLimit } from "./rate-limit.server";
 
-const MAX_PAYLOAD_SIZE = 1024 * 512; // 512KB
+import { MAX_BODY_SIZE, TIMESTAMP_WINDOW_SECONDS, RATE_LIMIT_PER_MINUTE } from "../plugin-api/contract";
+
+const MAX_PAYLOAD_SIZE = MAX_BODY_SIZE;
 
 export async function verifyPluginRequest(
   request: Request,
@@ -36,13 +38,13 @@ export async function verifyPluginRequest(
   // 4. Validar Timestamp (janela de 60 segundos)
   const requestTime = parseInt(timestamp, 10);
   const now = Math.floor(Date.now() / 1000);
-  if (isNaN(requestTime) || Math.abs(now - requestTime) > 60) {
+  if (isNaN(requestTime) || Math.abs(now - requestTime) > TIMESTAMP_WINDOW_SECONDS) {
     return { valid: false, errorCode: "expired_timestamp", status: 408 };
   }
 
   // 5. Rate Limit Inicial (por IP)
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
-  if (!(await checkRateLimit(pluginId, ip))) {
+  if (!(await checkRateLimit(pluginId, ip, RATE_LIMIT_PER_MINUTE))) {
     return { valid: false, errorCode: "invalid_request", status: 429 }; // Usando 429 para rate limit
   }
 
