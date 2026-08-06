@@ -3,7 +3,6 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { logger } from "@/lib/config/logger.server";
 import { z } from "zod";
-import { crypto } from "crypto";
 
 // Middleware para garantir que apenas admins ou desenvolvedores acessem
 const requireAdminOrDev = async (ctx: any) => {
@@ -12,7 +11,9 @@ const requireAdminOrDev = async (ctx: any) => {
     .select('role')
     .eq('user_id', ctx.userId);
   
-  const hasAccess = roles?.some(r => r.role === 'admin' || r.role === 'developer');
+  // Como 'developer' pode não estar no enum app_role do banco ainda, verificamos admin
+  // Em uma infra AAA, o desenvolvedor teria a role 'admin' ou uma role específica no banco
+  const hasAccess = roles?.some(r => r.role === 'admin' || (r.role as string) === 'developer');
   if (!hasAccess) throw new Error("Unauthorized");
 };
 
@@ -44,9 +45,9 @@ export const listDeliveryQueue = createServerFn({ method: "GET" })
   });
 
 export const retryDelivery = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ deliveryId: z.string().uuid() }).parse(data))
+  .validator((data: { deliveryId: string }) => z.object({ deliveryId: z.string().uuid() }).parse(data))
   .middleware([requireSupabaseAuth])
-  .handler(async ({ input, context }) => {
+  .handler(async ({ data: input, context }) => {
     await requireAdminOrDev(context);
     
     const { error } = await supabaseAdmin
@@ -61,19 +62,27 @@ export const retryDelivery = createServerFn({ method: "POST" })
   });
 
 export const createMinecraftServer = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ 
-    serverId: z.string(), 
-    name: z.string(),
-    environment: z.enum(['production', 'staging', 'development'])
-  }).parse(data))
+  .validator((data: { serverId: string; name: string; environment: 'production' | 'staging' | 'development' }) => 
+    z.object({ 
+      serverId: z.string(), 
+      name: z.string(),
+      environment: z.enum(['production', 'staging', 'development'])
+    }).parse(data)
+  )
   .middleware([requireSupabaseAuth])
-  .handler(async ({ input, context }) => {
+  .handler(async ({ data: input, context }) => {
     await requireAdminOrDev(context);
     
-    // Gerar segredo
+    // Gerar segredo aleatório
     const secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    const secretHash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(secret))
-      .then(buf => Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join(''));
+    
+    // Hash do segredo usando Web Crypto API (disponível no Worker runtime)
+    const encoder = new TextEncoder();
+    const secretData = encoder.encode(secret);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", secretData);
+    const secretHash = Array.from(new Uint8Array(hashBuffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
 
     const { error } = await supabaseAdmin
       .from('minecraft_servers')
@@ -91,3 +100,4 @@ export const createMinecraftServer = createServerFn({ method: "POST" })
     
     return { secret }; // Retornar segredo apenas uma vez
   });
+
