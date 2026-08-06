@@ -44,7 +44,7 @@ export async function verifyPluginRequest(
 
   // 5. Rate Limit Inicial (por IP)
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
-  if (!(await checkRateLimit(pluginId, ip))) {
+  if (!(await checkRateLimit(pluginId, ip, RATE_LIMIT_PER_MINUTE))) {
     return { valid: false, errorCode: "invalid_request", status: 429 }; // Usando 429 para rate limit
   }
 
