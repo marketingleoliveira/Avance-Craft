@@ -113,4 +113,3 @@ function Index() {
     </AnimatePresence>
   );
 }
-
