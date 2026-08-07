@@ -13,7 +13,7 @@ Todas as requisições enviadas pelo plugin ao portal devem ser autenticadas via
 | `X-Plugin-Id` | ID único da instância do servidor (server_id) | `avance-survival-01` |
 | `X-Timestamp` | Unix timestamp em segundos (UTC) | `1722977760` |
 | `X-Nonce` | String aleatória única (UUID v4 recomendado) | `a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5` |
-| `X-Signature` | Assinatura HMAC-SHA256 em **Hexadecimal** | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `X-Signature` | Assinatura HMAC-SHA256 em **Hexadecimal** | `26807c11249dfa59806ed3fb76ca3884d58bb721b9cad2525f48eaaa6e17fcf5` |
 | `Content-Type` | Sempre deve ser `application/json` | `application/json` |
 
 ### 1.2 Regra de Assinatura (Canonical String)
@@ -135,5 +135,5 @@ const body = '{"action":"heartbeat","server_id":"avance-survival-01","online_pla
 
 const data = `${timestamp}.${nonce}.${body}`;
 const signature = createHmac('sha256', secret).update(data).digest('hex');
-// Expected Signature: 3ae78a4b74356c2218914c00975dbe92cbc25485bd681df1eeddd321822e1d1c
+// Expected Signature: 26807c11249dfa59806ed3fb76ca3884d58bb721b9cad2525f48eaaa6e17fcf5
 ```
