@@ -9,7 +9,7 @@ describe("Plugin Route Integration Logic", () => {
     const nonce = crypto.randomUUID();
     const body = JSON.stringify({
       action: "get_deliveries",
-      server_id: "habblet-survival-01",
+      server_id: "avance-survival-01",
       plugin_instance_id: crypto.randomUUID(),
       limit: 10
     });

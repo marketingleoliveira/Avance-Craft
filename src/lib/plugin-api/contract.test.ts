@@ -13,7 +13,7 @@ export const VECTORS = [
     secret: "avance_test_secret_32_chars_long!!",
     timestamp: "1722977760",
     nonce: "a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5",
-    body: '{"action":"heartbeat","server_id":"habblet-survival-01","online_players":42,"max_players":100,"tps":19.95}',
+    body: '{"action":"heartbeat","server_id":"avance-survival-01","online_players":42,"max_players":100,"tps":19.95}',
     // Expected signature (hex)
     expected: "3ae78a4b74356c2218914c00975dbe92cbc25485bd681df1eeddd321822e1d1c"
   },

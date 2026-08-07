@@ -42,7 +42,7 @@
 ## 4. Instruções para Conexão do Plugin Real
 
 1. **Obter Credenciais:** No Painel Admin > Integração MC > Segurança, gere um novo `server_id` e `secret`.
-2. **Configurar Plugin:** Insira as chaves no `config.yml` do HabbletBridge.
+2. **Configurar Plugin:** Insira as chaves no `config.yml` do AvanceBridge.
 3. **Validar Handshake:** Verifique se o servidor aparece como "Online" no painel após o primeiro `heartbeat`.
 4. **Comandos:** Mantenha os templates de comandos simples e use apenas placeholders autorizados (`{player}`, `{player_uuid}`, etc.).
 
