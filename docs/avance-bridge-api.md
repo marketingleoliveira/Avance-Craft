@@ -10,10 +10,10 @@ Todas as requisições enviadas pelo plugin ao portal devem ser autenticadas via
 
 | Header | Descrição | Exemplo |
 | :--- | :--- | :--- |
-| `X-Plugin-Id` | ID único da instância do servidor (server_id) | `habblet-survival-01` |
+| `X-Plugin-Id` | ID único da instância do servidor (server_id) | `avance-survival-01` |
 | `X-Timestamp` | Unix timestamp em segundos (UTC) | `1722977760` |
 | `X-Nonce` | String aleatória única (UUID v4 recomendado) | `a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5` |
-| `X-Signature` | Assinatura HMAC-SHA256 em **Hexadecimal** | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `X-Signature` | Assinatura HMAC-SHA256 em **Hexadecimal** | `26807c11249dfa59806ed3fb76ca3884d58bb721b9cad2525f48eaaa6e17fcf5` |
 | `Content-Type` | Sempre deve ser `application/json` | `application/json` |
 
 ### 1.2 Regra de Assinatura (Canonical String)
@@ -53,7 +53,7 @@ Atualiza o status do servidor e sincroniza métricas.
 
 **Request Body:**
 ```json
-{"action":"heartbeat","server_id":"habblet-survival-01","online_players":42,"max_players":100,"tps":19.95}
+{"action":"heartbeat","server_id":"avance-survival-01","online_players":42,"max_players":100,"tps":19.95}
 ```
 
 ### 2.2 Get Deliveries
@@ -63,7 +63,7 @@ Busca comandos pendentes na fila de entrega.
 
 **Request Body:**
 ```json
-{"action":"get_deliveries","server_id":"habblet-survival-01","limit":50}
+{"action":"get_deliveries","server_id":"avance-survival-01","limit":50}
 ```
 
 ### 2.3 Confirm Delivery
@@ -72,7 +72,7 @@ Confirma a execução bem-sucedida de um comando.
 
 **Request Body:**
 ```json
-{"action":"confirm_delivery","server_id":"habblet-survival-01","delivery_id":"uuid-da-entrega"}
+{"action":"confirm_delivery","server_id":"avance-survival-01","delivery_id":"uuid-da-entrega"}
 ```
 
 ### 2.4 Link Account
@@ -81,7 +81,7 @@ Vincula um perfil do site a um UUID Minecraft.
 
 **Request Body:**
 ```json
-{"action":"link_account","server_id":"habblet-survival-01","minecraft_uuid":"uuid-do-player","minecraft_username":"nome-do-player","verification_code":"ABC123"}
+{"action":"link_account","server_id":"avance-survival-01","minecraft_uuid":"uuid-do-player","minecraft_username":"nome-do-player","verification_code":"ABC123"}
 ```
 
 ---
@@ -131,9 +131,9 @@ import { createHmac } from 'crypto';
 const secret = 'avance_test_secret_32_chars_long!!';
 const timestamp = '1722977760';
 const nonce = 'a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5';
-const body = '{"action":"heartbeat","server_id":"habblet-survival-01","online_players":42,"max_players":100,"tps":19.95}';
+const body = '{"action":"heartbeat","server_id":"avance-survival-01","online_players":42,"max_players":100,"tps":19.95}';
 
 const data = `${timestamp}.${nonce}.${body}`;
 const signature = createHmac('sha256', secret).update(data).digest('hex');
-// Expected Signature: 3ae78a4b74356c2218914c00975dbe92cbc25485bd681df1eeddd321822e1d1c
+// Expected Signature: 26807c11249dfa59806ed3fb76ca3884d58bb721b9cad2525f48eaaa6e17fcf5
 ```

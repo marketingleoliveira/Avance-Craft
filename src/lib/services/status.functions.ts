@@ -15,7 +15,7 @@ export const getPublicServerStatus = createServerFn({ method: "GET" })
     const { data, error } = await supabase
       .from("server_status")
       .select("online, online_players, max_players, last_seen_at, tps, maintenance_mode, minecraft_version")
-      .eq("server_id", "habblet-survival-01")
+      .eq("server_id", "avance-survival-01")
       .single();
 
     if (error || !data) {
