@@ -1,33 +1,32 @@
-# Digitale Têxtil Testimonials (Plataforma de Depoimentos)
+# Avance Craft
 
-Plataforma web interativa inspirada no modelo do Vocal Video, desenvolvida para que clientes da **Digitale Têxtil** possam gravar, submeter e gerenciar depoimentos em vídeo e texto de forma rápida e intuitiva.
+Aplicação web robusta e de alta disponibilidade com arquitetura orientada a microsserviços, containerização completa e pipelines avançadas de DevOps para governança, resiliência e suporte a ambientes de produção.
 
-🔗 **Live App:** [depoimentosdigitale.lovable.app](https://depoimentosdigitale.lovable.app)  
+🔗 **Live App:** [avancecraft.lovable.app](https://avancecraft.lovable.app)  
 🌐 **Portfólio do Desenvolvedor:** [portfolioleoliveira.lovable.app](https://portfolioleoliveira.lovable.app)
 
 ---
 
 ## 📌 Sobre o Projeto
 
-O **Plataforma-Depoimentos-Digitale** foi criado para fortalecer a prova social e a estratégia de marketing de conteúdo B2B da Digitale Têxtil. A aplicação permite a gravação direta de vídeos pelo navegador, envio de depoimentos e exibição de feedbacks de clientes com design totalmente alinhado à identidade visual institucional da marca.
+O **Avance-Craft** é uma plataforma corporativa projetada sob rigorosos padrões de engenharia de software e segurança da informação. O repositório destaca-se pela sua infraestrutura completa de CI/CD, documentação técnica detalhada, estratégias de *Disaster Recovery* (rollback, backup e restore) e ambiente isolado com Nginx e Docker.
 
 ---
 
-## ⚡ Principais Funcionalidades
+## ⚡ Diferenciais de Engenharia & DevOps
 
-* **Gravação e Envio Simplificado:** Captura de depoimentos em vídeo e texto diretamente pelo browser sem necessidade de softwares externos.
-* **Gestão de Depoimentos:** Coleta e organização de provas sociais para campanhas de marketing B2B.
-* **Design Identidade Digitale:** Interface moderna totalmente integrada ao padrão visual e de cores do site institucional da Digitale Têxtil.
-* **Edge Deployment:** Estruturado com suporte a Cloudflare Workers (`wrangler.jsonc`) para alta performance global.
+* **Containerização & Servidor Web:** Configurações prontas para produção com Docker, Docker Compose e servidor Nginx (`nginx/`).
+* **Segurança e Hardening:** Relatórios e políticas de segurança de infraestrutura (`HARDENING_REPORT.md`, `BACKUP_POLICY.md`).
+* **DevOps & Resiliência:** Documentação e automação para rollback (`ROLLBACK_RUNBOOK.md`), planos de rollout (`ROLLOUT_PLAN.md`) e simulações de lançamento (`LAUNCH_SIMULATION_REPORT.md`).
+* **Qualidade de Código:** Gates de qualidade automatizados, acompanhamento de Changelog e relatórios de métricas (`QUALITY_GATE_REPORT.md`).
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias e Ferramentas
 
-* **Frontend:** TypeScript, React, Vite, Tailwind CSS
+* **Frontend & Framework:** TypeScript, React, Vite, TanStack Start / Router
 * **Backend & Banco de Dados:** Supabase (PL/pgSQL)
-* **Framework Web:** TanStack Start / Router
-* **Deploy & Infrastructure:** Cloudflare Workers (Wrangler)
+* **Infraestrutura & DevOps:** Docker, Docker Compose, Nginx, Shell Scripting
 * **Gerenciador de Pacotes:** Bun / npm
 * **Desenvolvimento Acelerado:** Lovable
 
@@ -36,10 +35,10 @@ O **Plataforma-Depoimentos-Digitale** foi criado para fortalecer a prova social 
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
-Certifique-se de ter o **Node.js** e o **npm** (ou **Bun**) instalados em sua máquina.
+Certifique-se de ter o **Node.js** (ou **Bun**) e o **Docker / Docker Compose** instalados em sua máquina.
 
-### Passo a Passo
+### Execução via Docker (Recomendado)
 
 1. **Clonar o repositório:**
    ```bash
-   git clone [https://github.com/RennanLucas/Plataforma-Depoimentos-Digitale.git](https://github.com/RennanLucas/Plataforma-Depoimentos-Digitale.git)
+   git clone [https://github.com/RennanLucas/Avance-Craft.git](https://github.com/RennanLucas/Avance-Craft.git)
